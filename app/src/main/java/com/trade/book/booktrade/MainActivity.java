@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int mRequestCode = 1080;
     private static final String mNullValue = "N/A";
     CircularImageView profileImage;
+    int REQUEST_EXIT = 1520;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         return isConnected;
     }
+
 
     private void initilize() {
         toolbarMain = (Toolbar) findViewById(R.id.toolbarMain);
@@ -173,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
                     case R.id.navItemAccount:
                         if(spf.getBoolean(getResources().getString(R.string.prefAccountIndicator),false)){
-                            startActivity(new Intent(MainActivity.this, AccountActivity.class));
+                            startActivityForResult(new Intent(MainActivity.this, AccountActivity.class), REQUEST_EXIT);
                         }else {
                             checkFirst();
                         }
@@ -220,6 +222,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == mRequestCode && resultCode == RESULT_OK) {
+            this.finish();
+        }
+        if (requestCode == REQUEST_EXIT && resultCode == RESULT_OK) {
             this.finish();
         }
     }

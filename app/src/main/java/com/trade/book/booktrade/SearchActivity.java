@@ -99,6 +99,7 @@ public class SearchActivity extends AppCompatActivity {
 
     private void inSearch(String query){
         searchList.setAdapter(null);
+        srchList.clear();
         buildRequest(query);
     }
 

@@ -7,6 +7,7 @@
     <string name="detailsBuy">BUY</string>
     <string name="setting">Settings</string>
     <string name="searchHint">Search books by Name</string>
+    <string name="facebook_app_id">1653383558302081</string>
 
     <!-- url-->
     <string name="urlServer" translatable="false">http://ec2-35-154-208-1.ap-south-1.compute.amazonaws.com/</string>
@@ -84,7 +85,6 @@
     <string name="prefAccountIndicator" translatable="false">prefaccountInd</string>
     <string name="prefAccountId" translatable="false">prefaccountid</string>
     <string name="prefAccountName" translatable="false">prefaccountnm</string>
-    <string name="prefAccountEmail" translatable="false">prefaccountemd</string>
     <!-- -->
 
 </resources>

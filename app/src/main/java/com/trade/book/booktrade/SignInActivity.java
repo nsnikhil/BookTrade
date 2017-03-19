@@ -13,7 +13,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -21,6 +35,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -37,12 +54,70 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     GoogleSignInOptions gso;
     GoogleApiClient mGoogleApiClient;
     int RC_SIGN_IN = 540;
+    LoginButton loginButton;
+    private CallbackManager callbackManager;
+    private AccessTokenTracker accessTokenTracker;
+    private ProfileTracker profileTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         initilize();
+        setGooglePlus();
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        setUpFblogin();
+    }
+
+    private void initilize() {
+        SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        signInButton.setSize(SignInButton.SIZE_WIDE);
+        signInButton.setOnClickListener(this);
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions("public_profile");
+        loginButton.setReadPermissions();
+        callbackManager = CallbackManager.Factory.create();
+    }
+
+    private void setUpFblogin(){
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                try {
+                                    String profilePicUrl = response.getJSONObject().getJSONObject("picture").getJSONObject("data").getString("url");
+                                    SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                    spf.edit().putBoolean(getResources().getString(R.string.prefAccountIndicator),true).apply();
+                                    spf.edit().putString(getResources().getString(R.string.prefAccountId),String.valueOf(response.getJSONObject().getInt("id"))).apply();
+                                    spf.edit().putString(getResources().getString(R.string.prefAccountName), response.getJSONObject().getString("name")).apply();
+                                    new DownloadImage().execute(profilePicUrl);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,picture.width(600).height(600)");
+                request.setParameters(parameters);
+                request.executeAsync();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
+    }
+
+    private void setGooglePlus(){
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestId().requestEmail().requestProfile().build();
         mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
             @Override
@@ -52,17 +127,15 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         }).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
     }
 
-    private void initilize() {
-        SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_WIDE);
-        signInButton.setOnClickListener(this);
-    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.sign_in_button:
                 signIn();
+                break;
+            case R.id.login_button:
+                setUpFblogin();
                 break;
         }
     }
@@ -79,6 +152,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
         }
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
@@ -88,7 +162,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             spf.edit().putBoolean(getResources().getString(R.string.prefAccountIndicator),true).apply();
             spf.edit().putString(getResources().getString(R.string.prefAccountId),acct.getId()).apply();
             spf.edit().putString(getResources().getString(R.string.prefAccountName), acct.getDisplayName()).apply();
-            spf.edit().putString(getResources().getString(R.string.prefAccountEmail), acct.getEmail()).apply();
             new DownloadImage().execute(acct.getPhotoUrl().toString());
         } else {
 

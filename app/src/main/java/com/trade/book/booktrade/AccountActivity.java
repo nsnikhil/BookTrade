@@ -1,6 +1,7 @@
 package com.trade.book.booktrade;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,6 +22,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -29,6 +34,7 @@ import java.util.ArrayList;
 public class AccountActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String mNullValue = "N/A";
+    private static final int mZeroValue = 0;
     Toolbar accountToolbar;
     CollapsingToolbarLayout  accountCollapsingToolbarLayout;
     ImageView accountBanner;
@@ -118,8 +124,28 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         }).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getApplicationContext(),"Will Sign Out",Toast.LENGTH_SHORT).show();
+                AccessToken accessToken = AccessToken.getCurrentAccessToken();
+                if(accessToken!=null){
+                    FacebookSdk.sdkInitialize(getApplicationContext());
+                    LoginManager.getInstance().logOut();
+                }
+                SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                spf.edit().putBoolean(getResources().getString(R.string.prefAccountIndicator),false).apply();
+                spf.edit().putString(getResources().getString(R.string.prefAccountId),mNullValue).apply();
+                spf.edit().putString(getResources().getString(R.string.prefAccountName), mNullValue).apply();
+                deleteFile();
+                setResult(RESULT_OK, null);
+                finish();
+                startActivity(new Intent(AccountActivity.this,MainActivity.class));
             }
         }).create().show();
+    }
+
+    private void deleteFile(){
+        File folder  = getExternalCacheDir();
+        File f = new File(folder,"profile.jpg");
+        if(f.exists()){
+            f.delete();
+        }
     }
 }

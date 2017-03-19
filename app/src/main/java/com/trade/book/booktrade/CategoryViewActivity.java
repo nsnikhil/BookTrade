@@ -1,10 +1,12 @@
 package com.trade.book.booktrade;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -50,6 +52,17 @@ public class CategoryViewActivity extends AppCompatActivity {
         catProgress = (ProgressBar)findViewById(R.id.cateogoryProgress);
         catProgress.setVisibility(View.VISIBLE);
         categoryList = new ArrayList<>();
+        catList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                BookObject bookObject = (BookObject) parent.getItemAtPosition(position);
+                Intent detail  = new Intent(getApplicationContext(),PurchaseActivity.class);
+                Bundle b = new Bundle();
+                b.putSerializable(getResources().getString(R.string.intenKeyObejct), bookObject);
+                detail.putExtras(b);
+                startActivity(detail);
+            }
+        });
     }
 
     private void getList(String url){
