@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/matchParent"
+    tools:context="com.trade.book.booktrade.SearchActivity">
+
+
+    <com.lapism.searchview.SearchView
+        android:id="@+id/sSearchView"
+        android:layout_marginBottom="@dimen/sixteen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <GridView
+        style="@style/matchParent"
+        android:padding="@dimen/eight"
+        android:layout_below="@id/sSearchView"
+        android:numColumns="2"
+        android:id="@+id/searchListGrid">
+    </GridView>
+
+    <ImageView
+        android:layout_width="240dp"
+        android:id="@+id/searchErrorImage"
+        android:visibility="gone"
+        android:src="@drawable/nodata"
+        android:layout_centerInParent="true"
+        android:layout_height="240dp" />
+
+    <ProgressBar
+        style="@android:style/Widget.DeviceDefault.ProgressBar.Large"
+        android:id="@+id/searchProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>

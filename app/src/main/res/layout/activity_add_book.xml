@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/tools"
+    style="@style/matchParent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarAddBook"
+        android:theme="@style/AppToolbar"
+        style="@style/toolbar" />
+
+    <ScrollView
+        style="@style/matchParent"
+        android:layout_below="@id/toolbarAddBook">
+
+        <LinearLayout style="@style/verticalLinearLayout">
+
+            <RelativeLayout
+                android:id="@+id/imageContainer"
+                style="@style/matchParent"
+                android:layout_height="300dp"
+                android:layout_below="@id/toolbarAddBook">
+
+                <ImageView
+                    android:id="@+id/addBookImageEmptyState"
+                    style="@style/matchParent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/addimage" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/addBookView"
+                    style="@style/matchParent" />
+
+                <ImageView
+                    android:id="@+id/addBookNewImage"
+                    style="@style/wrapContent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:padding="@dimen/sixteen"
+                    android:src="@drawable/camera" />
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                style="@style/verticalLinearLayout"
+                android:padding="@dimen/sixteen">
+
+                <LinearLayout
+                    style="@style/wrapContent"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        style="@style/addBookIcon"
+                        android:src="@drawable/ic_book_black_48dp" />
+
+                    <EditText
+                        android:id="@+id/addBookName"
+                        style="@style/addBookText"
+                        android:singleLine="true"
+                        android:nextFocusDown="@+id/addBookPublisher"
+                        android:hint="@string/bookName" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/wrapContent"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        style="@style/addBookIcon"
+                        android:src="@drawable/ic_profile_banner_black_48d" />
+
+                    <EditText
+                        android:id="@+id/addBookPublisher"
+                        style="@style/addBookText"
+                        android:singleLine="true"
+                        android:nextFocusDown="@+id/addBookCostPrice"
+                        android:hint="@string/bookPublisher" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/wrapContent"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        style="@style/addBookIcon"
+                        android:src="@drawable/indianrupee_48" />
+
+                    <EditText
+                        android:id="@+id/addBookCostPrice"
+                        style="@style/addBookText"
+                        android:hint="@string/bookCp"
+                        android:singleLine="true"
+                        android:nextFocusDown="@+id/addBookSellingPrice"
+                        android:inputType="number" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/wrapContent"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        style="@style/addBookIcon"
+                        android:src="@drawable/indianrupee_48" />
+
+                    <EditText
+                        android:id="@+id/addBookSellingPrice"
+                        style="@style/addBookText"
+                        android:hint="@string/bookSp"
+                        android:singleLine="true"
+                        android:nextFocusDown="@+id/addBookEdition"
+                        android:inputType="number" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/wrapContent"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        style="@style/addBookIcon"
+                        android:src="@drawable/ic_date_range_black_48dp" />
+
+                    <EditText
+                        android:id="@+id/addBookEdition"
+                        style="@style/addBookText"
+                        android:hint="@string/bookEdition"
+                        android:singleLine="true"
+                        android:nextFocusDown="@+id/addBookComments"
+                        android:inputType="number" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/wrapContent"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        style="@style/addBookIcon"
+                        android:src="@drawable/ic_comment_black_48dp" />
+
+                    <EditText
+                        android:id="@+id/addBookComments"
+                        style="@style/addBookText"
+                        android:hint="@string/bookDescription"
+                        android:inputType="textMultiLine" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/matchParent"
+                    android:layout_margin="@dimen/eight"
+                    android:id="@+id/conditionSpinnerContainer"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/wrapContent"
+                        android:layout_margin="@dimen/eight"
+                        android:text="@string/bookCondition"
+                        android:textSize="20sp" />
+
+                    <Spinner
+                        android:id="@+id/addBookCondition"
+                        style="@style/wrapContent" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/matchParent"
+                    android:layout_margin="@dimen/eight"
+                    android:id="@+id/cateogorySpinnerContainer"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/wrapContent"
+                        android:layout_margin="@dimen/eight"
+                        android:text="@string/bookCateogory"
+                        android:textSize="20sp" />
+
+                    <Spinner
+                        android:id="@+id/addBookCateogory"
+                        style="@style/wrapContent" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/addBookBuy"
+        style="@style/fab"
+        android:src="@drawable/ic_shopping_cart_white_48dp"
+        android:visibility="gone"
+        app:fabSize="normal"
+        fab:menu_colorNormal="#3D5AFE"
+        fab:menu_colorPressed="#3D5AFE"
+        fab:menu_colorRipple="#99FFFFFF" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addBookDone"
+        style="@style/fab"
+        android:src="@drawable/ic_done_white_48dp"
+        app:fabSize="normal" />
+
+</RelativeLayout>

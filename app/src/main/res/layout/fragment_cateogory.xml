@@ -1,0 +1,10 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/verticalLinearLayout"
+    tools:context="com.trade.book.booktrade.CateogoryFragment">
+
+    <ListView
+        style="@style/matchParent"
+        android:id="@+id/cateogoryList"/>
+
+</LinearLayout>

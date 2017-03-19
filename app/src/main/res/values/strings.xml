@@ -1,0 +1,90 @@
+<resources>
+    <string name="app_name">Book Trade</string>
+    <string name="foldername">booktrade</string>
+    <string name="placeHolderName">Place Holder</string>
+    <string name="drawerOpen">Open</string>
+    <string name="drawerClose">Close</string>
+    <string name="detailsBuy">BUY</string>
+    <string name="setting">Settings</string>
+    <string name="searchHint">Search books by Name</string>
+
+    <!-- url-->
+    <string name="urlServer" translatable="false">http://ec2-35-154-208-1.ap-south-1.compute.amazonaws.com/</string>
+    <string name="urlInsert" translatable="false">insertBookTrade.php</string>
+    <string name="urlQuery" translatable="false">bookTableQuery.php</string>
+    <string name="urlSearchQuery" translatable="false">querySearch.php</string>
+    <string name="urlSearchCatQuery" translatable="false">querySearchCat.php</string>
+    <!-- -->
+
+    <!-- NavigationMenu-->
+    <string name="navBookList">Book List</string>
+    <string name="navMyCart">My Cart</string>
+    <string name="navaccount">Account</string>
+    <string name="navSettings">Settings</string>
+    <string name="navfeedback">Send Feedback</string>
+    <!-- -->
+
+    <!-- addBookFields-->
+    <string name="bookName">Name</string>
+    <string name="bookPublisher">Publisher</string>
+    <string name="bookCp">Original Cost Price</string>
+    <string name="bookSp">Selling Price</string>
+    <string name="bookEdition">Edition</string>
+    <string name="bookDescription">Comment or Notes(if any)</string>
+    <string name="bookCondition">Condition</string>
+    <string name="bookCateogory">Cateogory</string>
+    <string-array name="bookConditionEntry">
+        <item>New</item>
+        <item>Used</item>
+    </string-array>
+    <string-array name="bookCateogories">
+        <item>Art and Photography</item>
+        <item>Biographies and Memoirs</item>
+        <item>Busniness and investing</item>
+        <item>Adventure</item>
+        <item>Philosophy</item>
+        <item>Computer and Technology</item>
+        <item>Craft Hobbies and Home</item>
+        <item>Education and Reference</item>
+        <item>History</item>
+        <item>Entertainment and Humour</item>
+        <item>Litrature and Fiction</item>
+        <item>Politics and Social Science</item>
+        <item>Professional and Technical</item>
+        <item>Religion and Sprituality</item>
+        <item>Romance</item>
+        <item>School Stories</item>
+        <item>Animals</item>
+        <item>Short Stories</item>
+        <item>Other Books</item>
+    </string-array>
+    <!-- -->
+
+
+    <!-- Error-->
+    <string name="maxfourimage">You cannot upload more images</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- -->
+
+
+    <!-- bundleExtra-->
+    <!-- -->
+
+    <!-- -IntentExtraKey-->
+    <string name="intenKeyObejct">inkyobj</string>
+    <string name="intenSearchKey">insrchky</string>
+    <string name="intenfromcart">infrkrky</string>
+    <string name="intencateuri">incturky</string>
+    <string name="intencateuripos">incturpoky</string>
+    <!-- -->
+
+    <!-- prefStrings-->
+    <string name="prefAccountIndicator" translatable="false">prefaccountInd</string>
+    <string name="prefAccountId" translatable="false">prefaccountid</string>
+    <string name="prefAccountName" translatable="false">prefaccountnm</string>
+    <string name="prefAccountEmail" translatable="false">prefaccountemd</string>
+    <!-- -->
+
+</resources>

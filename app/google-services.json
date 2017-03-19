@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "855366082263",
+    "project_id": "firebase-book-trade"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:855366082263:android:5b30328420ce6772",
+        "android_client_info": {
+          "package_name": "com.trade.book.booktrade"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "855366082263-sgm2hm87ge957ko22g6oeek80k7732r1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trade.book.booktrade",
+            "certificate_hash": "b2983479124e74777fe374c165983420aaceccc8"
+          }
+        },
+        {
+          "client_id": "855366082263-fqndejdq0jl4ld6qr2sik705tqeedd0t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhZD8JKpJ9TDtVCI8_3kz9q5bIA9bxv-8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

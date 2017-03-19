@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainDrawerLayout"
+    style="@style/matchParent"
+    android:fitsSystemWindows="true"
+    tools:context="com.trade.book.booktrade.MainActivity">
+
+    <RelativeLayout style="@style/matchParent"
+        android:id="@+id/mainRelativeLayout">
+
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarMain"
+            android:theme="@style/AppToolbar"
+            android:contentInsetLeft="0dp"
+            android:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            android:contentInsetRight="0dp"
+            android:contentInsetEnd="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetEnd="0dp"
+            style="@style/toolbar" >
+
+            <com.lapism.searchview.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+        </android.support.v7.widget.Toolbar>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayoutMain"
+            style="@style/toolbar"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="#E0E0E0"
+            android:layout_below="@id/toolbarMain" />
+
+        <android.support.v4.view.ViewPager style="@style/matchParent"
+            android:layout_below="@id/tabLayoutMain"
+            android:id="@+id/mainContainer"/>
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/mainAdd"
+            style="@style/fab"
+            android:src="@drawable/ic_add_white_48dp"
+            app:fabSize="normal" />
+
+        <ImageView
+            android:layout_width="240dp"
+            android:id="@+id/errorImage"
+            android:visibility="gone"
+            android:src="@drawable/nointernet"
+            android:layout_centerInParent="true"
+            android:layout_height="240dp" />
+
+
+
+    </RelativeLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/mainNaviagtionView"
+        android:layout_width="@dimen/drawerWidth"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/header_layout"
+        app:menu="@menu/header_items" />
+
+
+</android.support.v4.widget.DrawerLayout>

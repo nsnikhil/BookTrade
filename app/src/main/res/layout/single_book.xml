@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    style="@style/matchParent">
+
+    <android.support.v7.widget.CardView
+        style="@style/crdv"
+        android:layout_height="250dp"
+        card_view:cardCornerRadius="1dp"
+        card_view:cardElevation="1dp"
+        card_view:cardMaxElevation="2dp"
+        card_view:cardUseCompatPadding="true">
+
+
+        <ImageView
+            android:id="@+id/singleBookPicture"
+            style="@style/crdvImage" />
+
+        <RelativeLayout
+            style="@style/wrapContent"
+            android:layout_width="match_parent"
+            android:background="@color/colorPrimary"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/singleBookName"
+                android:layout_marginLeft="@dimen/eight"
+                android:maxWidth="200dp"
+                android:layout_marginBottom="@dimen/eight"
+                android:layout_marginTop="@dimen/eight"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                style="@style/crdvText" />
+
+            <TextView
+                android:id="@+id/singleBookPublisher"
+                android:layout_marginLeft="@dimen/eight"
+                android:layout_below="@id/singleBookName"
+                android:layout_marginBottom="@dimen/eight"
+                style="@style/crdvText" />
+
+            <TextView
+                android:id="@+id/singleBookPrice"
+                android:textSize="18sp"
+                android:layout_marginRight="@dimen/eight"
+                android:layout_marginBottom="@dimen/eight"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:textStyle="bold"
+                android:layout_gravity="right|bottom"
+                style="@style/crdvPrice" />
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

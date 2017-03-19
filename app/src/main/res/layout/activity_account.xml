@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/verticalLinearLayout"
+    tools:context="com.trade.book.booktrade.AccountActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="256dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/accountCollapsingToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="48dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/accounttoolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:layout_collapseMode="parallax"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+            <ImageView
+                android:id="@+id/accountBanner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="100dp"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax"
+                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/sixteen"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            style="@style/wrapContent"
+            android:layout_width="match_parent"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView
+                style="@style/crdv"
+                android:layout_height="wrap_content"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="1dp"
+                card_view:cardMaxElevation="3dp"
+                card_view:cardUseCompatPadding="true">
+
+                <LinearLayout style="@style/verticalLinearLayout"
+                    android:id="@+id/accountPurchaseContainer"
+                    android:padding="@dimen/eight">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:textColor="@color/colorAccent"
+                        android:layout_height="wrap_content"
+                        android:text="Your Purchases" />
+
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:id="@+id/accountPurchaseList"
+                        android:listSelector="@android:color/transparent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                style="@style/crdv"
+                android:layout_height="wrap_content"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="1dp"
+                card_view:cardMaxElevation="3dp"
+                card_view:cardUseCompatPadding="true">
+
+                <LinearLayout style="@style/verticalLinearLayout"
+                    android:id="@+id/accountCartContainer"
+                    android:padding="@dimen/eight">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:textColor="@color/colorAccent"
+                        android:layout_height="wrap_content"
+                        android:text="Your Cart" />
+
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:id="@+id/accountCartList"
+                        android:listSelector="@android:color/transparent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                style="@style/crdv"
+                android:layout_height="wrap_content"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="1dp"
+                card_view:cardMaxElevation="3dp"
+                card_view:cardUseCompatPadding="true">
+
+                <LinearLayout style="@style/verticalLinearLayout"
+                    android:id="@+id/accountUploadContainer"
+                    android:padding="@dimen/eight">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:textColor="@color/colorAccent"
+                        android:layout_height="wrap_content"
+                        android:text="Your Uploads" />
+
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:id="@+id/accountUploadList"
+                        android:listSelector="@android:color/transparent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <Button
+                android:layout_width="match_parent"
+                android:text="Sign Out"
+                android:id="@+id/accountSignOut"
+                android:textSize="24sp"
+                android:theme="@style/buttonClr"
+                android:textColor="@color/white"
+                android:padding="@dimen/sixteen"
+                android:layout_margin="@dimen/sixteen"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+</android.support.design.widget.CoordinatorLayout>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.trade.book.booktrade.CategoryViewActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarCategory"
+        style="@style/toolbar"
+        android:theme="@style/AppToolbar" />
+
+
+    <GridView
+        android:id="@+id/catrLst"
+        style="@style/matchParent"
+        android:layout_below="@id/toolbarCategory"
+        android:numColumns="2"/>
+
+
+    <ImageView
+        android:id="@+id/categoryEmpty"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/nodata"
+        android:visibility="gone" />
+
+    <ProgressBar
+        style="@android:style/Widget.DeviceDefault.ProgressBar.Large"
+        android:visibility="gone"
+        android:id="@+id/cateogoryProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>

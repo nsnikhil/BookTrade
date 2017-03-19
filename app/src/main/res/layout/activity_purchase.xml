@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/matchParent"
+    tools:context="com.trade.book.booktrade.PurchaseActivity">
+
+    <ScrollView style="@style/matchParent">
+
+        <LinearLayout style="@style/verticalLinearLayout">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/purchaseBookView"
+                style="@style/matchParent"
+                android:layout_height="300dp" />
+
+            <RelativeLayout
+                style="@style/wrapContent"
+                android:layout_width="match_parent"
+                android:padding="@dimen/eight">
+
+                <TextView
+                    android:id="@+id/purchaseName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/eight"
+                    android:text="@string/bookName"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/purchasePublisher"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/purchaseName"
+                    android:layout_margin="@dimen/eight"
+                    android:text="@string/bookPublisher"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    style="@style/wrapContent"
+                    android:layout_alignParentRight="true"
+                    android:orientation="vertical">
+
+
+                    <Button
+                        android:id="@+id/purchaseBuy"
+                        android:padding="@dimen/eight"
+                        style="@style/wrapContent"
+                        android:textColor="@color/white"
+                        android:theme="@style/buttonClr"
+                        android:layout_width="match_parent"
+                        android:text="Buy Now" />
+
+                    <Button
+                        android:id="@+id/purchaseAddTocart"
+                        android:padding="@dimen/eight"
+                        android:theme="@style/buttonClr"
+                        android:textColor="@color/white"
+                        style="@style/wrapContent"
+                        android:text="Add to Cart" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/cardview_dark_background"
+                android:layout_margin="@dimen/sixteen"
+                android:layout_height="1dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/purchaseEdition"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/eight"
+                android:padding="@dimen/eight"
+                android:text="@string/bookEdition"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/purchaseDescription"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/eight"
+                android:padding="@dimen/eight"
+                android:text="@string/bookDescription"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/purchaseCateogory"
+                android:layout_margin="@dimen/eight"
+                android:padding="@dimen/eight"
+                android:text="@string/bookCateogory"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/purchaseCondition"
+                android:layout_margin="@dimen/eight"
+                android:padding="@dimen/eight"
+                android:text="@string/bookCondition"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
