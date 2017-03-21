@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             errorImage.setVisibility(View.GONE);
             TabsMain.setVisibility(View.VISIBLE);
             mainAdd.setVisibility(View.VISIBLE);
+            searchView.setVisibility(View.VISIBLE);
         } else {
             removeOffConnection();
         }
@@ -145,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TabsMain.setVisibility(View.GONE);
         mainAdd.setVisibility(View.GONE);
         errorImage.setVisibility(View.VISIBLE);
+        searchView.setVisibility(View.GONE);
         Snackbar.make(mainLayout, "No Internet", BaseTransientBottomBar.LENGTH_INDEFINITE).setAction("Retry", new View.OnClickListener() {
             @Override
             public void onClick(View v) {

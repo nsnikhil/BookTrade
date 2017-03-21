@@ -45,12 +45,13 @@
 
             <TextView
                 android:id="@+id/singleBookPrice"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 android:layout_marginEnd="@dimen/eight"
                 android:layout_marginBottom="@dimen/eight"
                 android:textStyle="bold"
                 android:layout_gravity="end|bottom"
                 android:fontFamily="sans-serif"
+                android:textColor="@color/colorAccent"
                 style="@style/crdvPrice" />
 
         </LinearLayout>

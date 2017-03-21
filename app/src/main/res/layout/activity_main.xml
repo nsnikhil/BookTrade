@@ -8,6 +8,7 @@
     tools:context="com.trade.book.booktrade.MainActivity">
 
     <RelativeLayout style="@style/matchParent"
+        android:background="@color/colorBackground"
         android:id="@+id/mainRelativeLayout">
 
 
