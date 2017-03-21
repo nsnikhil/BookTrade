@@ -13,6 +13,7 @@
     <GridView
         android:id="@+id/cartList"
         style="@style/matchParent"
+        android:background="@color/colorBackground"
         android:layout_below="@id/toolbarCart"
         android:numColumns="2"/>
 

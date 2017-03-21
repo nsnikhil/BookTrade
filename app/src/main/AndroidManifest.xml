@@ -25,7 +25,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddBook" />
+        <activity android:name=".AddBook"
+            android:theme="@style/AddBookTheme"
+            android:label="Add Book"/>
 
         <provider
             android:name=".data.TableProvider"
@@ -51,7 +53,8 @@
         <activity android:name=".AccountActivity" />
         <activity
             android:name=".PrefActivity"
-            android:label="@string/setting" />
+            android:label="@string/setting"
+            android:theme="@style/AddBookTheme"/>
         <activity android:name=".SignInActivity" />
         <activity android:name=".SearchActivity">
             <intent-filter>

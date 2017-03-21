@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/tools"
+    android:background="@color/colorBackground"
     style="@style/matchParent">
 
     <android.support.v7.widget.Toolbar
@@ -53,7 +54,7 @@
 
                     <ImageView
                         style="@style/addBookIcon"
-                        android:src="@drawable/ic_book_black_48dp" />
+                        android:src="@drawable/ic_book_white_48dp" />
 
                     <EditText
                         android:id="@+id/addBookName"
@@ -71,7 +72,7 @@
 
                     <ImageView
                         style="@style/addBookIcon"
-                        android:src="@drawable/ic_profile_banner_black_48d" />
+                        android:src="@drawable/ic_profile_banner_white_48d" />
 
                     <EditText
                         android:id="@+id/addBookPublisher"
@@ -127,7 +128,7 @@
 
                     <ImageView
                         style="@style/addBookIcon"
-                        android:src="@drawable/ic_date_range_black_48dp" />
+                        android:src="@drawable/ic_date_range_white_48dp" />
 
                     <EditText
                         android:id="@+id/addBookEdition"
@@ -146,7 +147,7 @@
 
                     <ImageView
                         style="@style/addBookIcon"
-                        android:src="@drawable/ic_comment_black_48dp" />
+                        android:src="@drawable/ic_comment_white_48dp" />
 
                     <EditText
                         android:id="@+id/addBookComments"
@@ -170,6 +171,7 @@
 
                     <Spinner
                         android:id="@+id/addBookCondition"
+                        android:popupBackground="@color/colorPrimaryDark"
                         style="@style/wrapContent" />
 
                 </LinearLayout>
@@ -188,6 +190,7 @@
 
                     <Spinner
                         android:id="@+id/addBookCateogory"
+                        android:popupBackground="@color/colorPrimaryDark"
                         style="@style/wrapContent" />
 
                 </LinearLayout>
@@ -196,16 +199,6 @@
         </LinearLayout>
 
     </ScrollView>
-
-    <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/addBookBuy"
-        style="@style/fab"
-        android:src="@drawable/ic_shopping_cart_white_48dp"
-        android:visibility="gone"
-        app:fabSize="normal"
-        fab:menu_colorNormal="#3D5AFE"
-        fab:menu_colorPressed="#3D5AFE"
-        fab:menu_colorRipple="#99FFFFFF" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addBookDone"

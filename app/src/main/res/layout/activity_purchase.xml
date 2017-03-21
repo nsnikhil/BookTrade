@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/matchParent"
+    android:background="@color/colorBackground"
     tools:context="com.trade.book.booktrade.PurchaseActivity">
 
     <ScrollView style="@style/matchParent">
@@ -15,95 +18,135 @@
 
             <RelativeLayout
                 style="@style/wrapContent"
-                android:layout_width="match_parent"
-                android:padding="@dimen/eight">
+                android:layout_width="match_parent">
 
-                <TextView
-                    android:id="@+id/purchaseName"
-                    android:layout_width="wrap_content"
+                <android.support.v7.widget.CardView
+                    style="@style/crdv"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/eight"
-                    android:text="@string/bookName"
-                    android:textSize="28sp"
-                    android:textStyle="bold" />
+                    app:cardBackgroundColor="@color/colorPrimaryDark"
+                    card_view:cardCornerRadius="3dp"
+                    card_view:cardElevation="4dp"
+                    card_view:cardMaxElevation="8dp"
+                    card_view:cardUseCompatPadding="true">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:id="@+id/purchasePublisher"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/purchaseName"
-                    android:layout_margin="@dimen/eight"
-                    android:text="@string/bookPublisher"
-                    android:textSize="20sp" />
-
-                <LinearLayout
-                    style="@style/wrapContent"
-                    android:layout_alignParentRight="true"
-                    android:orientation="vertical">
+                    <LinearLayout
+                        style="@style/verticalLinearLayout">
 
 
-                    <Button
-                        android:id="@+id/purchaseBuy"
-                        android:padding="@dimen/eight"
-                        style="@style/wrapContent"
-                        android:textColor="@color/white"
-                        android:theme="@style/buttonClr"
+                    <TextView
+                        android:id="@+id/purchaseName"
                         android:layout_width="match_parent"
-                        android:text="Buy Now" />
-
-                    <Button
-                        android:id="@+id/purchaseAddTocart"
-                        android:padding="@dimen/eight"
-                        android:theme="@style/buttonClr"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/eight"
+                        android:fontFamily="sans-serif-light"
+                        android:text="@string/bookName"
+                        android:textAllCaps="true"
                         android:textColor="@color/white"
-                        style="@style/wrapContent"
-                        android:text="Add to Cart" />
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
 
-                </LinearLayout>
+                    <TextView
+                        android:id="@+id/purchasePublisher"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/purchaseName"
+                        android:layout_margin="@dimen/eight"
+                        android:fontFamily="sans-serif-light"
+                        android:text="@string/bookPublisher"
+                        android:textColor="@color/white"
+                        android:textSize="20sp" />
+
+                    <LinearLayout
+                        style="@style/horizontalLinearLayout"
+                        android:padding="@dimen/eight">
+
+                        <Button
+                            android:id="@+id/purchaseBuy"
+                            style="@style/wrapContent"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:padding="@dimen/eight"
+                            android:text="Buy Now"
+                            android:textColor="@color/white"
+                            android:theme="@style/buttonClr" />
+
+                        <Button
+                            android:id="@+id/purchaseAddTocart"
+                            style="@style/wrapContent"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:padding="@dimen/eight"
+                            android:text="Add to Cart"
+                        android:textColor="@color/white"
+                            android:theme="@style/buttonClr" />
+
+                    </LinearLayout>
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
 
             </RelativeLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:background="@color/cardview_dark_background"
-                android:layout_margin="@dimen/sixteen"
-                android:layout_height="1dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:id="@+id/purchaseEdition"
+            <android.support.v7.widget.CardView
+                style="@style/crdv"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/eight"
-                android:padding="@dimen/eight"
-                android:text="@string/bookEdition"
-                android:textSize="18sp" />
+                app:cardBackgroundColor="@color/colorPrimaryDark"
+                card_view:cardCornerRadius="3dp"
+                card_view:cardElevation="4dp"
+                card_view:cardMaxElevation="8dp"
+                card_view:cardUseCompatPadding="true">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:id="@+id/purchaseDescription"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/eight"
-                android:padding="@dimen/eight"
-                android:text="@string/bookDescription"
-                android:textSize="18sp" />
+                <LinearLayout style="@style/verticalLinearLayout">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/purchaseCateogory"
-                android:layout_margin="@dimen/eight"
-                android:padding="@dimen/eight"
-                android:text="@string/bookCateogory"
-                android:textSize="18sp" />
+                    <TextView
+                        android:id="@+id/purchaseEdition"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/eight"
+                        android:fontFamily="sans-serif-light"
+                        android:padding="@dimen/eight"
+                        android:text="@string/bookEdition"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/purchaseCondition"
-                android:layout_margin="@dimen/eight"
-                android:padding="@dimen/eight"
-                android:text="@string/bookCondition"
-                android:textSize="18sp" />
+                    <TextView
+                        android:id="@+id/purchaseDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/eight"
+                        android:fontFamily="sans-serif-light"
+                        android:padding="@dimen/eight"
+                        android:text="@string/bookDescription"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/purchaseCateogory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/eight"
+                        android:fontFamily="sans-serif-light"
+                        android:padding="@dimen/eight"
+                        android:text="@string/bookCateogory"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/purchaseCondition"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/eight"
+                        android:fontFamily="sans-serif-light"
+                        android:padding="@dimen/eight"
+                        android:text="@string/bookCondition"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
 
         </LinearLayout>
 

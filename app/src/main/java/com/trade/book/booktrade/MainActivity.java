@@ -30,6 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lapism.searchview.SearchAdapter;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     DrawerLayout mainDrawerLayout;
     RelativeLayout mainLayout;
     ImageView errorImage;
+    TextView headerText;
     NavigationView mainNaviagtionView;
     SearchView searchView;
     ActionBarDrawerToggle mainDrawerToggle;
@@ -112,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 search.putExtra(getResources().getString(R.string.intenSearchKey),query);
                 search.setAction(Intent.ACTION_SEARCH);
                 startActivity(search);
+                searchView.clearFocus();
                 return false;
             }
 
@@ -151,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initilizeDrawer() {
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mainDrawerLayout = (DrawerLayout) findViewById(R.id.mainDrawerLayout);
         mainNaviagtionView = (NavigationView) findViewById(R.id.mainNaviagtionView);
         View v = mainNaviagtionView.getHeaderView(0);
@@ -160,6 +164,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else {
             profileImage.setImageResource(R.drawable.profile);
         }
+        headerText = (TextView)v.findViewById(R.id.headerTextView);
+        headerText.setText(spf.getString(getResources().getString(R.string.prefAccountName),mNullValue));
         mainNaviagtionView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

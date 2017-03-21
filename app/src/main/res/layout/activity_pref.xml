@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/verticalLinearLayout"
+    android:background="@color/colorBackground"
     tools:context="com.trade.book.booktrade.PrefActivity">
 
     <android.support.v7.widget.Toolbar

@@ -7,6 +7,13 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
+    <style name="AddBookTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    </style>
+
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="color">@color/white</item>
     </style>
@@ -68,8 +75,8 @@
     <style name="crdvImage">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
+        <item name="android:src">@drawable/bookback</item>
         <item name="android:scaleType">centerCrop</item>
-        <item name="android:src">@color/cardview_shadow_start_color</item>
     </style>
 
     <style name="crdvText">
@@ -99,7 +106,7 @@
         <item name="android:layout_width">@dimen/headerCircleImage</item>
         <item name="android:layout_height">@dimen/headerCircleImage</item>
         <item name="android:layout_marginLeft">@dimen/sixteen</item>
-        <item name="android:layout_marginTop">40dp</item>
+        <item name="android:layout_marginTop">24dp</item>
     </style>
 
     <style name="headerText">
@@ -109,7 +116,7 @@
         <item name="android:layout_marginTop">@dimen/sixteen</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/headingText</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
     <style name="AppToolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -117,6 +124,10 @@
         <item name="android:textColorSecondary">@android:color/white</item>
         <item name="android:colorBackground">@color/white</item>
         <item name="actionMenuTextColor">@color/white</item>
+    </style>
+
+    <style name="naviagtionDivider">
+        <item name="android:listDivider">@color/white</item>
     </style>
 
 </resources>

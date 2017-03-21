@@ -58,7 +58,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         cateogory.setText("Cateogory : "+ bookObject.getCateogory());
         condition.setText("Condition : "+ bookObject.getCondition());
         imageHolder.setBackgroundColor(getResources().getColor(R.color.cardview_shadow_start_color));
-        buyNow.setText(" Buy Now "+ "\n र " +bookObject.getSellingPrice());
+        buyNow.setText(" Buy Now "+ " र " +bookObject.getSellingPrice());
     }
 
     @Override

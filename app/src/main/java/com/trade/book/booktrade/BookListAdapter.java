@@ -5,12 +5,14 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.widget.CursorAdapter;
+import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.trade.book.booktrade.data.Tables.tableOne;
 import com.trade.book.booktrade.cartData.CartTables.tablecart;
@@ -57,10 +59,12 @@ public class BookListAdapter extends BaseAdapter{
         }
         BookObject bookObject = list.get(position);
         myViewHolder.bookName.setText(bookObject.getName());
+        myViewHolder.bookName.setAllCaps(true);
         myViewHolder.bookPrice.setText("र "+bookObject.getSellingPrice());
         myViewHolder.bookPublisher.setText(bookObject.getPublisher());
         return convertView;
     }
+
 
     public class MyViewHolder{
         ImageView bookImage;
