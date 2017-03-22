@@ -1,17 +1,19 @@
-package com.trade.book.booktrade;
+package com.trade.book.booktrade.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.trade.book.booktrade.fragments.fragmentBookList;
+import com.trade.book.booktrade.fragments.fragmentCategory;
 
 
-public class PagerAdapter extends FragmentStatePagerAdapter{
+public class adapterBookPager extends FragmentStatePagerAdapter{
 
-    private static final CharSequence[] mPageTitle = {"Books","Cateogory"};
+    private static final CharSequence[] mPageTitle = {"Books","Category"};
 
 
-    public PagerAdapter(FragmentManager fm) {
+    public adapterBookPager(FragmentManager fm) {
         super(fm);
     }
 
@@ -19,10 +21,10 @@ public class PagerAdapter extends FragmentStatePagerAdapter{
     public Fragment getItem(int position) {
         Fragment f = null;
         if(position==0){
-            f = new BookList();
+            f = new fragmentBookList();
         }
         if(position==1){
-            f = new CateogoryFragment();
+            f = new fragmentCategory();
         }
         return f;
     }

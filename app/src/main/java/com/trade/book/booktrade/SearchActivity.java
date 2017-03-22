@@ -1,16 +1,10 @@
 package com.trade.book.booktrade;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -23,6 +17,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.trade.book.booktrade.adapters.adapterBookList;
+import com.trade.book.booktrade.objects.BookObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -153,7 +149,7 @@ public class SearchActivity extends AppCompatActivity {
                 int itmId = jsonObject.getInt("id");
                 srchList.add(new BookObject(name, publisher, costPrice, sellingPrice, edition, description, condtn, cateogory, userId,itmId));
             }
-            BookListAdapter bookAdapter = new BookListAdapter(getApplicationContext(), srchList);
+            adapterBookList bookAdapter = new adapterBookList(getApplicationContext(), srchList);
             searchList.setAdapter(bookAdapter);
         }else {
             noList.setVisibility(View.VISIBLE);

@@ -16,20 +16,23 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.trade.book.booktrade.adapters.adapterCart;
 import com.trade.book.booktrade.cartData.CartTables.tablecart;
 import com.trade.book.booktrade.cartData.CartTables;
+import com.trade.book.booktrade.objects.BookObject;
 
 
-public class MyCart extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class MyCartActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
     GridView bookCartGrid;
     ImageView noItem;
     Toolbar cartToolbar;
     FloatingActionButton checkOut;
     private static final int mCartLoaderId = 1;
-    CartAdapter cartAdapter;
+    adapterCart cartAdapter;
 
-    public MyCart() {
+    public MyCartActivity() {
 
     }
 
@@ -46,7 +49,7 @@ public class MyCart extends AppCompatActivity implements LoaderManager.LoaderCal
     private void initilize() {
         bookCartGrid = (GridView)findViewById(R.id.cartList);
         noItem = (ImageView)findViewById(R.id.cartEmpty);
-        cartAdapter = new CartAdapter(getApplicationContext(),null);
+        cartAdapter = new adapterCart(getApplicationContext(),null);
         bookCartGrid.setAdapter(cartAdapter);
         cartToolbar = (Toolbar)findViewById(R.id.toolbarCart);
         setSupportActionBar(cartToolbar);

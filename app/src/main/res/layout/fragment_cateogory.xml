@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/verticalLinearLayout"
     android:background="@color/colorBackground"
-    tools:context="com.trade.book.booktrade.CateogoryFragment">
+    tools:context="com.trade.book.booktrade.fragments.fragmentCategory">
 
     <ListView
         style="@style/matchParent"

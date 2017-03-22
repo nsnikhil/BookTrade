@@ -1,4 +1,4 @@
-package com.trade.book.booktrade;
+package com.trade.book.booktrade.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -9,15 +9,16 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.cartData.CartTables;
 
 /**
  * Created by Nikhil on 19-Mar-17.
  */
 
-public class CartAdapter extends CursorAdapter{
+public class adapterCart extends CursorAdapter{
 
-    public CartAdapter(Context context, Cursor c) {
+    public adapterCart(Context context, Cursor c) {
         super(context, c);
     }
 

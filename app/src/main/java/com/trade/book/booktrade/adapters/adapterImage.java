@@ -1,4 +1,4 @@
-package com.trade.book.booktrade;
+package com.trade.book.booktrade.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -6,21 +6,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
+
+import com.trade.book.booktrade.R;
 
 import java.util.ArrayList;
 
 
-public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder>{
+public class adapterImage extends RecyclerView.Adapter<adapterImage.MyViewHolder>{
 
     ArrayList<Bitmap> bmp;
     Context mContext;
     int k;
 
 
-    ImageAdapter(Context c,ArrayList<Bitmap> img,int key){
+    adapterImage(Context c, ArrayList<Bitmap> img, int key){
         mContext = c;
         bmp = img;
         k = key;

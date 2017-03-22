@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -18,6 +17,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.trade.book.booktrade.adapters.adapterBookList;
+import com.trade.book.booktrade.objects.BookObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -102,7 +103,7 @@ public class CategoryViewActivity extends AppCompatActivity {
                 int itemId = jsonObject.getInt("id");
                 categoryList.add(new BookObject(name, publisher, costPrice, sellingPrice, edition, description, condtn, cateogory, userId, itemId));
             }
-            BookListAdapter bookAdapter = new BookListAdapter(getApplicationContext(), categoryList);
+            adapterBookList bookAdapter = new adapterBookList(getApplicationContext(), categoryList);
             catList.setAdapter(bookAdapter);
         }else {
             emptyCat.setVisibility(View.VISIBLE);

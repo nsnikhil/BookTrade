@@ -1,32 +1,25 @@
-package com.trade.book.booktrade;
+package com.trade.book.booktrade.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.v4.widget.CursorAdapter;
-import android.support.v7.graphics.Palette;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.trade.book.booktrade.data.Tables.tableOne;
-import com.trade.book.booktrade.cartData.CartTables.tablecart;
 
-import java.io.File;
+import com.trade.book.booktrade.objects.BookObject;
+import com.trade.book.booktrade.R;
+
 import java.util.ArrayList;
 
-public class BookListAdapter extends BaseAdapter{
+public class adapterBookList extends BaseAdapter{
 
 
     Context mContext;
     ArrayList<BookObject> list;
 
-    BookListAdapter(Context c,ArrayList<BookObject> bookObjects){
+    public adapterBookList(Context c, ArrayList<BookObject> bookObjects){
         mContext = c;
         list = bookObjects;
     }

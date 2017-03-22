@@ -1,30 +1,28 @@
-package com.trade.book.booktrade;
+package com.trade.book.booktrade.fragments;
 
 
 import android.content.Intent;
 import android.net.Uri;
-import android.nfc.NfcEvent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import java.lang.reflect.Array;
+import com.trade.book.booktrade.CategoryViewActivity;
+import com.trade.book.booktrade.R;
+import com.trade.book.booktrade.adapters.adapterList;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-public class CateogoryFragment extends Fragment {
+public class fragmentCategory extends Fragment {
 
     ListView catList;
 
-    public CateogoryFragment() {
+    public fragmentCategory() {
     }
 
 
@@ -68,7 +66,7 @@ public class CateogoryFragment extends Fragment {
     private void addList(){
         String[] arr = getResources().getStringArray(R.array.bookCateogories);
         ArrayList<String> stringList = new ArrayList<String>(Arrays.asList(arr));
-        CateogoryAdapter adptr = new CateogoryAdapter(getActivity(),stringList);
+        adapterList adptr = new adapterList(getActivity(),stringList);
         catList.setAdapter(adptr);
     }
 

@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/verticalLinearLayout"
+    android:background="@color/colorBackground"
+    android:padding="@dimen/sixteen"
+    tools:context="com.trade.book.booktrade.fragments.dialogfragments.dialogFagmentAddress">
+
+    <EditText
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/eight"
+        android:hint="Address" />
+
+    <EditText
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/eight"
+        android:hint="Phone No" />
+
+    <Button
+        android:layout_marginTop="@dimen/eight"
+        android:layout_width="wrap_content"
+        android:text="Save"
+        android:theme="@style/buttonClr"
+        android:textColor="@color/white"
+        android:layout_gravity="end"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

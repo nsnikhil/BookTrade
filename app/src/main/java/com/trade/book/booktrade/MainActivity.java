@@ -3,7 +3,6 @@ package com.trade.book.booktrade;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -15,17 +14,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -33,10 +28,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lapism.searchview.SearchAdapter;
 import com.lapism.searchview.SearchView;
 import com.mikhaellopez.circularimageview.CircularImageView;
-import com.trade.book.booktrade.data.Tables;
+import com.trade.book.booktrade.adapters.adapterBookPager;
 
 import java.io.File;
 
@@ -130,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void addOnConnection() {
         if (checkConnection()) {
             checkFirst();
-            PagerAdapter lPagerAdapter = new PagerAdapter(getSupportFragmentManager());
+            adapterBookPager lPagerAdapter = new adapterBookPager(getSupportFragmentManager());
             mainViewPager.setAdapter(lPagerAdapter);
             TabsMain.setupWithViewPager(mainViewPager);
             errorImage.setVisibility(View.GONE);
@@ -156,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initilizeDrawer() {
-        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        final SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mainDrawerLayout = (DrawerLayout) findViewById(R.id.mainDrawerLayout);
         mainNaviagtionView = (NavigationView) findViewById(R.id.mainNaviagtionView);
         View v = mainNaviagtionView.getHeaderView(0);
@@ -168,6 +162,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         headerText = (TextView)v.findViewById(R.id.headerTextView);
         headerText.setText(spf.getString(getResources().getString(R.string.prefAccountName),mNullValue));
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainDrawerLayout.closeDrawers();
+                if(spf.getBoolean(getResources().getString(R.string.prefAccountIndicator),false)){
+                    startActivityForResult(new Intent(MainActivity.this, AccountActivity.class), REQUEST_EXIT);
+                }else {
+                    checkFirst();
+                }
+            }
+        });
         mainNaviagtionView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -176,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switch (item.getItemId()) {
                     case R.id.navItemMyCart:
                         if(spf.getBoolean(getResources().getString(R.string.prefAccountIndicator),false)){
-                            startActivity(new Intent(MainActivity.this, MyCart.class));
+                            startActivity(new Intent(MainActivity.this, MyCartActivity.class));
                         }else {
                             checkFirst();
                         }

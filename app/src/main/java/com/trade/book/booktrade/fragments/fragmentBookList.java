@@ -1,11 +1,9 @@
-package com.trade.book.booktrade;
+package com.trade.book.booktrade.fragments;
 
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,21 +15,25 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.trade.book.booktrade.adapters.adapterBookList;
+import com.trade.book.booktrade.objects.BookObject;
+import com.trade.book.booktrade.PurchaseActivity;
+import com.trade.book.booktrade.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class BookList extends Fragment {
+public class fragmentBookList extends Fragment {
 
 
     GridView bookListGrid;
     ArrayList<BookObject> bookList = new ArrayList<>();
 
-    public BookList() {
+    public fragmentBookList() {
     }
 
     @Override
@@ -80,7 +82,7 @@ public class BookList extends Fragment {
             int itemId = jsonObject.getInt("id");
             bookList.add(new BookObject(name,publisher,costPrice,sellingPrice,edition,description,condtn,cateogory,userId,itemId));
         }
-        BookListAdapter bookAdapter = new BookListAdapter(getActivity(),bookList);
+        adapterBookList bookAdapter = new adapterBookList(getActivity(),bookList);
         bookListGrid.setAdapter(bookAdapter);
     }
 

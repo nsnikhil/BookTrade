@@ -1,4 +1,4 @@
-package com.trade.book.booktrade;
+package com.trade.book.booktrade.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,18 +8,20 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.trade.book.booktrade.R;
+
 import java.util.ArrayList;
 
 /**
  * Created by Nikhil on 19-Mar-17.
  */
 
-public class CateogoryAdapter extends BaseAdapter{
+public class adapterList extends BaseAdapter{
 
     Context mContext;
     ArrayList<String> list;
 
-    CateogoryAdapter(Context context, ArrayList<String> name){
+    public adapterList(Context context, ArrayList<String> name){
         mContext = context;
         list = name;
     }

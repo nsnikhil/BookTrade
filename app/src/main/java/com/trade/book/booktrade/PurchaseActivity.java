@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.trade.book.booktrade.cartData.CartTables;
 import com.trade.book.booktrade.cartData.CartTables.tablecart;
+import com.trade.book.booktrade.objects.BookObject;
 
 public class PurchaseActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -28,13 +29,9 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         initilize();
         if(getIntent().getExtras()!=null){
             bObject = (BookObject) getIntent().getExtras().getSerializable(getResources().getString(R.string.intenKeyObejct));
-            checkInCart(bObject);
             setValue(bObject);
         }
-        if(getIntent().getExtras().getBoolean(getResources().getString(R.string.intenfromcart))){
-            addToCart.setText("Remove From Cart");
-            addToCart.setEnabled(true);
-        }
+        setCartText();
     }
 
     private void initilize() {
@@ -65,11 +62,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()){
             case  R.id.purchaseAddTocart:
-                if(getIntent().getExtras().getBoolean(getResources().getString(R.string.intenfromcart))){
-                    removeBook();
-                }else {
-                    insertVal();
-                }
+               checkInCart(bObject);
             break;
         }
     }
@@ -80,8 +73,8 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
             if(count==0){
                 Toast.makeText(getApplicationContext(),"Error while removing item",Toast.LENGTH_SHORT).show();
             }else {
+                setCartText();
                 Toast.makeText(getApplicationContext(),"Item Removed",Toast.LENGTH_SHORT).show();
-                finish();
             }
         }
 
@@ -89,9 +82,29 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
 
     private void checkInCart(BookObject bObject){
         Cursor c = getContentResolver().query(CartTables.mCartContentUri,null,null,null,null);
+        if(c.getCount()==0){
+            insertVal();
+        }else {
+            if(c.moveToNext()){
+                if(c.getInt(c.getColumnIndex(tablecart.mUid))==bObject.getItemId()){
+                    removeBook();
+                }else {
+                    insertVal();
+                }
+            }
+        }
+    }
+
+    private void setCartText(){
+        Cursor c = getContentResolver().query(CartTables.mCartContentUri,null,null,null,null);
+        if(c.getCount()==0){
+            addToCart.setText("Add to cart");
+        }
         if(c.moveToNext()){
             if(c.getInt(c.getColumnIndex(tablecart.mUid))==bObject.getItemId()){
-                addToCart.setEnabled(false);
+                addToCart.setText("Remove from cart");
+            }else {
+                addToCart.setText("Add to cart");
             }
         }
     }
@@ -113,7 +126,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
             Toast.makeText(getApplicationContext(),"Error while adding",Toast.LENGTH_SHORT).show();
         }else {
             Toast.makeText(getApplicationContext(),"Added to cart",Toast.LENGTH_SHORT).show();
-            addToCart.setEnabled(false);
+            setCartText();
         }
     }
 }

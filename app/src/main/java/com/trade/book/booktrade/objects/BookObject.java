@@ -1,4 +1,4 @@
-package com.trade.book.booktrade;
+package com.trade.book.booktrade.objects;
 
 
 import java.io.Serializable;
@@ -8,7 +8,7 @@ public class BookObject implements Serializable{
     String name,publisher,description,cateogory,condition;
     int costPrice,sellingPrice,edition,userId,itemId;
 
-    BookObject(String nm,String pb,int cp,int sp, int ed,String des,String condt,String cat,int usrd,int itmid){
+    public BookObject(String nm,String pb,int cp,int sp, int ed,String des,String condt,String cat,int usrd,int itmid){
         name = nm;
         publisher = pb;
         costPrice = cp;
