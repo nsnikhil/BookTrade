@@ -1,6 +1,7 @@
 package com.trade.book.booktrade;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -16,13 +17,13 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -44,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView headerText;
     NavigationView mainNaviagtionView;
     SearchView searchView;
-    ActionBarDrawerToggle mainDrawerToggle;
     ViewPager mainViewPager;
     TabLayout TabsMain;
     int mRequestCode = 1080;
@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         errorImage = (ImageView) findViewById(R.id.errorImage);
         mainLayout = (RelativeLayout) findViewById(R.id.mainRelativeLayout);
         searchView = (SearchView)findViewById(R.id.searchView);
+
         searchView.setHint(getResources().getString(R.string.searchHint));
         searchView.setOnMenuClickListener(new SearchView.OnMenuClickListener() {
             @Override
@@ -228,6 +229,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }else {
                     checkFirst();
                 }
+                break;
+            case R.id.addBookNewImage:
                 break;
         }
     }

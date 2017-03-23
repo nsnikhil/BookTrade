@@ -1,13 +1,16 @@
 package com.trade.book.booktrade.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.trade.book.booktrade.objects.BookObject;
 import com.trade.book.booktrade.R;
 
@@ -55,6 +58,14 @@ public class adapterBookList extends BaseAdapter{
         myViewHolder.bookName.setAllCaps(true);
         myViewHolder.bookPrice.setText("र "+bookObject.getSellingPrice());
         myViewHolder.bookPublisher.setText(bookObject.getPublisher());
+        String url = mContext.getResources().getString(R.string.urlBucetHost)+mContext.getResources().getString(R.string.urlBucketName)+"/"+bookObject.getPhoto0();
+        Log.d("",url);
+        Glide.with(mContext)
+                .load(url)
+                .centerCrop()
+                .placeholder(R.drawable.bookback)
+                .crossFade()
+                .into(myViewHolder.bookImage);
         return convertView;
     }
 

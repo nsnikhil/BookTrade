@@ -64,7 +64,7 @@ public class MyCartActivity extends AppCompatActivity implements LoaderManager.L
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor c = (Cursor) parent.getItemAtPosition(position);
-                if(c.moveToFirst()){
+                if(c.moveToPosition(position)){
                     BookObject bookObject = new BookObject (c.getString(c.getColumnIndex(tablecart.mName)),
                             c.getString(c.getColumnIndex(tablecart.mPublisher)),
                             c.getInt(c.getColumnIndex(tablecart.mCostPrice)),
@@ -74,7 +74,15 @@ public class MyCartActivity extends AppCompatActivity implements LoaderManager.L
                             c.getString(c.getColumnIndex(tablecart.mCondition)),
                             c.getString(c.getColumnIndex(tablecart.mCateogory)),
                             c.getInt(c.getColumnIndex(tablecart.mUserId)),
-                            c.getInt(c.getColumnIndex(tablecart._ID)));
+                            c.getInt(c.getColumnIndex(tablecart._ID))
+                            ,c.getString(c.getColumnIndex(tablecart.mPhoto0))
+                            ,c.getString(c.getColumnIndex(tablecart.mPhoto1))
+                            ,c.getString(c.getColumnIndex(tablecart.mPhoto2))
+                            ,c.getString(c.getColumnIndex(tablecart.mPhoto3))
+                            ,c.getString(c.getColumnIndex(tablecart.mPhoto4))
+                            ,c.getString(c.getColumnIndex(tablecart.mPhoto5))
+                            ,c.getString(c.getColumnIndex(tablecart.mPhoto6))
+                            ,c.getString(c.getColumnIndex(tablecart.mPhoto7)));
                     Intent detail  = new Intent(getApplicationContext(),PurchaseActivity.class);
                     Bundle b = new Bundle();
                     b.putSerializable(getResources().getString(R.string.intenKeyObejct), bookObject);

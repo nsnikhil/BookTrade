@@ -9,6 +9,7 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.cartData.CartTables;
 
@@ -36,6 +37,13 @@ public class adapterCart extends CursorAdapter{
         myViewHolder.bookName.setText(cursor.getString(cursor.getColumnIndex(CartTables.tablecart.mName)));
         myViewHolder.bookPublisher.setText(cursor.getString(cursor.getColumnIndex(CartTables.tablecart.mPublisher)));
         myViewHolder.bookPrice.setText(""+cursor.getInt(cursor.getColumnIndex(CartTables.tablecart.mSellingPrice)));
+        String url = context.getResources().getString(R.string.urlBucetHost)+context.getResources().getString(R.string.urlBucketName)+"/"+cursor.getString(cursor.getColumnIndex(CartTables.tablecart.mPhoto0));
+        Glide.with(context)
+                .load(url)
+                .centerCrop()
+                .placeholder(R.drawable.bookback)
+                .crossFade()
+                .into(myViewHolder.bookImage);
     }
 
     public class MyViewHolder{

@@ -68,7 +68,10 @@
         <activity
             android:name=".MyCartActivity"
             android:label="My Cart" />
-        <activity android:name=".CategoryViewActivity"></activity>
+        <activity android:name=".CategoryViewActivity"/>
+        <service
+            android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
+            android:enabled="true" />
     </application>
 
 </manifest>

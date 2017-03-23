@@ -80,7 +80,16 @@ public class fragmentBookList extends Fragment {
             String cateogory = jsonObject.getString("Cateogory");
             int userId = jsonObject.getInt("userId");
             int itemId = jsonObject.getInt("id");
-            bookList.add(new BookObject(name,publisher,costPrice,sellingPrice,edition,description,condtn,cateogory,userId,itemId));
+            String photoUrlName0 = jsonObject.getString("pic0");
+            String photoUrlName1 = jsonObject.getString("pic1");
+            String photoUrlName2 = jsonObject.getString("pic2");
+            String photoUrlName3 = jsonObject.getString("pic3");
+            String photoUrlName4 = jsonObject.getString("pic4");
+            String photoUrlName5 = jsonObject.getString("pic5");
+            String photoUrlName6 = jsonObject.getString("pic6");
+            String photoUrlName7 = jsonObject.getString("pic7");
+            bookList.add(new BookObject(name,publisher,costPrice,sellingPrice,edition,description,condtn,cateogory,userId,itemId
+                    ,photoUrlName0,photoUrlName1,photoUrlName2,photoUrlName3,photoUrlName4,photoUrlName5,photoUrlName6,photoUrlName7));
         }
         adapterBookList bookAdapter = new adapterBookList(getActivity(),bookList);
         bookListGrid.setAdapter(bookAdapter);

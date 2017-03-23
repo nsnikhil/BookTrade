@@ -19,8 +19,7 @@
             <RelativeLayout
                 android:id="@+id/imageContainer"
                 style="@style/matchParent"
-                android:layout_height="300dp"
-                android:layout_below="@id/toolbarAddBook">
+                android:layout_height="300dp">
 
                 <ImageView
                     android:id="@+id/addBookImageEmptyState"
@@ -36,7 +35,7 @@
                     android:id="@+id/addBookNewImage"
                     style="@style/wrapContent"
                     android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:padding="@dimen/sixteen"
                     android:src="@drawable/camera" />
 
