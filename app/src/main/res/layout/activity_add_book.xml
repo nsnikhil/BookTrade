@@ -53,7 +53,7 @@
 
                     <ImageView
                         style="@style/addBookIcon"
-                        android:src="@drawable/ic_book_white_48dp" />
+                        android:src="@drawable/ic_book_black_48dp" />
 
                     <EditText
                         android:id="@+id/addBookName"
@@ -71,7 +71,7 @@
 
                     <ImageView
                         style="@style/addBookIcon"
-                        android:src="@drawable/ic_profile_banner_white_48d" />
+                        android:src="@drawable/ic_profile_banner_black_48d" />
 
                     <EditText
                         android:id="@+id/addBookPublisher"
@@ -127,7 +127,7 @@
 
                     <ImageView
                         style="@style/addBookIcon"
-                        android:src="@drawable/ic_date_range_white_48dp" />
+                        android:src="@drawable/ic_date_range_black_48dp" />
 
                     <EditText
                         android:id="@+id/addBookEdition"
@@ -146,7 +146,7 @@
 
                     <ImageView
                         style="@style/addBookIcon"
-                        android:src="@drawable/ic_comment_white_48dp" />
+                        android:src="@drawable/ic_comment_black_48dp" />
 
                     <EditText
                         android:id="@+id/addBookComments"
@@ -170,7 +170,6 @@
 
                     <Spinner
                         android:id="@+id/addBookCondition"
-                        android:popupBackground="@color/colorPrimaryDark"
                         style="@style/wrapContent" />
 
                 </LinearLayout>
@@ -189,7 +188,6 @@
 
                     <Spinner
                         android:id="@+id/addBookCateogory"
-                        android:popupBackground="@color/colorPrimaryDark"
                         style="@style/wrapContent" />
 
                 </LinearLayout>

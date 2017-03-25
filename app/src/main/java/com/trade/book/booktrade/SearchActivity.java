@@ -137,6 +137,7 @@ public class SearchActivity extends AppCompatActivity {
         if (response.length() > 0) {
             for (int i = 0; i < response.length(); i++) {
                 JSONObject jsonObject = response.getJSONObject(i);
+                int bid = jsonObject.getInt("id");
                 String name = jsonObject.getString("Name");
                 String publisher = jsonObject.getString("Publisher");
                 int costPrice = jsonObject.getInt("CostPrice");
@@ -155,7 +156,7 @@ public class SearchActivity extends AppCompatActivity {
                 String photoUrlName5 = jsonObject.getString("pic5");
                 String photoUrlName6 = jsonObject.getString("pic6");
                 String photoUrlName7 = jsonObject.getString("pic7");
-                srchList.add(new BookObject(name, publisher, costPrice, sellingPrice, edition, description, condtn, cateogory, userId,itmId
+                srchList.add(new BookObject(bid,name, publisher, costPrice, sellingPrice, edition, description, condtn, cateogory, userId,itmId
                         ,photoUrlName0,photoUrlName1,photoUrlName2,photoUrlName3,photoUrlName4,photoUrlName5,photoUrlName6,photoUrlName7));
             }
             adapterBookList bookAdapter = new adapterBookList(getApplicationContext(), srchList);

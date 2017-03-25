@@ -66,7 +66,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         boolean id = spf.getBoolean(getResources().getString(R.string.prefAccountIndicator), false);
         if (!id) {
             finish();
-            startActivity(new Intent(MainActivity.this, SignInActivity.class));
+            //startActivity(new Intent(MainActivity.this, SignInActivity.class));
+            startActivity(new Intent(MainActivity.this, IntroActivity.class));
         }
     }
 

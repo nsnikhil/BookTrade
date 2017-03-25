@@ -5,111 +5,90 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
 
 public class AccountActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String mNullValue = "N/A";
-    private static final int mZeroValue = 0;
-    Toolbar accountToolbar;
-    CollapsingToolbarLayout  accountCollapsingToolbarLayout;
-    ImageView accountBanner;
-    ListView purchaseList,uploadList,cartList;
-    LinearLayout purchaseLayout,uploadLayout,cartLayout;
-    Button signOut;
+    Button signOut,purchase,uploads;
+    TextView name;
+    CircularImageView profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
         initilize();
-        setValue();
-        addFakedata();
+        setVal();
     }
 
-    private void initilize() {
-        accountToolbar = (Toolbar)findViewById(R.id.accounttoolbar);
-        accountCollapsingToolbarLayout = (CollapsingToolbarLayout)findViewById(R.id.accountCollapsingToolbar);
-        accountBanner = (ImageView)findViewById(R.id.accountBanner);
-        accountBanner.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        purchaseList = (ListView)findViewById(R.id.accountPurchaseList);
-        uploadList = (ListView)findViewById(R.id.accountUploadList);
-        cartList = (ListView)findViewById(R.id.accountCartList);
-        signOut = (Button)findViewById(R.id.accountSignOut);
-        signOut.setOnClickListener(this);
-        purchaseLayout = (LinearLayout)findViewById(R.id.accountPurchaseContainer);
-        uploadLayout = (LinearLayout)findViewById(R.id.accountUploadContainer);
-        cartLayout = (LinearLayout)findViewById(R.id.accountCartContainer);
-        purchaseLayout.setOnClickListener(this);
-        cartLayout.setOnClickListener(this);
-        uploadLayout.setOnClickListener(this);
-    }
-
-    private void addFakedata(){
-        ArrayList<String> list = new ArrayList<>();
-        list.add("No Items");
-        ArrayAdapter<String> adp = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,list);
-        purchaseList.setAdapter(adp);
-        uploadList.setAdapter(adp);
-        cartList.setAdapter(adp);
-    }
-
-    private void setValue(){
+    private void setVal() {
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        accountToolbar.setTitle(spf.getString(getResources().getString(R.string.prefAccountName),mNullValue));
-        accountBanner.setImageBitmap(getBitmap());
+        name.setText(spf.getString(getResources().getString(R.string.prefAccountName),mNullValue));
+        if(getBitmap()!=null){
+            profile.setImageBitmap(getBitmap());
+        }
     }
-
 
     private Bitmap getBitmap() {
         Bitmap img = null;
         File folder = getExternalCacheDir();
-        File fi = new File(folder,"profile.jpg");
+        File fi = new File(folder, "profile.jpg");
         String fpath = String.valueOf(fi);
         img = BitmapFactory.decodeFile(fpath);
         return img;
     }
 
+    private void initilize() {
+        signOut = (Button)findViewById(R.id.accountSignOut);
+        purchase = (Button)findViewById(R.id.accountPurchase);
+        uploads = (Button)findViewById(R.id.accountUploads);
+        name = (TextView) findViewById(R.id.accountName);
+        profile = (CircularImageView) findViewById(R.id.accountPicture);
+        signOut.setOnClickListener(this);
+        purchase.setOnClickListener(this);
+        uploads.setOnClickListener(this);
+    }
+
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.accountSignOut:
-                makeDialog();
-                break;
-            case R.id.accountPurchaseContainer:
-                Toast.makeText(getApplicationContext(),"Purchaese",Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.accountCartContainer:
-                Toast.makeText(getApplicationContext(),"cart",Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.accountUploadContainer:
-                Toast.makeText(getApplicationContext(),"upload",Toast.LENGTH_SHORT).show();
+            case R.id.accountUploads:
+                Intent act = new Intent(AccountActivity.this,CategoryViewActivity.class);
+                act.putExtra(getResources().getString(R.string.intencateuri),buildUri());
+                act.putExtra(getResources().getString(R.string.intenupind),121);
+                startActivity(act);
                 break;
         }
+    }
+
+    private String buildUri(){
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String host = getResources().getString(R.string.urlServer);
+        String searchFileName = getResources().getString(R.string.urlUserUploads);
+        String url = host + searchFileName;
+        String uidQuery = "uid";
+        String uidValue  = spf.getString(getResources().getString(R.string.prefAccountId),mNullValue);
+        return Uri.parse(url).buildUpon()
+                .appendQueryParameter(uidQuery, uidValue)
+                .build()
+                .toString();
     }
 
     private void makeDialog() {

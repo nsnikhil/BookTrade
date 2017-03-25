@@ -33,14 +33,18 @@ public class CategoryViewActivity extends AppCompatActivity {
     Toolbar catToolbar;
     ProgressBar catProgress;
     ArrayList<BookObject> categoryList;
+    int mUploadIndicator = 0;
+    private static final int mRequestCode = 151;
+    String catUri;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_view);
+        catUri = getIntent().getExtras().getString(getResources().getString(R.string.intencateuri));
+        mUploadIndicator = getIntent().getExtras().getInt(getResources().getString(R.string.intenupind));
         initilize();
-        String catUri = getIntent().getExtras().getString(getResources().getString(R.string.intencateuri));
         getList(catUri);
     }
 
@@ -49,7 +53,11 @@ public class CategoryViewActivity extends AppCompatActivity {
         emptyCat = (ImageView)findViewById(R.id.categoryEmpty);
         catToolbar = (Toolbar)findViewById(R.id.toolbarCategory);
         setSupportActionBar(catToolbar);
-        getSupportActionBar().setTitle(getResources().getStringArray(R.array.bookCateogories)[ getIntent().getExtras().getInt(getResources().getString(R.string.intencateuripos))]);
+        if(mUploadIndicator==0){
+            getSupportActionBar().setTitle(getResources().getStringArray(R.array.bookCateogories)[ getIntent().getExtras().getInt(getResources().getString(R.string.intencateuripos))]);
+        }else {
+            getSupportActionBar().setTitle("My Uploads");
+        }
         catProgress = (ProgressBar)findViewById(R.id.cateogoryProgress);
         catProgress.setVisibility(View.VISIBLE);
         categoryList = new ArrayList<>();
@@ -61,9 +69,23 @@ public class CategoryViewActivity extends AppCompatActivity {
                 Bundle b = new Bundle();
                 b.putSerializable(getResources().getString(R.string.intenKeyObejct), bookObject);
                 detail.putExtras(b);
-                startActivity(detail);
+                if(mUploadIndicator!=0){
+                    detail.putExtra(getResources().getString(R.string.intentfromupload),123);
+                }
+                startActivityForResult(detail,mRequestCode);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==mRequestCode){
+            if(resultCode==RESULT_OK){
+                catList.setAdapter(null);
+                categoryList.clear();
+                getList(catUri);
+            }
+        }
     }
 
     private void getList(String url){
@@ -91,6 +113,7 @@ public class CategoryViewActivity extends AppCompatActivity {
         if (response.length() > 0) {
             for (int i = 0; i < response.length(); i++) {
                 JSONObject jsonObject = response.getJSONObject(i);
+                int bid = jsonObject.getInt("id");
                 String name = jsonObject.getString("Name");
                 String publisher = jsonObject.getString("Publisher");
                 int costPrice = jsonObject.getInt("CostPrice");
@@ -109,7 +132,7 @@ public class CategoryViewActivity extends AppCompatActivity {
                 String photoUrlName5 = jsonObject.getString("pic5");
                 String photoUrlName6 = jsonObject.getString("pic6");
                 String photoUrlName7 = jsonObject.getString("pic7");
-                categoryList.add(new BookObject(name, publisher, costPrice, sellingPrice, edition, description, condtn, cateogory, userId, itemId
+                categoryList.add(new BookObject(bid,name, publisher, costPrice, sellingPrice, edition, description, condtn, cateogory, userId, itemId
                         ,photoUrlName0,photoUrlName1,photoUrlName2,photoUrlName3,photoUrlName4,photoUrlName5,photoUrlName6,photoUrlName7));
             }
             adapterBookList bookAdapter = new adapterBookList(getApplicationContext(), categoryList);

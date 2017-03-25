@@ -43,6 +43,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.adapters.*;
+import com.trade.book.booktrade.objects.BookObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -50,26 +51,33 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AddBook extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String mNullValue = "N/A";
+    private static final int CAMERA_REQUEST_CODE = 154;
+    private static final int GALLERY_REQUEST_CODE = 155;
+    static int imageCount = 0;
     Toolbar toolbarAddBook;
     FloatingActionButton addBookDone;
     EditText name, publisher, costPrice, sellingPrice, edition, comment;
     Spinner condition, cateogory;
     ImageView emptyState, newImage;
-    private static final String mNullValue = "N/A";
     RecyclerView imageContainer;
     ArrayList<Bitmap> imageList;
+    ArrayList<String> imageUrls;
     adapterImage imageAdapter;
+    //adapterPurchaseImage editImageAdapter;
     String tempImageFolder = "tempImage";
     String[] fileArrayNames = {null, null, null, null, null, null, null, null};
     File[] fileArray;
-    private static final int CAMERA_REQUEST_CODE = 154;
-    private static final int GALLERY_REQUEST_CODE = 155;
-    static int imageCount = 0;
+    BookObject bookEditObject = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +85,132 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.activity_add_book);
         initilize();
         setClickListener();
+        if (getIntent().getExtras() != null) {
+            bookEditObject = (BookObject) getIntent().getExtras().getSerializable(getResources().getString(R.string.intentEditObject));
+            setValue(bookEditObject);
+        }
+    }
+
+    private void setValue(BookObject bookEditObject) {
+        name.setText(bookEditObject.getName());
+        publisher.setText(bookEditObject.getPublisher());
+        sellingPrice.setText(bookEditObject.getSellingPrice() + "");
+        edition.setText(bookEditObject.getEdition() + "");
+        costPrice.setText(bookEditObject.getCostPrice() + "");
+        if (!bookEditObject.getDescription().isEmpty() || bookEditObject.getDescription().length() != 0) {
+            comment.setText(bookEditObject.getDescription());
+        }
+        setCondition();
+        setCategory();
+        buildImageUrl();
+    }
+
+    private void setCondition() {
+        String[] cdt = getResources().getStringArray(R.array.bookConditionEntry);
+        for (int i = 0; i < cdt.length; i++) {
+            if (cdt[i].equalsIgnoreCase(bookEditObject.getCondition())) {
+                condition.setSelection(i);
+                return;
+            }
+        }
+    }
+
+    private void setCategory() {
+        String[] cat = getResources().getStringArray(R.array.bookCateogories);
+        for (int i = 0; i < cat.length; i++) {
+            if (cat[i].equalsIgnoreCase(bookEditObject.getCateogory())) {
+                cateogory.setSelection(i);
+                return;
+            }
+        }
+    }
+
+    private void buildImageUrl() {
+        imageUrls = new ArrayList<>();
+        String baseUrl = getResources().getString(R.string.urlBucetHost) + getResources().getString(R.string.urlBucketName);
+        if (!bookEditObject.getPhoto0().equalsIgnoreCase("null") && bookEditObject.getPhoto0() != null) {
+            imageUrls.add(baseUrl + "/" + bookEditObject.getPhoto0());
+        }
+        if (!bookEditObject.getPhoto1().equalsIgnoreCase("null") && bookEditObject.getPhoto1() != null) {
+            imageUrls.add(baseUrl + "/" + bookEditObject.getPhoto1());
+        }
+        if (!bookEditObject.getPhoto2().equalsIgnoreCase("null") && bookEditObject.getPhoto2() != null) {
+            imageUrls.add(baseUrl + "/" + bookEditObject.getPhoto2());
+        }
+        if (!bookEditObject.getPhoto3().equalsIgnoreCase("null") && bookEditObject.getPhoto3() != null) {
+            imageUrls.add(baseUrl + "/" + bookEditObject.getPhoto3());
+        }
+        if (!bookEditObject.getPhoto4().equalsIgnoreCase("null") && bookEditObject.getPhoto4() != null) {
+            imageUrls.add(baseUrl + "/" + bookEditObject.getPhoto4());
+        }
+        if (!bookEditObject.getPhoto5().equalsIgnoreCase("null") && bookEditObject.getPhoto5() != null) {
+            imageUrls.add(baseUrl + "/" + bookEditObject.getPhoto5());
+        }
+        if (!bookEditObject.getPhoto6().equalsIgnoreCase("null") && bookEditObject.getPhoto6() != null) {
+            imageUrls.add(baseUrl + "/" + bookEditObject.getPhoto6());
+        }
+        if (!bookEditObject.getPhoto7().equalsIgnoreCase("null") && bookEditObject.getPhoto7() != null) {
+            imageUrls.add(baseUrl + "/" + bookEditObject.getPhoto7());
+        }
+        getImages();
+        //editImageAdapter = new adapterPurchaseImage(getApplicationContext(), imageUrls, 1);
+        //imageContainer.setAdapter(null);
+        //imageContainer.setAdapter(editImageAdapter);
+    }
+
+    private void getImages(){
+        for(int i=0;i<imageUrls.size();i++){
+            new downloadImages().execute(imageUrls.get(i));
+        }
+    }
+
+    private void addBitmap(String s){
+        URL u = null;
+        Bitmap img = null;
+        HttpURLConnection htcp = null;
+        InputStream is = null;
+        try {
+            u = new URL(s);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        try {
+            htcp = (HttpURLConnection) u.openConnection();
+            htcp.setRequestMethod("GET");
+            htcp.connect();
+            if(htcp.getResponseCode()==200){
+                is = htcp.getInputStream();
+                img = BitmapFactory.decodeStream(is);
+                imageList.add(img);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            if(htcp!=null){
+                htcp.disconnect();
+            }if(is!=null){
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public class downloadImages extends AsyncTask<String,Void,Void>{
+
+        @Override
+        protected Void doInBackground(String... params) {
+            addBitmap(params[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            imageContainer.swapAdapter(imageAdapter, true);
+        }
     }
 
     private void setClickListener() {
@@ -113,7 +247,6 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         ArrayAdapter<CharSequence> spinnerCateogorynAdapter = ArrayAdapter.createFromResource(this, R.array.bookCateogories, android.R.layout.simple_spinner_dropdown_item);
         spinnerConditionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cateogory.setAdapter(spinnerCateogorynAdapter);
-
     }
 
     private String buildUrl() {
@@ -121,22 +254,22 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         String insertFilename = getResources().getString(R.string.urlInsert);
         String url = host + insertFilename;
         String nameQuery = "nm";
-        String nameValue = name.getText().toString();
+        String nameValue = name.getText().toString().trim();
         String publisherQuery = "pb";
-        String publisherValue = publisher.getText().toString();
+        String publisherValue = publisher.getText().toString().trim();
         String costPriceQuery = "cp";
-        String costPriceValue = costPrice.getText().toString();
+        String costPriceValue = costPrice.getText().toString().trim();
         String sellingPriceQuery = "sp";
-        String sellingPriceValue = sellingPrice.getText().toString();
+        String sellingPriceValue = sellingPrice.getText().toString().trim();
         String editionQuery = "ed";
-        String editionValue = edition.getText().toString();
+        String editionValue = edition.getText().toString().trim();
         String commentQuery = "ds";
-        String commentValue = comment.getText().toString();
+        String commentValue = comment.getText().toString().trim();
         String conditiontQuery = "cd";
-        String conditionValue = condition.getSelectedItem().toString();
+        String conditionValue = condition.getSelectedItem().toString().trim();
         ;
         String cateogoryQuery = "ct";
-        String cateogoryValue = cateogory.getSelectedItem().toString();
+        String cateogoryValue = cateogory.getSelectedItem().toString().trim();
         ;
         String userIdQuery = "uid";
 
@@ -171,6 +304,72 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                 .appendQueryParameter(conditiontQuery, conditionValue)
                 .appendQueryParameter(cateogoryQuery, cateogoryValue)
                 .appendQueryParameter(userIdQuery, userIdValue)
+                .appendQueryParameter(picyQuery0, picyValue0)
+                .appendQueryParameter(picyQuery1, picyValue1)
+                .appendQueryParameter(picyQuery2, picyValue2)
+                .appendQueryParameter(picyQuery3, picyValue3)
+                .appendQueryParameter(picyQuery4, picyValue4)
+                .appendQueryParameter(picyQuery5, picyValue5)
+                .appendQueryParameter(picyQuery6, picyValue6)
+                .appendQueryParameter(picyQuery7, picyValue7)
+                .build()
+                .toString();
+    }
+
+    private String buildUpdateUrl() {
+        String host = getResources().getString(R.string.urlServer);
+        String updateFile = getResources().getString(R.string.urlUpdateSingle);
+        String url = host + updateFile;
+
+        String bookIdQuery = "bid";
+        int bookIdValue = bookEditObject.getBid();
+
+        String nameQuery = "nm";
+        String nameValue = name.getText().toString().trim();
+        String publisherQuery = "pb";
+        String publisherValue = publisher.getText().toString().trim();
+        String costPriceQuery = "cp";
+        String costPriceValue = costPrice.getText().toString().trim();
+        String sellingPriceQuery = "sp";
+        String sellingPriceValue = sellingPrice.getText().toString().trim();
+        String editionQuery = "ed";
+        String editionValue = edition.getText().toString().trim();
+        String commentQuery = "ds";
+        String commentValue = comment.getText().toString().trim();
+        String conditiontQuery = "cd";
+        String conditionValue = condition.getSelectedItem().toString().trim();
+
+        String cateogoryQuery = "ct";
+        String cateogoryValue = cateogory.getSelectedItem().toString().trim();
+
+
+        String picyQuery0 = "p0";
+        String picyValue0 = fileArrayNames[0];
+        String picyQuery1 = "p1";
+        String picyValue1 = fileArrayNames[1];
+        String picyQuery2 = "p2";
+        String picyValue2 = fileArrayNames[2];
+        String picyQuery3 = "p3";
+        String picyValue3 = fileArrayNames[3];
+        String picyQuery4 = "p4";
+        String picyValue4 = fileArrayNames[4];
+        String picyQuery5 = "p5";
+        String picyValue5 = fileArrayNames[5];
+        String picyQuery6 = "p6";
+        String picyValue6 = fileArrayNames[6];
+        String picyQuery7 = "p7";
+        String picyValue7 = fileArrayNames[7];
+
+        return Uri.parse(url).buildUpon()
+                .appendQueryParameter(bookIdQuery, String.valueOf(bookIdValue))
+                .appendQueryParameter(nameQuery, nameValue)
+                .appendQueryParameter(publisherQuery, publisherValue)
+                .appendQueryParameter(costPriceQuery, costPriceValue)
+                .appendQueryParameter(sellingPriceQuery, sellingPriceValue)
+                .appendQueryParameter(editionQuery, editionValue)
+                .appendQueryParameter(commentQuery, commentValue)
+                .appendQueryParameter(conditiontQuery, conditionValue)
+                .appendQueryParameter(cateogoryQuery, cateogoryValue)
                 .appendQueryParameter(picyQuery0, picyValue0)
                 .appendQueryParameter(picyQuery1, picyValue1)
                 .appendQueryParameter(picyQuery2, picyValue2)
@@ -228,27 +427,52 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addBookDone:
-                if (verifyFields()) {
-                    makeNames();
-                    for (int i = 0; i < imageList.size(); i++) {
-                        makeFile(fileArrayNames[i],i);
+                if (getIntent().getExtras() != null) {
+                    if (verifyFields()) {
+                        makeNames();
+                        for (int i = 0; i < imageList.size(); i++) {
+                            makeFile(fileArrayNames[i], i);
+                        }
+                        RequestQueue request = Volley.newRequestQueue(getApplicationContext());
+                        StringRequest stringRequest = new StringRequest(Request.Method.GET, buildUpdateUrl(), new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+                                setResult(RESULT_OK, null);
+                                finish();
+                                startActivity(new Intent(AddBook.this, MainActivity.class));
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        request.add(stringRequest);
                     }
-                    RequestQueue request = Volley.newRequestQueue(getApplicationContext());
-                    StringRequest stringRequest = new StringRequest(Request.Method.GET, buildUrl(), new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
-                            setResult(RESULT_OK, null);
-                            finish();
-                            startActivity(new Intent(AddBook.this, MainActivity.class));
+                } else {
+                    if (verifyFields()) {
+                        makeNames();
+                        for (int i = 0; i < imageList.size(); i++) {
+                            makeFile(fileArrayNames[i], i);
                         }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    request.add(stringRequest);
+                        RequestQueue request = Volley.newRequestQueue(getApplicationContext());
+                        StringRequest stringRequest = new StringRequest(Request.Method.GET, buildUrl(), new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+                                setResult(RESULT_OK, null);
+                                finish();
+                                startActivity(new Intent(AddBook.this, MainActivity.class));
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        request.add(stringRequest);
+                    }
                 }
                 break;
             case R.id.addBookNewImage:
@@ -281,7 +505,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
             }
         });
         Dialog dialog = choosePath.create();
-        dialog.getWindow().setBackgroundDrawableResource(R.color.colorBackground);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.colorAccent);
         dialog.show();
     }
 
@@ -310,7 +534,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-    private void makeFile(String fileName,int position) {
+    private void makeFile(String fileName, int position) {
         FileOutputStream fos = null;
         File fldr = getExternalFilesDir(tempImageFolder);
         if (!fldr.exists()) {
@@ -342,33 +566,6 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         TransferObserver observer = transferUtility.upload(bucket, filename, f);
     }
 
-public class uploadAsync extends AsyncTask<Void, Void, Void> {
-
-    File f;
-    String fn;
-
-    uploadAsync(File file, String fileName) {
-        f = file;
-        fn = fileName;
-    }
-
-    @Override
-    protected Void doInBackground(Void... params) {
-        try {
-            uploadImage(f, fn);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-    }
-
-}
-
     private CognitoCachingCredentialsProvider getCredentials() {
         CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
                 getApplicationContext(),
@@ -376,5 +573,32 @@ public class uploadAsync extends AsyncTask<Void, Void, Void> {
                 Regions.AP_NORTHEAST_1 // Region
         );
         return credentialsProvider;
+    }
+
+    public class uploadAsync extends AsyncTask<Void, Void, Void> {
+
+        File f;
+        String fn;
+
+        uploadAsync(File file, String fileName) {
+            f = file;
+            fn = fileName;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                uploadImage(f, fn);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+
     }
 }

@@ -1,0 +1,44 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/verticalLinearLayout"
+    android:background="@color/colorBackground"
+    tools:context="com.trade.book.booktrade.fragments.introfragments.intro4Fragment">
+
+    <TextView
+        style="@style/wrapContent"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:layout_margin="@dimen/sixteen"
+        android:fontFamily="sans-serif-light"
+        android:layout_centerHorizontal="true"
+        android:textSize="28sp"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:id="@+id/intro4heading"
+        android:text="Terms and Condition"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:id="@+id/intro4Agree"
+        android:layout_alignParentBottom="true"
+        android:text="Agree"
+        android:layout_height="wrap_content" />
+
+    <ScrollView style="@style/matchParent"
+        android:layout_below="@id/intro4heading"
+        android:layout_above="@id/intro4Agree"
+        android:id="@+id/intro4terms">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/condition"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-light"
+            android:textAllCaps="true"
+            android:padding="@dimen/sixteen"
+            android:textSize="24sp" />
+    </ScrollView>
+
+
+</RelativeLayout>

@@ -1,6 +1,7 @@
 package com.trade.book.booktrade.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.trade.book.booktrade.ImageActivity;
 import com.trade.book.booktrade.R;
 
 import java.util.ArrayList;

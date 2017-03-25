@@ -1,7 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/verticalLinearLayout"
-    android:background="@color/colorBackground"
     android:padding="@dimen/sixteen"
     tools:context="com.trade.book.booktrade.fragments.dialogfragments.dialogFagmentAddress">
 

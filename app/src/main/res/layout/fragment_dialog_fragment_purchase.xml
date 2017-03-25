@@ -1,0 +1,100 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+   style="@style/verticalLinearLayout"
+    tools:context="com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentPurchase">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:id="@+id/dialogPurchaseHead"
+        android:textSize="16sp"
+        android:padding="@dimen/eight"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-light"
+        android:text="Physics by nooton will be delivered to 12/1 ramlal mukherjee lane"
+        android:layout_height="wrap_content" />
+
+   <LinearLayout
+       style="@style/horizontalLinearLayout"
+       android:padding="@dimen/eight"
+       android:layout_height="wrap_content">
+
+       <TextView
+           android:layout_width="0dp"
+           android:layout_weight="1"
+           android:text="Actual Price"
+           android:textSize="14sp"
+           android:textStyle="bold"
+           android:fontFamily="sans-serif-light"
+           android:layout_height="wrap_content" />
+
+       <TextView
+           android:layout_width="0dp"
+           android:layout_weight="1"
+           android:text="0"
+           android:textSize="16sp"
+           android:textStyle="bold"
+           android:fontFamily="sans-serif-light"
+           android:id="@+id/dialogPurchasePrice"
+           android:layout_height="wrap_content" />
+
+   </LinearLayout>
+
+    <LinearLayout
+        style="@style/horizontalLinearLayout"
+        android:padding="@dimen/eight"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="Convenience Fee"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-light"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="0"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-light"
+            android:id="@+id/dialogPurchaseExtra"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/horizontalLinearLayout"
+        android:padding="@dimen/eight"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="Total"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-light"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="0"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-light"
+            android:id="@+id/dialogPurchaseTotal"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/eight"
+        android:text="Buy"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

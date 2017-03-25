@@ -23,7 +23,6 @@
                 <android.support.v7.widget.CardView
                     style="@style/crdv"
                     android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/colorPrimaryDark"
                     card_view:cardCornerRadius="3dp"
                     card_view:cardElevation="4dp"
                     card_view:cardMaxElevation="8dp"
@@ -41,7 +40,6 @@
                         android:fontFamily="sans-serif-light"
                         android:text="@string/bookName"
                         android:textAllCaps="true"
-                        android:textColor="@color/white"
                         android:textSize="28sp"
                         android:textStyle="bold" />
 
@@ -53,7 +51,6 @@
                         android:layout_margin="@dimen/eight"
                         android:fontFamily="sans-serif-light"
                         android:text="@string/bookPublisher"
-                        android:textColor="@color/white"
                         android:textSize="20sp" />
 
                     <LinearLayout
@@ -91,7 +88,6 @@
             <android.support.v7.widget.CardView
                 style="@style/crdv"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/colorPrimaryDark"
                 card_view:cardCornerRadius="3dp"
                 card_view:cardElevation="4dp"
                 card_view:cardMaxElevation="8dp"
@@ -107,7 +103,6 @@
                         android:fontFamily="sans-serif-light"
                         android:padding="@dimen/eight"
                         android:text="@string/bookEdition"
-                        android:textColor="@color/white"
                         android:textSize="18sp" />
 
                     <TextView
@@ -118,7 +113,6 @@
                         android:fontFamily="sans-serif-light"
                         android:padding="@dimen/eight"
                         android:text="@string/bookDescription"
-                        android:textColor="@color/white"
                         android:textSize="18sp" />
 
                     <TextView
@@ -129,7 +123,6 @@
                         android:fontFamily="sans-serif-light"
                         android:padding="@dimen/eight"
                         android:text="@string/bookCateogory"
-                        android:textColor="@color/white"
                         android:textSize="18sp" />
 
                     <TextView
@@ -140,7 +133,6 @@
                         android:fontFamily="sans-serif-light"
                         android:padding="@dimen/eight"
                         android:text="@string/bookCondition"
-                        android:textColor="@color/white"
                         android:textSize="18sp" />
 
                 </LinearLayout>

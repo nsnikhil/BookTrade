@@ -12,6 +12,7 @@ public class CartHelper extends SQLiteOpenHelper{
 
     private static final String mCreateCartTable = "CREATE TABLE "+ CartTables.mTableName + " ("
             + tablecart.mUid + " INTEGER NOT NULL , "
+            + tablecart.mBuid + " INTEGER NOT NULL , "
             + tablecart.mName + " TEXT NOT NULL, "
             + tablecart.mPublisher + " TEXT NOT NULL, "
             + tablecart.mCostPrice + " TEXT NOT NULL, "

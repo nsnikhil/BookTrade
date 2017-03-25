@@ -1,21 +1,20 @@
-package com.trade.book.booktrade;
+package com.trade.book.booktrade.fragments.introfragments;
 
-import android.app.Activity;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -23,11 +22,10 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.Profile;
 import com.facebook.ProfileTracker;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.github.paolorotolo.appintro.ISlidePolicy;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -35,6 +33,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.trade.book.booktrade.MainActivity;
+import com.trade.book.booktrade.R;
+import com.trade.book.booktrade.SignInActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,10 +47,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 
-public class SignInActivity extends AppCompatActivity implements View.OnClickListener{
+
+public class intro2Fragment extends Fragment implements ISlidePolicy,View.OnClickListener {
 
     GoogleSignInOptions gso;
     GoogleApiClient mGoogleApiClient;
@@ -58,29 +59,38 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private CallbackManager callbackManager;
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
+    boolean signedIn = false;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
-        initilize();
-        setGooglePlus();
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        setUpFblogin();
+    public intro2Fragment() {
+        // Required empty public constructor
     }
 
-    private void initilize() {
-        SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v =  inflater.inflate(R.layout.fragment_intro2, container, false);
+        initilize(v);
+        setGooglePlus();
+        FacebookSdk.sdkInitialize(getActivity());
+        setUpFblogin();
+        return v;
+    }
+
+
+
+
+    private void initilize(View v) {
+        SignInButton signInButton = (SignInButton) v.findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_WIDE);
         signInButton.setOnClickListener(this);
-        loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton = (LoginButton) v.findViewById(R.id.login_button);
         loginButton.setReadPermissions("public_profile");
         loginButton.setReadPermissions();
         callbackManager = CallbackManager.Factory.create();
     }
 
     private void setUpFblogin(){
-        //loginButton.setFragment(this);
+        loginButton.setFragment(this);
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -90,8 +100,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 try {
                                     String profilePicUrl = response.getJSONObject().getJSONObject("picture").getJSONObject("data").getString("url");
-                                    SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                    spf.edit().putBoolean(getResources().getString(R.string.prefAccountIndicator),true).apply();
+                                    SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
                                     spf.edit().putString(getResources().getString(R.string.prefAccountId),String.valueOf(response.getJSONObject().getInt("id"))).apply();
                                     spf.edit().putString(getResources().getString(R.string.prefAccountName), response.getJSONObject().getString("name")).apply();
                                     new DownloadImage().execute(profilePicUrl);
@@ -120,7 +129,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private void setGooglePlus(){
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestId().requestEmail().requestProfile().build();
-        mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity()).enableAutoManage(getActivity(), new GoogleApiClient.OnConnectionFailedListener() {
             @Override
             public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
@@ -158,9 +167,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
-            SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
             GoogleSignInAccount acct = result.getSignInAccount();
-            spf.edit().putBoolean(getResources().getString(R.string.prefAccountIndicator),true).apply();
             spf.edit().putString(getResources().getString(R.string.prefAccountId),acct.getId()).apply();
             spf.edit().putString(getResources().getString(R.string.prefAccountName), acct.getDisplayName()).apply();
             new DownloadImage().execute(acct.getPhotoUrl().toString());
@@ -170,11 +178,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void closeSingInActivity() {
-        this.finish();
-        startActivity(new Intent(SignInActivity.this,MainActivity.class));
+        signedIn = true;
+        Toast.makeText(getActivity(),"Signed In",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(),"Swipe Left",Toast.LENGTH_SHORT).show();
+        //getActivity().finish();
+        //startActivity(new Intent(getActivity(),MainActivity.class));
     }
 
-    public class DownloadImage extends AsyncTask<String,Void,Void>{
+    public class DownloadImage extends AsyncTask<String,Void,Void> {
 
 
         @Override
@@ -217,7 +228,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         private  void saveImage(String s,Bitmap b) {
-            File folder  = getExternalCacheDir();
+            File folder  = getActivity().getExternalCacheDir();
             File f = new File(folder,s);
             FileOutputStream fos = null;
             try {
@@ -239,5 +250,15 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 }
             }
         }
+    }
+
+    @Override
+    public boolean isPolicyRespected() {
+        return signedIn;
+    }
+
+    @Override
+    public void onUserIllegallyRequestedNextPage() {
+        Toast.makeText(getActivity(),"Sign In using any one service to continue",Toast.LENGTH_SHORT).show();
     }
 }

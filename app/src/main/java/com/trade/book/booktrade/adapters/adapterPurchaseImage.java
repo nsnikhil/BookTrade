@@ -1,15 +1,15 @@
 package com.trade.book.booktrade.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.trade.book.booktrade.ImageActivity;
 import com.trade.book.booktrade.R;
 
 import java.util.ArrayList;
@@ -18,14 +18,16 @@ import java.util.ArrayList;
  * Created by Nikhil on 23-Mar-17.
  */
 
-public class adapterPurchaeeImage extends RecyclerView.Adapter<adapterPurchaeeImage.MyViewHolder> {
+public class adapterPurchaseImage extends RecyclerView.Adapter<adapterPurchaseImage.MyViewHolder> {
 
     Context mContext;
     ArrayList<String> url;
+    int key;
 
-    public adapterPurchaeeImage(Context c, ArrayList<String> list) {
+    public adapterPurchaseImage(Context c, ArrayList<String> list,int k) {
         mContext = c;
         url = list;
+        key = k;
     }
 
     @Override
@@ -40,7 +42,7 @@ public class adapterPurchaeeImage extends RecyclerView.Adapter<adapterPurchaeeIm
         Glide.with(mContext)
                 .load(surl)
                 .centerCrop()
-                .placeholder(R.color.colorBackground)
+                .placeholder(R.color.colorAccent)
                 .crossFade()
                 .into(holder.img);
     }
@@ -59,7 +61,27 @@ public class adapterPurchaeeImage extends RecyclerView.Adapter<adapterPurchaeeIm
             super(itemView);
             img = (ImageView) itemView.findViewById(R.id.singleImage);
             remove = (ImageView) itemView.findViewById(R.id.seingleImageRemove);
-            remove.setVisibility(View.GONE);
+            if(key==0){
+                remove.setVisibility(View.GONE);
+            }else {
+                remove.setVisibility(View.VISIBLE);
+            }
+            remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    url.remove(getPosition());
+                    notifyItemRemoved(getPosition());
+                }
+            });
+            img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent img = new Intent(mContext, ImageActivity.class);
+                    img.putExtra(mContext.getResources().getString(R.string.intentImageUrl),url.get(getPosition()));
+                    img.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(img);
+                }
+            });
         }
     }
 }

@@ -11,10 +11,28 @@
 
     <!-- url-->
     <string name="urlServer" translatable="false">http://ec2-35-154-208-1.ap-south-1.compute.amazonaws.com/</string>
-    <string name="urlInsert" translatable="false">insertBookTrade.php</string>
-    <string name="urlQuery" translatable="false">bookTableQuery.php</string>
-    <string name="urlSearchQuery" translatable="false">querySearch.php</string>
-    <string name="urlSearchCatQuery" translatable="false">querySearchCat.php</string>
+
+    <string name="urlInsert" translatable="false">booktrade/bookInsert.php</string>
+    <string name="urlQueryAll" translatable="false">booktrade/bookQueryAll.php</string>
+    <string name="urlQueryAvailable" translatable="false">booktrade/bookQueryAvailable.php</string>
+    <string name="urlQueryInTransit" translatable="false">booktrade/bookQueryInTransit.php</string>
+    <string name="urlSearchQuery" translatable="false">booktrade/bookSearchAll.php</string>
+    <string name="urlSearchCatQuery" translatable="false">booktrade/bookSearchCategory.php</string>
+
+
+    <string name="urlMoveToTransit" translatable="false">booktrade/bookMoveToTransit.php</string>
+    <string name="urlMoveToAvailable" translatable="false">booktrade/bookMoveToAvalilable.php</string>
+    <string name="urlDeleteSingle" translatable="false">booktrade/bookDeleteSingle.php</string>
+
+    <string name="urlUserUploads" translatable="false">booktrade/bookQueryUserAll.php</string>
+    <string name="urlUpdateSingle" translatable="false">booktrade/bookUpdate.php</string>
+
+    <string name="urlUserInsert" translatable="false">booktrade/userInsert.php</string>
+    <string name="urlUserUpdate" translatable="false">booktrade/userUpdateValue.php</string>
+    <string name="urlUserQuery" translatable="false">booktrade/userQueryAll.php</string>
+
+    <string name="urlTransactionInsert" translatable="false">booktrade/transactionInsert.php</string>
+
     <string name="urlBucetHost" translatable="false">https://s3-ap-northeast-1.amazonaws.com/</string>
     <string name="urlBucketName" translatable="false">nsnikbkimg</string>
     <!-- -->
@@ -74,6 +92,9 @@
 
 
     <!-- bundleExtra-->
+    <string name="bundleBookName">bdnlbknm</string>
+    <string name="bundleBookPublisher">bdnlbkpb</string>
+    <string name="bundleBookPrice">bdnlbkpr</string>
     <!-- -->
 
     <!-- -IntentExtraKey-->
@@ -81,13 +102,24 @@
     <string name="intenSearchKey">insrchky</string>
     <string name="intenfromcart">infrkrky</string>
     <string name="intencateuri">incturky</string>
+    <string name="intenupind">inupiky</string>
     <string name="intencateuripos">incturpoky</string>
+    <string name="intentImageUrl">intimgurlky</string>
+    <string name="intentfromupload">intenfrmupky</string>
+    <string name="intentEditObject">inkyedob</string>
     <!-- -->
 
     <!-- prefStrings-->
     <string name="prefAccountIndicator" translatable="false">prefaccountInd</string>
     <string name="prefAccountId" translatable="false">prefaccountid</string>
     <string name="prefAccountName" translatable="false">prefaccountnm</string>
+    <string name="prefAccountPhone" translatable="false">prefaccountph</string>
+    <string name="prefAccountAddress" translatable="false">prefaccountadr</string>
+    <!-- -->
+
+    <!-- TermsAndCondition-->
+    <string name="condition">We charge convenience fee to run our servers and provide you this service for each book being sold for less than Rs300 we charge
+    8 fee from both buyer and seller for range between 300 to 999 we charge a fee of 6 and for any book with selling price of Rs1000 and above a fee of 4 is being charged</string>
     <!-- -->
 
 </resources>

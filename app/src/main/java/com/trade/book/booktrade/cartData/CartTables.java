@@ -8,7 +8,7 @@ public class CartTables {
 
     public static final String mTableName = "cart";
     public static final String mDataBaseName = "cartdatabase";
-    public static final int mDatabaseVersion = 7;
+    public static final int mDatabaseVersion = 8;
 
     public static final String mCartScheme = "content://";
     public static final String mCartAuthority = "com.trade.book.booktrade.cart";
@@ -18,6 +18,7 @@ public class CartTables {
 
     public class tablecart implements BaseColumns {
         public static final String mUid = BaseColumns._ID;
+        public static final String mBuid = "bookid";
         public static final String mName = "cartname";
         public static final String mPublisher = "cartpublisher";
         public static final String mCostPrice = "cartcost";

@@ -46,7 +46,7 @@ public class fragmentBookList extends Fragment {
 
     private void getList(){
         String host = getResources().getString(R.string.urlServer);
-        String queryFilename = getResources().getString(R.string.urlQuery);
+        String queryFilename = getResources().getString(R.string.urlQueryAvailable);
         String url = host+queryFilename;
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -70,6 +70,7 @@ public class fragmentBookList extends Fragment {
     private void addToList(JSONArray response) throws JSONException {
         for(int i =0;i<response.length();i++){
             JSONObject jsonObject = response.getJSONObject(i);
+            int bid = jsonObject.getInt("id");
             String name = jsonObject.getString("Name");
             String publisher = jsonObject.getString("Publisher");
             int costPrice = jsonObject.getInt("CostPrice");
@@ -88,7 +89,7 @@ public class fragmentBookList extends Fragment {
             String photoUrlName5 = jsonObject.getString("pic5");
             String photoUrlName6 = jsonObject.getString("pic6");
             String photoUrlName7 = jsonObject.getString("pic7");
-            bookList.add(new BookObject(name,publisher,costPrice,sellingPrice,edition,description,condtn,cateogory,userId,itemId
+            bookList.add(new BookObject(bid,name,publisher,costPrice,sellingPrice,edition,description,condtn,cateogory,userId,itemId
                     ,photoUrlName0,photoUrlName1,photoUrlName2,photoUrlName3,photoUrlName4,photoUrlName5,photoUrlName6,photoUrlName7));
         }
         adapterBookList bookAdapter = new adapterBookList(getActivity(),bookList);

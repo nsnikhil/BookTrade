@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -12,22 +13,25 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
-        <provider android:authorities="com.facebook.app.FacebookContentProvider"
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:exported="true"/>
-        <activity
-            android:name=".MainActivity"
-            android:theme="@style/tranparentStatusBar">
+            android:authorities="com.facebook.app.FacebookContentProvider"
+            android:exported="true" />
+
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddBook"
-            android:theme="@style/AddBookTheme"
-            android:label="Add Book"/>
+        <activity
+            android:name=".AddBook"
+            android:label="Add Book" />
 
         <provider
             android:name=".data.TableProvider"
@@ -53,8 +57,7 @@
         <activity android:name=".AccountActivity" />
         <activity
             android:name=".PrefActivity"
-            android:label="@string/setting"
-            android:theme="@style/AddBookTheme"/>
+            android:label="@string/setting" />
         <activity android:name=".SignInActivity" />
         <activity android:name=".SearchActivity">
             <intent-filter>
@@ -68,10 +71,14 @@
         <activity
             android:name=".MyCartActivity"
             android:label="My Cart" />
-        <activity android:name=".CategoryViewActivity"/>
+        <activity android:name=".CategoryViewActivity" />
+
         <service
             android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
             android:enabled="true" />
+
+        <activity android:name=".IntroActivity" />
+        <activity android:name=".ImageActivity" />
     </application>
 
 </manifest>

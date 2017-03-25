@@ -20,7 +20,7 @@
             style="@style/wrapContent"
             android:id="@+id/singleBookTextContainer"
             android:layout_width="match_parent"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/toolbargradeint"
             android:layout_gravity="bottom"
             android:orientation="vertical">
 

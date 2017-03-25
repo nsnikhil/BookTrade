@@ -65,7 +65,8 @@ public class MyCartActivity extends AppCompatActivity implements LoaderManager.L
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor c = (Cursor) parent.getItemAtPosition(position);
                 if(c.moveToPosition(position)){
-                    BookObject bookObject = new BookObject (c.getString(c.getColumnIndex(tablecart.mName)),
+                    BookObject bookObject = new BookObject (c.getInt(c.getColumnIndex(tablecart.mBuid)),
+                            c.getString(c.getColumnIndex(tablecart.mName)),
                             c.getString(c.getColumnIndex(tablecart.mPublisher)),
                             c.getInt(c.getColumnIndex(tablecart.mCostPrice)),
                             c.getInt(c.getColumnIndex(tablecart.mSellingPrice)),

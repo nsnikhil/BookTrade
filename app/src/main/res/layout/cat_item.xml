@@ -2,13 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground"
     style="@style/matchParent">
 
 
     <android.support.v7.widget.CardView
         style="@style/matchParent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/colorBackground"
         card_view:cardCornerRadius="0dp"
         card_view:cardElevation="0dp"
         card_view:cardMaxElevation="2dp"
@@ -18,7 +18,6 @@
             style="@style/wrapContent"
             android:textSize="18sp"
             android:padding="@dimen/sixteen"
-            android:textColor="@color/white"
             android:fontFamily="sans-serif-condensed"
             android:layout_centerVertical="true"
             android:text="@string/app_name"

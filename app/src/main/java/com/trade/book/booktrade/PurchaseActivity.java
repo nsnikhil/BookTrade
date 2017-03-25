@@ -1,8 +1,11 @@
 package com.trade.book.booktrade;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,10 +15,17 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.cartData.CartTables;
 import com.trade.book.booktrade.cartData.CartTables.tablecart;
 import com.trade.book.booktrade.objects.BookObject;
 import com.trade.book.booktrade.adapters.*;
+import com.trade.book.booktrade.fragments.dialogfragments.*;
 
 import java.util.ArrayList;
 
@@ -25,8 +35,9 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
     Button buyNow,addToCart;
     RecyclerView imageHolder;
     BookObject bObject = null;
-    adapterPurchaeeImage imageAdapter;
+    adapterPurchaseImage imageAdapter;
     ArrayList<String> urls;
+    private static final int mEditRequestCode = 584;
 
 
     @Override
@@ -40,6 +51,10 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         }
         setCartText();
         getUrl();
+        if(getIntent().getExtras().getInt(getResources().getString(R.string.intentfromupload))!=0){
+            buyNow.setText("Edit");
+            addToCart.setText("Delete");
+        }
     }
 
     private void initilize() {
@@ -56,6 +71,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
 
         addToCart = (Button)findViewById(R.id.purchaseAddTocart);
         addToCart.setOnClickListener(this);
+        buyNow.setOnClickListener(this);
 
     }
 
@@ -90,7 +106,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         } if(!bObject.getPhoto7().equalsIgnoreCase("null")&&bObject.getPhoto7()!=null){
             urls.add(baseUrl+"/"+bObject.getPhoto7());
         }
-        imageAdapter = new adapterPurchaeeImage(getApplicationContext(),urls);
+        imageAdapter = new adapterPurchaseImage(getApplicationContext(),urls,0);
         imageHolder.setAdapter(imageAdapter);
     }
 
@@ -100,9 +116,71 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()){
             case  R.id.purchaseAddTocart:
-               checkInCart(bObject);
+                if(getIntent().getExtras().getInt(getResources().getString(R.string.intentfromupload))!=0){
+                    AlertDialog.Builder delete  = new AlertDialog.Builder(PurchaseActivity.this);
+                    delete.setTitle("Warning").setMessage("Are you sure yo want to delete this book")
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+                    delete.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            deleteItem();
+                        }
+                    });
+                   delete.create().show();
+                }else {
+                    checkInCart(bObject);
+                }
             break;
+            case R.id.purchaseBuy:
+                if(getIntent().getExtras().getInt(getResources().getString(R.string.intentfromupload))!=0){
+                    Intent detail  = new Intent(getApplicationContext(),AddBook.class);
+                    Bundle b = new Bundle();
+                    b.putSerializable(getResources().getString(R.string.intentEditObject), bObject);
+                    detail.putExtras(b);
+                    startActivityForResult(detail,mEditRequestCode);
+                }else {
+                    dialogFragmentPurchase dialogFragmentPurchase = new dialogFragmentPurchase();
+                    Bundle args = new Bundle();
+                    args.putString(getResources().getString(R.string.bundleBookName),name.getText().toString());
+                    args.putString(getResources().getString(R.string.bundleBookPublisher),publisher.getText().toString());
+                    args.putInt(getResources().getString(R.string.bundleBookPrice),bObject.getSellingPrice());
+                    dialogFragmentPurchase.setArguments(args);
+                    dialogFragmentPurchase.show(getSupportFragmentManager(),"purchase");
+                }
+                break;
         }
+    }
+
+    private String buildDeleteUri(){
+        String host = getResources().getString(R.string.urlServer);
+        String deleteBook = getResources().getString(R.string.urlDeleteSingle);
+        String url = host + deleteBook;
+        String bidQuery = "id";
+        int bidValue = bObject.getBid();
+        return Uri.parse(url).buildUpon().appendQueryParameter(bidQuery, String.valueOf(bidValue)).build().toString();
+    }
+
+    private void deleteItem() {
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, buildDeleteUri(), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(getApplicationContext(),"Deleted",Toast.LENGTH_SHORT).show();
+                finish();
+                startActivity(new Intent(PurchaseActivity.this, MainActivity.class));
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(stringRequest);
     }
 
     private void removeBook() {
@@ -149,6 +227,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
 
     private void insertVal() {
         ContentValues cv = new ContentValues();
+        cv.put(tablecart.mBuid,bObject.getBid());
         cv.put(tablecart.mUid,bObject.getItemId());
         cv.put(tablecart.mName,bObject.getName());
         cv.put(tablecart.mPublisher,bObject.getPublisher());
