@@ -13,8 +13,8 @@
         android:layout_centerInParent="true">
 
         <com.mikhaellopez.circularimageview.CircularImageView
-            android:layout_width="140dp"
-            android:layout_height="140dp"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
             android:layout_gravity="center"
             android:id="@+id/accountPicture"
             android:src="@drawable/profile" />
@@ -26,7 +26,7 @@
             android:layout_margin="@dimen/sixteen"
             android:gravity="center"
             android:text="Name"
-            android:textColor="@color/cardview_dark_background"
+            android:textColor="@color/white"
             android:textSize="24sp" />
 
     </LinearLayout>

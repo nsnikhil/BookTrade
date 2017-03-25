@@ -55,7 +55,9 @@ public class CategoryViewActivity extends AppCompatActivity {
         setSupportActionBar(catToolbar);
         if(mUploadIndicator==0){
             getSupportActionBar().setTitle(getResources().getStringArray(R.array.bookCateogories)[ getIntent().getExtras().getInt(getResources().getString(R.string.intencateuripos))]);
-        }else {
+        }else if(mUploadIndicator==123){
+            getSupportActionBar().setTitle("My Purchases");
+        } else {
             getSupportActionBar().setTitle("My Uploads");
         }
         catProgress = (ProgressBar)findViewById(R.id.cateogoryProgress);
@@ -64,15 +66,17 @@ public class CategoryViewActivity extends AppCompatActivity {
         catList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BookObject bookObject = (BookObject) parent.getItemAtPosition(position);
-                Intent detail  = new Intent(getApplicationContext(),PurchaseActivity.class);
-                Bundle b = new Bundle();
-                b.putSerializable(getResources().getString(R.string.intenKeyObejct), bookObject);
-                detail.putExtras(b);
-                if(mUploadIndicator!=0){
-                    detail.putExtra(getResources().getString(R.string.intentfromupload),123);
+                if(mUploadIndicator!=123) {
+                    BookObject bookObject = (BookObject) parent.getItemAtPosition(position);
+                    Intent detail = new Intent(getApplicationContext(), PurchaseActivity.class);
+                    Bundle b = new Bundle();
+                    b.putSerializable(getResources().getString(R.string.intenKeyObejct), bookObject);
+                    detail.putExtras(b);
+                    if (mUploadIndicator != 0) {
+                        detail.putExtra(getResources().getString(R.string.intentfromupload), 123);
+                    }
+                    startActivityForResult(detail, mRequestCode);
                 }
-                startActivityForResult(detail,mRequestCode);
             }
         });
     }
@@ -122,7 +126,7 @@ public class CategoryViewActivity extends AppCompatActivity {
                 String description = jsonObject.getString("Description");
                 String condtn = jsonObject.getString("Cndtn");
                 String cateogory = jsonObject.getString("Cateogory");
-                int userId = jsonObject.getInt("userId");
+                String userId = jsonObject.getString("userId");
                 int itemId = jsonObject.getInt("id");
                 String photoUrlName0 = jsonObject.getString("pic0");
                 String photoUrlName1 = jsonObject.getString("pic1");

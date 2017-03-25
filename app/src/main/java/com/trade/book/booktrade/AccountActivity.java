@@ -75,7 +75,29 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 act.putExtra(getResources().getString(R.string.intenupind),121);
                 startActivity(act);
                 break;
+            case R.id.accountSignOut:
+                makeDialog();
+                break;
+            case R.id.accountPurchase:
+                Intent pur = new Intent(AccountActivity.this,CategoryViewActivity.class);
+                pur.putExtra(getResources().getString(R.string.intencateuri),buildPurchaseUri());
+                pur.putExtra(getResources().getString(R.string.intenupind),123);
+                startActivity(pur);
+                break;
         }
+    }
+
+    private String buildPurchaseUri() {
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String host = getResources().getString(R.string.urlServer);
+        String searchFileName = getResources().getString(R.string.urlTransactionQueryYour);
+        String url = host + searchFileName;
+        String uidQuery = "uid";
+        String uidValue  = spf.getString(getResources().getString(R.string.prefAccountId),mNullValue);
+        return Uri.parse(url).buildUpon()
+                .appendQueryParameter(uidQuery, uidValue)
+                .build()
+                .toString();
     }
 
     private String buildUri(){

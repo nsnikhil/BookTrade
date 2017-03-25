@@ -504,9 +504,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                 }
             }
         });
-        Dialog dialog = choosePath.create();
-        dialog.getWindow().setBackgroundDrawableResource(R.color.colorAccent);
-        dialog.show();
+        choosePath.create().show();
     }
 
     @Override

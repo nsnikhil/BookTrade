@@ -149,6 +149,8 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
                     args.putString(getResources().getString(R.string.bundleBookName),name.getText().toString());
                     args.putString(getResources().getString(R.string.bundleBookPublisher),publisher.getText().toString());
                     args.putInt(getResources().getString(R.string.bundleBookPrice),bObject.getSellingPrice());
+                    args.putString(getResources().getString(R.string.bundleBookSellerUid),bObject.getUserId());
+                    args.putInt(getResources().getString(R.string.bundleBookBookId),bObject.getBid());
                     dialogFragmentPurchase.setArguments(args);
                     dialogFragmentPurchase.show(getSupportFragmentManager(),"purchase");
                 }

@@ -79,7 +79,7 @@ public class fragmentBookList extends Fragment {
             String description = jsonObject.getString("Description");
             String condtn = jsonObject.getString("Cndtn");
             String cateogory = jsonObject.getString("Cateogory");
-            int userId = jsonObject.getInt("userId");
+            String userId = jsonObject.getString("userId");
             int itemId = jsonObject.getInt("id");
             String photoUrlName0 = jsonObject.getString("pic0");
             String photoUrlName1 = jsonObject.getString("pic1");

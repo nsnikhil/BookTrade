@@ -74,7 +74,7 @@ public class MyCartActivity extends AppCompatActivity implements LoaderManager.L
                             c.getString(c.getColumnIndex(tablecart.mDescription)),
                             c.getString(c.getColumnIndex(tablecart.mCondition)),
                             c.getString(c.getColumnIndex(tablecart.mCateogory)),
-                            c.getInt(c.getColumnIndex(tablecart.mUserId)),
+                            c.getString(c.getColumnIndex(tablecart.mUserId)),
                             c.getInt(c.getColumnIndex(tablecart._ID))
                             ,c.getString(c.getColumnIndex(tablecart.mPhoto0))
                             ,c.getString(c.getColumnIndex(tablecart.mPhoto1))

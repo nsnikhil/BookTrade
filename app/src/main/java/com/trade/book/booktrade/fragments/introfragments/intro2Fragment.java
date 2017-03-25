@@ -210,7 +210,7 @@ public class intro2Fragment extends Fragment implements ISlidePolicy,View.OnClic
         private Bitmap getBitmap(URL imageUrl) {
             Bitmap pstr = null;
             HttpURLConnection htpc = null;
-            InputStream ir;
+            InputStream ir = null;
             try {
                 htpc = (HttpURLConnection) imageUrl.openConnection();
                 htpc.setRequestMethod("GET");
@@ -222,7 +222,16 @@ public class intro2Fragment extends Fragment implements ISlidePolicy,View.OnClic
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
-                htpc.disconnect();
+                if(htpc!=null){
+                    htpc.disconnect();
+                }if(ir!=null){
+                    try {
+                        ir.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
             }
             return pstr;
         }
@@ -243,11 +252,13 @@ public class intro2Fragment extends Fragment implements ISlidePolicy,View.OnClic
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } finally {
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+               if(fos!=null){
+                   try {
+                       fos.close();
+                   } catch (IOException e) {
+                       e.printStackTrace();
+                   }
+               }
             }
         }
     }

@@ -17,42 +17,43 @@
             style="@style/crdvImage" />
 
         <LinearLayout
-            style="@style/wrapContent"
             android:id="@+id/singleBookTextContainer"
+            style="@style/wrapContent"
             android:layout_width="match_parent"
-            android:background="@drawable/toolbargradeint"
             android:layout_gravity="bottom"
+            android:background="@drawable/toolbargradeint"
             android:orientation="vertical">
 
 
             <TextView
                 android:id="@+id/singleBookName"
-                android:layout_marginStart="@dimen/eight"
+                style="@style/crdvText"
                 android:layout_marginBottom="@dimen/eight"
+                android:layout_marginStart="@dimen/eight"
                 android:layout_marginTop="@dimen/eight"
                 android:fontFamily="sans-serif-light"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                style="@style/crdvText" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/singleBookPublisher"
-                android:layout_marginStart="@dimen/eight"
+                style="@style/crdvText"
                 android:layout_marginBottom="@dimen/eight"
+                android:layout_marginStart="@dimen/eight"
                 android:fontFamily="sans-serif-thin"
-                android:textStyle="bold"
-                style="@style/crdvText" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/singleBookPrice"
-                android:textSize="18sp"
-                android:layout_marginEnd="@dimen/eight"
-                android:layout_marginBottom="@dimen/eight"
-                android:textStyle="bold"
+                style="@style/crdvPrice"
                 android:layout_gravity="end|bottom"
+                android:layout_marginBottom="@dimen/eight"
+                android:layout_marginEnd="@dimen/eight"
                 android:fontFamily="sans-serif"
                 android:textColor="@color/colorAccent"
-                style="@style/crdvPrice" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
 
         </LinearLayout>
 
