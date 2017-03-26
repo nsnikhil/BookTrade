@@ -41,7 +41,7 @@ public class adapterCart extends CursorAdapter{
         Glide.with(context)
                 .load(url)
                 .centerCrop()
-                .placeholder(R.drawable.bookback)
+                .placeholder(R.drawable.back)
                 .crossFade()
                 .into(myViewHolder.bookImage);
     }

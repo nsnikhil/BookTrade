@@ -1,6 +1,8 @@
 package com.trade.book.booktrade;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -76,9 +78,33 @@ public class CategoryViewActivity extends AppCompatActivity {
                         detail.putExtra(getResources().getString(R.string.intentfromupload), 123);
                     }
                     startActivityForResult(detail, mRequestCode);
+                }else {
+                    AlertDialog.Builder cancel = new AlertDialog.Builder(CategoryViewActivity.this)
+                            .setTitle("Warning")
+                            .setMessage("Do you want to cancel your purchase")
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Toast.makeText(getApplicationContext(),"Will Cancel The purchase",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                    cancel.create().show();
                 }
             }
         });
+    }
+
+    private void buildCancelPurchaseUri(){
+
+    }
+
+    private void buildMoveToAvailable(){
+
     }
 
     @Override

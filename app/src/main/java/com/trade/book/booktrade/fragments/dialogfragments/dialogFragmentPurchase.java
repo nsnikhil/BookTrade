@@ -56,7 +56,7 @@ public class dialogFragmentPurchase extends DialogFragment {
         buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Bundle args = getArguments();
+                Bundle args = getArguments();
                 SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 if(spf.getString(getResources().getString(R.string.prefAccountId),mNullValue)
                         .equalsIgnoreCase(args.getString(getActivity().getResources().getString(R.string.bundleBookSellerUid),mNullValue))){
@@ -64,9 +64,7 @@ public class dialogFragmentPurchase extends DialogFragment {
                 }else {
                     buy();
                     shift();
-                }*/
-                buy();
-                shift();
+                }
             }
         });
     }

@@ -6,7 +6,7 @@
     <ImageView
         android:id="@+id/singleImage"
         style="@style/matchParent"
-        android:background="@drawable/bposter"
+        android:background="@drawable/back"
         android:scaleType="centerCrop" />
 
     <ImageView

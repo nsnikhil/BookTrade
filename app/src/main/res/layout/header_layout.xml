@@ -5,22 +5,31 @@
 
     <ImageView
         style="@style/wrapContent"
-        android:layout_height="100dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/headerback" />
+        android:src="@drawable/header" />
 
-    <com.mikhaellopez.circularimageview.CircularImageView
-        android:id="@+id/headerCircleView"
-        android:layout_centerVertical="true"
-        style="@style/headerImage"
-        android:src="@drawable/profile" />
-
-    <TextView
-        style="@style/headerText"
-        android:id="@+id/headerTextView"
-        android:layout_toEndOf="@id/headerCircleView"
+    <LinearLayout
+        style="@style/horizontalLinearLayout"
         android:layout_marginStart="@dimen/sixteen"
-        android:layout_centerVertical="true"
-        android:text="@string/app_name" />
+        android:layout_marginTop="24dp">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/headerCircleView"
+            style="@style/headerImage"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/profile" />
+
+        <TextView
+            android:id="@+id/headerTextView"
+            style="@style/headerText"
+            android:layout_marginStart="@dimen/sixteen"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/sixteen"
+            android:textSize="24sp"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/white"
+            android:text="@string/app_name" />
+
+    </LinearLayout>
 
 </RelativeLayout>

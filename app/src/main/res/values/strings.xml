@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Book Trade</string>
+    <string name="app_name">Shelf Bee</string>
     <string name="foldername">booktrade</string>
     <string name="placeHolderName">Place Holder</string>
     <string name="drawerOpen">Open</string>
