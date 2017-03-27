@@ -18,6 +18,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -33,6 +34,7 @@ import android.widget.Toast;
 import com.lapism.searchview.SearchView;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.trade.book.booktrade.adapters.adapterBookPager;
+import com.trade.book.booktrade.fragments.dialogfragments.*;
 
 import java.io.File;
 
@@ -204,6 +206,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
                     case R.id.navItemFeedback:
                         Toast.makeText(getApplicationContext(), "Will Send Feedback once we have a public email id", Toast.LENGTH_LONG).show();
+                        break;
+                    case R.id.navItemRequest:
+                        dialogFragmentRequest dialogFragmentRequest = new dialogFragmentRequest();
+                        dialogFragmentRequest.show(getSupportFragmentManager(),"request");
                         break;
                 }
                 return false;

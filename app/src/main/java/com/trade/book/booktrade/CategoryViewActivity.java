@@ -2,6 +2,7 @@ package com.trade.book.booktrade;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.adapters.adapterBookList;
 import com.trade.book.booktrade.objects.BookObject;
@@ -79,6 +81,7 @@ public class CategoryViewActivity extends AppCompatActivity {
                     }
                     startActivityForResult(detail, mRequestCode);
                 }else {
+                    final BookObject bookObject = (BookObject) parent.getItemAtPosition(position);
                     AlertDialog.Builder cancel = new AlertDialog.Builder(CategoryViewActivity.this)
                             .setTitle("Warning")
                             .setMessage("Do you want to cancel your purchase")
@@ -90,7 +93,9 @@ public class CategoryViewActivity extends AppCompatActivity {
                             }).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Toast.makeText(getApplicationContext(),"Will Cancel The purchase",Toast.LENGTH_SHORT).show();
+                                  int bookId = bookObject.getBid();
+                                    cancelPurchase(bookId);
+                                    moveToAvailable(bookId);
                                 }
                             });
                     cancel.create().show();
@@ -99,12 +104,56 @@ public class CategoryViewActivity extends AppCompatActivity {
         });
     }
 
-    private void buildCancelPurchaseUri(){
-
+    private String buildCancelPurchaseUri(int bid){
+        String host = getResources().getString(R.string.urlServer);
+        String cancelPurchase = getResources().getString(R.string.urlTransactionDelete);
+        String url = host+cancelPurchase;
+        String bidQuery = "bkid";
+        String bidValue  = String.valueOf(bid);
+        return Uri.parse(url).buildUpon().appendQueryParameter(bidQuery,bidValue).build().toString();
     }
 
-    private void buildMoveToAvailable(){
+    private void cancelPurchase(int bid){
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, buildCancelPurchaseUri(bid), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(getApplicationContext(),response,Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(stringRequest);
+    }
 
+    private String buildMoveToAvailable(int bid){
+        String host = getResources().getString(R.string.urlServer);
+        String cancelPurchase = getResources().getString(R.string.urlMoveToAvailable);
+        String url = host+cancelPurchase;
+        String bidQuery = "id";
+        String bidValue  = String.valueOf(bid);
+        return Uri.parse(url).buildUpon().appendQueryParameter(bidQuery,bidValue).build().toString();
+    }
+
+    private void moveToAvailable(int bid){
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, buildMoveToAvailable(bid), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(getApplicationContext(),response,Toast.LENGTH_SHORT).show();
+                finish();
+                startActivity(new Intent(CategoryViewActivity.this,MainActivity.class));
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(stringRequest);
     }
 
     @Override

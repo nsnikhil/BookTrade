@@ -33,6 +33,7 @@
 
     <string name="urlTransactionInsert" translatable="false">booktrade/transactionInsert.php</string>
     <string name="urlTransactionQueryYour" translatable="false">booktrade/transactionYourPurchase.php</string>
+    <string name="urlTransactionDelete" translatable="false">booktrade/transactionDelete.php</string>
 
     <string name="urlBucetHost" translatable="false">https://s3-ap-northeast-1.amazonaws.com/</string>
     <string name="urlBucketName" translatable="false">nsnikbkimg</string>
@@ -44,6 +45,7 @@
     <string name="navaccount">Account</string>
     <string name="navSettings">Settings</string>
     <string name="navMore">More</string>
+    <string name="navRequest">Book Requests</string>
     <string name="navfeedback">Send Feedback</string>
     <!-- -->
 

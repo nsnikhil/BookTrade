@@ -15,6 +15,10 @@
             android:id="@+id/navItemSettings"
             android:icon="@drawable/ic_more_white_48dp"
             android:title="@string/navMore" />
+        <item
+            android:id="@+id/navItemRequest"
+            android:icon="@drawable/ic_add_box_black_48dp"
+            android:title="@string/navRequest" />
     </group>
     <group
         android:id="@+id/grp2"
