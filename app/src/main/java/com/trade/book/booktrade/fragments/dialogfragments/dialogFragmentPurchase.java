@@ -70,14 +70,18 @@ public class dialogFragmentPurchase extends DialogFragment {
         String name = args.getString(getActivity().getResources().getString(R.string.bundleBookName));
         String publisher = args.getString(getActivity().getResources().getString(R.string.bundleBookPublisher));
         int price = args.getInt(getActivity().getResources().getString(R.string.bundleBookPrice));
-        title.setText("Its a non refundable purchase \n" + name.toUpperCase() + " by " + publisher + " will be delivered to " + spf.getString(getActivity().getResources().getString(R.string.prefAccountAddress), mNullValue) + " within one week");
+        title.setText(name.toUpperCase() + " by " + publisher + " will be delivered to " + spf.getString(getActivity().getResources().getString(R.string.prefAccountAddress), mNullValue) + " within one week");
         actualPrice.setText((double) price + "");
-        extraPrice.setText(compute(price) + "");
-        totalPrice.setText((price + compute(price)) + "");
+        double taxPrice = Double.parseDouble(String.format("%.2f", compute(price)));
+        extraPrice.setText(taxPrice+"");
+        totalPrice.setText((price + taxPrice )+ "");
     }
 
     private double compute(int price) {
-        if (price > 0 && price < 300) {
+        if(price<100){
+            return 7;
+        }
+        if (price > 100 && price < 300) {
             return ((double) 8 / 100) * price;
         }
         if (price >= 300 && price <= 999) {

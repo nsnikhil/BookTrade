@@ -95,6 +95,8 @@
         android:layout_width="match_parent"
         android:layout_margin="@dimen/eight"
         android:text="Buy"
+        android:theme="@style/buttonClr"
+        android:textColor="@color/white"
         android:id="@+id/dialogPurchaseBuy"
         android:layout_height="wrap_content" />
 

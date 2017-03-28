@@ -75,7 +75,7 @@
                             android:layout_weight="1"
                             android:padding="@dimen/eight"
                             android:text="Add to Cart"
-                        android:textColor="@color/white"
+                            android:textColor="@color/white"
                             android:theme="@style/buttonClr" />
 
                     </LinearLayout>

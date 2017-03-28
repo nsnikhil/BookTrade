@@ -25,6 +25,7 @@ public class IntroActivity extends AppIntro2 {
         setProgressButtonEnabled(false);
         setVibrate(true);
         setVibrateIntensity(10);
+        setIndicatorColor(getResources().getColor(R.color.colorAccent),getResources().getColor(R.color.cardview_dark_background));
     }
 
     @Override

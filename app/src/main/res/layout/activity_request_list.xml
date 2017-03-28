@@ -12,6 +12,7 @@
 
     <ListView
         style="@style/matchParent"
+        android:divider="@null"
         android:layout_below="@id/toolbarRequest"
         android:id="@+id/requestList"/>
 

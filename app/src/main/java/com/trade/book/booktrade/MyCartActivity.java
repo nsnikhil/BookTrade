@@ -162,7 +162,10 @@ public class MyCartActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     private double compute(int price) {
-        if (price > 0 && price < 300) {
+        if(price<100){
+            return 7;
+        }
+        if (price > 100 && price < 300) {
             return ((double) 8 / 100) * price;
         }
         if (price >= 300 && price <= 999) {

@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         boolean id = spf.getBoolean(getResources().getString(R.string.prefAccountIndicator), false);
         if (!id) {
             finish();
-            //startActivity(new Intent(MainActivity.this, SignInActivity.class));
             startActivity(new Intent(MainActivity.this, IntroActivity.class));
         }
     }
@@ -150,7 +149,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainAdd.setVisibility(View.GONE);
         errorImage.setVisibility(View.VISIBLE);
         searchView.setVisibility(View.GONE);
-        Snackbar.make(mainLayout, "No Internet", BaseTransientBottomBar.LENGTH_INDEFINITE).setAction("Retry", new View.OnClickListener() {
+        Snackbar.make(mainLayout, "No Internet", BaseTransientBottomBar.LENGTH_INDEFINITE)
+                .setActionTextColor(getResources().getColor(R.color.white))
+                .setAction("Retry", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addOnConnection();
@@ -186,31 +187,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 mainDrawerLayout.closeDrawers();
-                SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                switch (item.getItemId()) {
-                    case R.id.navItemMyCart:
-                        if(spf.getBoolean(getResources().getString(R.string.prefAccountIndicator),false)){
-                            startActivity(new Intent(MainActivity.this, MyCartActivity.class));
-                        }else {
-                            checkFirst();
-                        }
-                        break;
-                    case R.id.navItemAccount:
-                        if(spf.getBoolean(getResources().getString(R.string.prefAccountIndicator),false)){
-                            startActivityForResult(new Intent(MainActivity.this, AccountActivity.class), REQUEST_EXIT);
-                        }else {
-                            checkFirst();
-                        }
-                        break;
-                    case R.id.navItemSettings:
-                        startActivity(new Intent(MainActivity.this, PrefActivity.class));
-                        break;
-                    case R.id.navItemFeedback:
-                        Toast.makeText(getApplicationContext(), "Will Send Feedback once we have a public email id", Toast.LENGTH_LONG).show();
-                        break;
-                    case R.id.navItemRequest:
-                        startActivity(new Intent(MainActivity.this, RequestListActivity.class));
-                        break;
+                if(checkConnection()) {
+                    SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    switch (item.getItemId()) {
+                        case R.id.navItemMyCart:
+                            if (spf.getBoolean(getResources().getString(R.string.prefAccountIndicator), false)) {
+                                startActivity(new Intent(MainActivity.this, MyCartActivity.class));
+                            } else {
+                                checkFirst();
+                            }
+                            break;
+                        case R.id.navItemAccount:
+                            if (spf.getBoolean(getResources().getString(R.string.prefAccountIndicator), false)) {
+                                startActivityForResult(new Intent(MainActivity.this, AccountActivity.class), REQUEST_EXIT);
+                            } else {
+                                checkFirst();
+                            }
+                            break;
+                        case R.id.navItemSettings:
+                            startActivity(new Intent(MainActivity.this, PrefActivity.class));
+                            break;
+                        case R.id.navItemFeedback:
+                            Toast.makeText(getApplicationContext(), "Will Send Feedback once we have a public email id", Toast.LENGTH_LONG).show();
+                            break;
+                        case R.id.navItemRequest:
+                            startActivity(new Intent(MainActivity.this, RequestListActivity.class));
+                            break;
+                    }
+                }else {
+                    Toast.makeText(getApplicationContext(),"No Internet",Toast.LENGTH_SHORT).show();
                 }
                 return false;
             }

@@ -10,9 +10,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -55,8 +57,10 @@ import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class AddBook extends AppCompatActivity implements View.OnClickListener {
 
@@ -86,10 +90,18 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         initilize();
         setClickListener();
         if (getIntent().getExtras() != null) {
-            bookEditObject = (BookObject) getIntent().getExtras().getSerializable(getResources().getString(R.string.intentEditObject));
-            setValue(bookEditObject);
-
+            if (getIntent().getExtras().getString(getResources().getString(R.string.intentRequestBookName)) != null) {
+                setTwoVal();
+            } else {
+                bookEditObject = (BookObject) getIntent().getExtras().getSerializable(getResources().getString(R.string.intentEditObject));
+                setValue(bookEditObject);
+            }
         }
+    }
+
+    private void uploadigDialog(){
+        AlertDialog.Builder uploading = new AlertDialog.Builder(AddBook.this);
+        uploading.setTitle("\n"+"Processing..."+"\n").setCancelable(false).create().show();
     }
 
     private void setTwoVal() {
@@ -159,9 +171,6 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
             imageUrls.add(baseUrl + "/" + bookEditObject.getPhoto7());
         }
         getImages();
-        //editImageAdapter = new adapterPurchaseImage(getApplicationContext(), imageUrls, 1);
-        //imageContainer.setAdapter(null);
-        //imageContainer.setAdapter(editImageAdapter);
     }
 
     private void getImages() {
@@ -394,14 +403,11 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         } else if (Integer.parseInt(costPrice.getText().toString()) < Integer.parseInt(sellingPrice.getText().toString())) {
             Toast.makeText(this, "Selling Price cannot be greater than cost price", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (Integer.parseInt(edition.getText().toString()) > 2018 || Integer.parseInt(edition.getText().toString()) < 2000) {
-            Toast.makeText(this, "Enter a valid edition", Toast.LENGTH_SHORT).show();
-            return false;
         } else if (spf.getString(getResources().getString(R.string.prefAccountId), mNullValue).equalsIgnoreCase(mNullValue)) {
             Toast.makeText(this, "Invalid User Id", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (imageList.size() < 1) {
-            Toast.makeText(this, "You need to upload atleast one image", Toast.LENGTH_SHORT).show();
+        } else if (imageList.size() < 2) {
+            Toast.makeText(this, "You need to upload atleast two image", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -419,6 +425,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addBookDone:
+                uploadigDialog();
                 if (getIntent().getExtras() != null) {
                     if (verifyFields()) {
                         makeNames();
@@ -454,6 +461,13 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                             public void onResponse(String response) {
                                 Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
                                 setResult(RESULT_OK, null);
+                                Bundle numInt = getIntent().getExtras();
+                                /*if (numInt!=null) {
+                                    if(numInt.getInt(getResources().getString(R.string.intentRequestBookRid))!=0){
+                                        deleteRequest();
+                                    }
+
+                                }*/
                                 finish();
                                 startActivity(new Intent(AddBook.this, MainActivity.class));
                             }
@@ -476,6 +490,17 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                 break;
         }
     }
+
+    private File makeIntentFileName() {
+        File folder = getExternalFilesDir("booktrade");
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String id = spf.getString(getResources().getString(R.string.prefAccountId), mNullValue);
+        return new File(folder, id + name.getText().toString() + imageList.size() + ".jpg");
+    }
+
 
     private String buildDeleteRequestUri() {
         String server = getResources().getString(R.string.urlServer);
@@ -512,7 +537,9 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
             public void onClick(DialogInterface dialog, int position) {
                 if (position == 0) {
                     Intent intentcam = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intentcam, CAMERA_REQUEST_CODE);
+                    if (intentcam.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intentcam, CAMERA_REQUEST_CODE);
+                    }
                 }
                 if (position == 1) {
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -545,9 +572,13 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 imageList.add(imageBitmap);
                 imageContainer.swapAdapter(imageAdapter, true);
+                /*Bitmap imageBitmap = BitmapFactory.decodeFile(makeIntentFileName().toString());
+                imageList.add(imageBitmap));
+                imageContainer.swapAdapter(imageAdapter, true);*/
             }
         }
     }
+
 
     private void makeFile(String fileName, int position) {
         FileOutputStream fos = null;

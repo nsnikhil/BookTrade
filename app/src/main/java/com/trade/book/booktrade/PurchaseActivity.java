@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -96,6 +97,10 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         buyNow.setOnClickListener(this);
         buttonConatiner = (LinearLayout)findViewById(R.id.purchaseButtonContainer);
         purchaseError = (TextView)findViewById(R.id.purchaseErrorText);
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            buyNow.setTextColor(getResources().getColor(R.color.cardview_dark_background));
+            addToCart.setTextColor(getResources().getColor(R.color.cardview_dark_background));
+        }
     }
 
     private void setValue(BookObject bookObject){

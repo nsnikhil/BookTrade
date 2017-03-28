@@ -62,7 +62,7 @@ public class RequestListActivity extends AppCompatActivity {
         requestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
-                /*AlertDialog.Builder have = new AlertDialog.Builder(RequestListActivity.this)
+                AlertDialog.Builder have = new AlertDialog.Builder(RequestListActivity.this)
                         .setMessage("Do you want to sell this book")
                         .setPositiveButton("Sell", new DialogInterface.OnClickListener() {
                             @Override
@@ -71,11 +71,11 @@ public class RequestListActivity extends AppCompatActivity {
                                 Intent sell = new Intent(RequestListActivity.this,AddBook.class);
                                 sell.putExtra(getResources().getString(R.string.intentRequestBookName),object.getName());
                                 sell.putExtra(getResources().getString(R.string.intentRequestBookPublisher), object.getPublisher());
-                                sell.putExtra(getResources().getString(R.string.intentRequestBookPublisher), object.getRequestId());
+                                sell.putExtra(getResources().getString(R.string.intentRequestBookRid), object.getRequestId());
                                 startActivity(sell);
                             }
                         });
-                have.create().show();*/
+                have.create().show();
             }
         });
     }
