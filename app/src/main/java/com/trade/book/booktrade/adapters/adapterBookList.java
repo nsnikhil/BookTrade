@@ -152,6 +152,7 @@ public class adapterBookList extends BaseAdapter{
             bookPublisher = (TextView)v.findViewById(R.id.singleBookPublisher);
             bookImage = (ImageView)v.findViewById(R.id.singleBookPicture);
             bookTextConatiner = (LinearLayout)v.findViewById(R.id.singleBookTextContainer);
+            //bookTextConatiner = (LinearLayout)v.findViewById(R.id.singleBookTextContainer);
         }
     }
 }
