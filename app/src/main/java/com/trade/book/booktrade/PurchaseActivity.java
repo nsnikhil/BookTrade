@@ -3,8 +3,10 @@ package com.trade.book.booktrade;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,12 +34,14 @@ import java.util.ArrayList;
 
 public class PurchaseActivity extends AppCompatActivity implements View.OnClickListener{
 
-    TextView name,publisher,edition,description,cateogory,condition;
+    TextView name,publisher,edition,description,cateogory,condition,purchaseError;
     Button buyNow,addToCart;
+    LinearLayout buttonConatiner;
     RecyclerView imageHolder;
     BookObject bObject = null;
     adapterPurchaseImage imageAdapter;
     ArrayList<String> urls;
+    private static final String mNullValue = "N/A";
     private static final int mEditRequestCode = 584;
 
 
@@ -48,12 +53,29 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         if(getIntent().getExtras()!=null){
             bObject = (BookObject) getIntent().getExtras().getSerializable(getResources().getString(R.string.intenKeyObejct));
             setValue(bObject);
+            SharedPreferences sfp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            if(bObject.getUserId().equalsIgnoreCase(sfp.getString(getResources().getString(R.string.prefAccountId),mNullValue))){
+                purchaseError.setText("You cannot buy your own book");
+                purchaseError.setVisibility(View.VISIBLE);
+                buttonConatiner.setVisibility(View.GONE);
+            }else {
+                purchaseError.setVisibility(View.GONE);
+                buttonConatiner.setVisibility(View.VISIBLE);
+            }
         }
         setCartText();
         getUrl();
         if(getIntent().getExtras().getInt(getResources().getString(R.string.intentfromupload))!=0){
-            buyNow.setText("Edit");
-            addToCart.setText("Delete");
+            if(bObject.getStatus()==1){
+                purchaseError.setText("You cannot modify a book that has been sold");
+                purchaseError.setVisibility(View.VISIBLE);
+                buttonConatiner.setVisibility(View.GONE);
+            }else {
+                purchaseError.setVisibility(View.GONE);
+                buttonConatiner.setVisibility(View.VISIBLE);
+                buyNow.setText("Edit");
+                addToCart.setText("Delete");
+            }
         }
     }
 
@@ -72,7 +94,8 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         addToCart = (Button)findViewById(R.id.purchaseAddTocart);
         addToCart.setOnClickListener(this);
         buyNow.setOnClickListener(this);
-
+        buttonConatiner = (LinearLayout)findViewById(R.id.purchaseButtonContainer);
+        purchaseError = (TextView)findViewById(R.id.purchaseErrorText);
     }
 
     private void setValue(BookObject bookObject){

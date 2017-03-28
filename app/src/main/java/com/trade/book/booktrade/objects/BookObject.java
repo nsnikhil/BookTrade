@@ -6,10 +6,10 @@ import java.io.Serializable;
 public class BookObject implements Serializable{
 
     String name,publisher,description,cateogory,condition,photo0,photo1,photo2,photo3,photo4,photo5,photo6,photo7,userId;
-    int bid,costPrice,sellingPrice,edition,itemId;
+    int bid,costPrice,sellingPrice,edition,itemId,status;
 
     public BookObject(int id,String nm,String pb,int cp,int sp, int ed,String des,String condt,String cat,String usrd,int itmid,
-                      String pic0,String pic1,String pic2,String pic3,String pic4,String pic5,String pic6,String pic7){
+                      String pic0,String pic1,String pic2,String pic3,String pic4,String pic5,String pic6,String pic7,int bookstatus){
         bid = id;
         name = nm;
         publisher = pb;
@@ -29,6 +29,7 @@ public class BookObject implements Serializable{
         photo5 = pic5;
         photo6 = pic6;
         photo7 = pic7;
+        status = bookstatus;
     }
 
     public String getName() {
@@ -105,5 +106,9 @@ public class BookObject implements Serializable{
 
     public int getBid() {
         return bid;
+    }
+
+    public int getStatus() {
+        return status;
     }
 }

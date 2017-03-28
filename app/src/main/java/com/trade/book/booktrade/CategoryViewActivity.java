@@ -211,8 +211,9 @@ public class CategoryViewActivity extends AppCompatActivity {
                 String photoUrlName5 = jsonObject.getString("pic5");
                 String photoUrlName6 = jsonObject.getString("pic6");
                 String photoUrlName7 = jsonObject.getString("pic7");
+                int status = jsonObject.getInt("status");
                 categoryList.add(new BookObject(bid,name, publisher, costPrice, sellingPrice, edition, description, condtn, cateogory, userId, itemId
-                        ,photoUrlName0,photoUrlName1,photoUrlName2,photoUrlName3,photoUrlName4,photoUrlName5,photoUrlName6,photoUrlName7));
+                        ,photoUrlName0,photoUrlName1,photoUrlName2,photoUrlName3,photoUrlName4,photoUrlName5,photoUrlName6,photoUrlName7,status));
             }
             adapterBookList bookAdapter = new adapterBookList(getApplicationContext(), categoryList);
             catList.setAdapter(bookAdapter);

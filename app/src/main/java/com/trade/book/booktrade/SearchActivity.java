@@ -156,8 +156,9 @@ public class SearchActivity extends AppCompatActivity {
                 String photoUrlName5 = jsonObject.getString("pic5");
                 String photoUrlName6 = jsonObject.getString("pic6");
                 String photoUrlName7 = jsonObject.getString("pic7");
+                int status = jsonObject.getInt("status");
                 srchList.add(new BookObject(bid,name, publisher, costPrice, sellingPrice, edition, description, condtn, cateogory, userId,itmId
-                        ,photoUrlName0,photoUrlName1,photoUrlName2,photoUrlName3,photoUrlName4,photoUrlName5,photoUrlName6,photoUrlName7));
+                        ,photoUrlName0,photoUrlName1,photoUrlName2,photoUrlName3,photoUrlName4,photoUrlName5,photoUrlName6,photoUrlName7,status));
             }
             adapterBookList bookAdapter = new adapterBookList(getApplicationContext(), srchList);
             searchList.setAdapter(bookAdapter);

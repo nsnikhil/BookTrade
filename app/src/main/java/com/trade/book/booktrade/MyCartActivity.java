@@ -83,7 +83,8 @@ public class MyCartActivity extends AppCompatActivity implements LoaderManager.L
                             ,c.getString(c.getColumnIndex(tablecart.mPhoto4))
                             ,c.getString(c.getColumnIndex(tablecart.mPhoto5))
                             ,c.getString(c.getColumnIndex(tablecart.mPhoto6))
-                            ,c.getString(c.getColumnIndex(tablecart.mPhoto7)));
+                            ,c.getString(c.getColumnIndex(tablecart.mPhoto7))
+                            ,c.getInt(c.getColumnIndex(tablecart.mstatus)));
                     Intent detail  = new Intent(getApplicationContext(),PurchaseActivity.class);
                     Bundle b = new Bundle();
                     b.putSerializable(getResources().getString(R.string.intenKeyObejct), bookObject);

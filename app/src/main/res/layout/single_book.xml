@@ -50,7 +50,7 @@
                 android:layout_marginBottom="@dimen/eight"
                 android:layout_marginEnd="@dimen/eight"
                 android:fontFamily="sans-serif"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

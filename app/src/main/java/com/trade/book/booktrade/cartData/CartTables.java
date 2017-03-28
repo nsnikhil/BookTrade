@@ -8,7 +8,7 @@ public class CartTables {
 
     public static final String mTableName = "cart";
     public static final String mDataBaseName = "cartdatabase";
-    public static final int mDatabaseVersion = 8;
+    public static final int mDatabaseVersion = 10;
 
     public static final String mCartScheme = "content://";
     public static final String mCartAuthority = "com.trade.book.booktrade.cart";
@@ -36,5 +36,6 @@ public class CartTables {
         public static final String mPhoto5 = "photourl5";
         public static final String mPhoto6 = "photourl6";
         public static final String mPhoto7 = "photourl7";
+        public static final String mstatus = "status";
     }
 }

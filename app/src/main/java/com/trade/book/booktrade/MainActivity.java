@@ -31,6 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
 import com.lapism.searchview.SearchView;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.trade.book.booktrade.adapters.adapterBookPager;
@@ -208,8 +209,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(getApplicationContext(), "Will Send Feedback once we have a public email id", Toast.LENGTH_LONG).show();
                         break;
                     case R.id.navItemRequest:
-                        dialogFragmentRequest dialogFragmentRequest = new dialogFragmentRequest();
-                        dialogFragmentRequest.show(getSupportFragmentManager(),"request");
+                        startActivity(new Intent(MainActivity.this, RequestListActivity.class));
                         break;
                 }
                 return false;

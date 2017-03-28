@@ -29,7 +29,8 @@ public class CartHelper extends SQLiteOpenHelper{
             + tablecart.mPhoto4 + " TEXT NOT NULL, "
             + tablecart.mPhoto5 + " TEXT NOT NULL, "
             + tablecart.mPhoto6 + " TEXT NOT NULL, "
-            + tablecart.mPhoto7 + " TEXT NOT NULL "
+            + tablecart.mPhoto7 + " TEXT NOT NULL, "
+            + tablecart.mstatus + " INTEGER NOT NULL "
             +");";
 
     private static final String mDropCartTable = "DROP TABLE IF EXISTS "+ CartTables.mTableName;

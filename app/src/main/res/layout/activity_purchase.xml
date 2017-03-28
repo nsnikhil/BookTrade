@@ -55,6 +55,7 @@
 
                     <LinearLayout
                         style="@style/horizontalLinearLayout"
+                        android:id="@+id/purchaseButtonContainer"
                         android:padding="@dimen/eight">
 
                         <Button
@@ -78,6 +79,17 @@
                             android:theme="@style/buttonClr" />
 
                     </LinearLayout>
+
+                        <TextView
+                            style="@style/wrapContent"
+                            android:layout_width="match_parent"
+                            android:textSize="18sp"
+                            android:id="@+id/purchaseErrorText"
+                            android:visibility="gone"
+                            android:textStyle="bold"
+                            android:padding="@dimen/sixteen"
+                            android:fontFamily="sans-serif-light"
+                            android:text="This is a sample text"/>
 
                     </LinearLayout>
 

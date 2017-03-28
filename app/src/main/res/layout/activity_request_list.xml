@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/matchParent"
+    tools:context="com.trade.book.booktrade.RequestListActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarRequest"
+        style="@style/toolbar"
+        android:theme="@style/AppToolbar" />
+
+    <ListView
+        style="@style/matchParent"
+        android:layout_below="@id/toolbarRequest"
+        android:id="@+id/requestList"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/requestAdd"
+        style="@style/fab"
+        android:src="@drawable/ic_add_white_48dp"
+        app:fabSize="normal" />
+
+</RelativeLayout>

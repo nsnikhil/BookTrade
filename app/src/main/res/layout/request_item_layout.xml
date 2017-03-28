@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    style="@style/matchParent"
+    android:background="@color/colorBackground">
+
+
+    <android.support.v7.widget.CardView
+        style="@style/matchParent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation="0dp"
+        card_view:cardMaxElevation="2dp"
+        card_view:cardUseCompatPadding="true">
+
+        <RelativeLayout style="@style/matchParent"
+            android:padding="@dimen/eight">
+
+            <RelativeLayout
+                android:id="@+id/requestHeadingContainer"
+                android:layout_width="50dp"
+                android:layout_centerVertical="true"
+                android:layout_height="50dp"
+                android:background="@drawable/circle">
+
+                <TextView
+                    android:id="@+id/requestHeading"
+                    style="@style/wrapContent"
+                    android:layout_centerInParent="true"
+                    android:text="A"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                style="@style/wrapContent"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/requestHeadingContainer"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/requestName"
+                    style="@style/wrapContent"
+                    android:layout_marginStart="@dimen/sixteen"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="@string/app_name"
+                    android:textStyle="bold"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/requestPublisher"
+                    style="@style/wrapContent"
+                    android:layout_marginStart="@dimen/sixteen"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@string/app_name"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+
+</RelativeLayout>
