@@ -18,6 +18,7 @@ import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.trade.book.booktrade.cartData.CartTables;
 
 import java.io.File;
 
@@ -136,6 +137,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 spf.edit().putString(getResources().getString(R.string.prefAccountName), mNullValue).apply();
                 deleteFile();
                 setResult(RESULT_OK, null);
+                getContentResolver().delete(CartTables.mCartContentUri,null,null);
                 finish();
                 startActivity(new Intent(AccountActivity.this,MainActivity.class));
             }

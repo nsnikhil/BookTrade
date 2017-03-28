@@ -9,11 +9,11 @@
         android:layout_gravity="center"
         android:textStyle="bold"
         android:layout_margin="@dimen/sixteen"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="sans-serif-thin"
         android:layout_centerHorizontal="true"
         android:textSize="28sp"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
         android:id="@+id/intro4heading"
         android:text="Terms and Condition"/>
 
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:text="@string/condition"
             android:textStyle="bold"
-            android:fontFamily="sans-serif-light"
+            android:fontFamily="sans-serif-condensed"
             android:textAllCaps="true"
             android:padding="@dimen/sixteen"
             android:textSize="24sp" />

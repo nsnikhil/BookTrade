@@ -14,9 +14,10 @@
             android:layout_gravity="center"
             android:textStyle="bold"
             android:layout_margin="@dimen/sixteen"
-            android:fontFamily="sans-serif-light"
+            android:fontFamily="sans-serif-thin"
+            android:textAllCaps="true"
             android:textSize="48sp"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorAccent"
             android:text="Sign Up"/>
 
         <com.google.android.gms.common.SignInButton
@@ -27,6 +28,7 @@
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/login_button"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

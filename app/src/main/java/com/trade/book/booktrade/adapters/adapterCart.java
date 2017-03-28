@@ -2,16 +2,22 @@ package com.trade.book.booktrade.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
+import android.support.v7.graphics.Palette;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.cartData.CartTables;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Nikhil on 19-Mar-17.
@@ -44,16 +50,61 @@ public class adapterCart extends CursorAdapter{
                 .placeholder(R.drawable.back)
                 .crossFade()
                 .into(myViewHolder.bookImage);
+        setColor color = new setColor(context,myViewHolder,url);
+        color.execute();
+    }
+
+    private void setColor(Context c,Palette p, MyViewHolder myViewHolder){
+        myViewHolder.bookTextConatiner.setBackgroundColor(p.getDarkMutedColor(c.getResources().getColor(R.color.colorPrimary)));
+    }
+
+    public class setColor extends AsyncTask<Void,Void,Palette> {
+
+        MyViewHolder myViewHolder;
+        String url;
+        Context mContext;
+
+        setColor(Context c,MyViewHolder mvh, String u){
+            myViewHolder = mvh;
+            url  = u;
+            mContext = c;
+        }
+
+
+        @Override
+        protected Palette doInBackground(Void... params) {
+            try {
+                return createPaletteAsync(mContext,url);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Palette palette) {
+            setColor(mContext,palette,myViewHolder);
+            super.onPostExecute(palette);
+        }
+    }
+
+    public Palette createPaletteAsync(Context c,String url) throws ExecutionException, InterruptedException {
+        Bitmap b =  Glide.with(c).load(url).asBitmap().into(100, 100).get();
+        return Palette.from(b).generate();
     }
 
     public class MyViewHolder{
         ImageView bookImage;
         TextView bookName,bookPublisher,bookPrice;
+        LinearLayout bookTextConatiner;
         MyViewHolder(View v){
             bookName = (TextView)v.findViewById(R.id.singleBookName);
             bookPrice = (TextView)v.findViewById(R.id.singleBookPrice);
             bookPublisher = (TextView)v.findViewById(R.id.singleBookPublisher);
             bookImage = (ImageView)v.findViewById(R.id.singleBookPicture);
+            bookTextConatiner = (LinearLayout)v.findViewById(R.id.singleBookTextContainer);
         }
     }
 }

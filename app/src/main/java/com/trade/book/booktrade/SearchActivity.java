@@ -160,7 +160,7 @@ public class SearchActivity extends AppCompatActivity {
                 srchList.add(new BookObject(bid,name, publisher, costPrice, sellingPrice, edition, description, condtn, cateogory, userId,itmId
                         ,photoUrlName0,photoUrlName1,photoUrlName2,photoUrlName3,photoUrlName4,photoUrlName5,photoUrlName6,photoUrlName7,status));
             }
-            adapterBookList bookAdapter = new adapterBookList(getApplicationContext(), srchList);
+            adapterBookList bookAdapter = new adapterBookList(getApplicationContext(), srchList,0);
             searchList.setAdapter(bookAdapter);
         }else {
             noList.setVisibility(View.VISIBLE);

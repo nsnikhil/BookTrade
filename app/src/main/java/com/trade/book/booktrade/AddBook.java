@@ -88,7 +88,13 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         if (getIntent().getExtras() != null) {
             bookEditObject = (BookObject) getIntent().getExtras().getSerializable(getResources().getString(R.string.intentEditObject));
             setValue(bookEditObject);
+
         }
+    }
+
+    private void setTwoVal() {
+        name.setText(getIntent().getExtras().getString(getResources().getString(R.string.intentRequestBookName)));
+        publisher.setText(getIntent().getExtras().getString(getResources().getString(R.string.intentRequestBookPublisher)));
     }
 
     private void setValue(BookObject bookEditObject) {
@@ -158,13 +164,13 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         //imageContainer.setAdapter(editImageAdapter);
     }
 
-    private void getImages(){
-        for(int i=0;i<imageUrls.size();i++){
+    private void getImages() {
+        for (int i = 0; i < imageUrls.size(); i++) {
             new downloadImages().execute(imageUrls.get(i));
         }
     }
 
-    private void addBitmap(String s){
+    private void addBitmap(String s) {
         URL u = null;
         Bitmap img = null;
         HttpURLConnection htcp = null;
@@ -178,38 +184,24 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
             htcp = (HttpURLConnection) u.openConnection();
             htcp.setRequestMethod("GET");
             htcp.connect();
-            if(htcp.getResponseCode()==200){
+            if (htcp.getResponseCode() == 200) {
                 is = htcp.getInputStream();
                 img = BitmapFactory.decodeStream(is);
                 imageList.add(img);
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
-            if(htcp!=null){
+        } finally {
+            if (htcp != null) {
                 htcp.disconnect();
-            }if(is!=null){
+            }
+            if (is != null) {
                 try {
                     is.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-        }
-    }
-
-    public class downloadImages extends AsyncTask<String,Void,Void>{
-
-        @Override
-        protected Void doInBackground(String... params) {
-            addBitmap(params[0]);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            imageContainer.swapAdapter(imageAdapter, true);
         }
     }
 
@@ -485,6 +477,31 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
+    private String buildDeleteRequestUri() {
+        String server = getResources().getString(R.string.urlServer);
+        String requestAdd = getResources().getString(R.string.urlRequestDelete);
+        String url = server + requestAdd;
+        String ridQuery = "rid";
+        int ridValue = getIntent().getExtras().getInt(getResources().getString(R.string.intentRequestBookRid));
+        return Uri.parse(url).buildUpon().appendQueryParameter(ridQuery, String.valueOf(ridValue)).build().toString();
+    }
+
+    private void deleteRequest() {
+        RequestQueue requestObject = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, buildDeleteRequestUri(), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestObject.add(stringRequest);
+    }
+
     private void chooseImageAction() {
         AlertDialog.Builder choosePath = new AlertDialog.Builder(AddBook.this);
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(AddBook.this, android.R.layout.simple_list_item_1);
@@ -556,7 +573,6 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-
     private void uploadImage(File f, String filename) throws IOException {
         AmazonS3 s3 = new AmazonS3Client(getCredentials());
         TransferUtility transferUtility = new TransferUtility(s3, getApplicationContext());
@@ -571,6 +587,21 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                 Regions.AP_NORTHEAST_1 // Region
         );
         return credentialsProvider;
+    }
+
+    public class downloadImages extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            addBitmap(params[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            imageContainer.swapAdapter(imageAdapter, true);
+        }
     }
 
     public class uploadAsync extends AsyncTask<Void, Void, Void> {

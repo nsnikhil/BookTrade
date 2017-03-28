@@ -2,11 +2,22 @@
     xmlns:tools="http://schemas.android.com/tools"
    style="@style/verticalLinearLayout"
     android:layout_width="250dp"
+    android:padding="@dimen/sixteen"
     tools:context="com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentRequest">
+
+    <TextView
+        style="@style/addBookText"
+        android:textSize="20sp"
+        android:textColor="@color/colorAccent"
+        android:fontFamily="sans-serif-light"
+        android:textStyle="bold"
+        android:layout_width="250dp"
+        android:text="Add book for request" />
 
     <EditText
         android:id="@+id/requestName"
         style="@style/addBookText"
+        android:padding="@dimen/eight"
         android:layout_width="250dp"
         android:hint="@string/bookName"
         android:inputType="textMultiLine" />
@@ -14,6 +25,7 @@
     <EditText
         android:id="@+id/requestPublisher"
         style="@style/addBookText"
+        android:padding="@dimen/eight"
         android:layout_width="250dp"
         android:hint="@string/bookPublisher"
         android:inputType="textMultiLine" />

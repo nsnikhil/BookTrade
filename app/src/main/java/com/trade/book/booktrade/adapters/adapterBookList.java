@@ -26,10 +26,12 @@ public class adapterBookList extends BaseAdapter{
 
     Context mContext;
     ArrayList<BookObject> list;
+    int k;
 
-    public adapterBookList(Context c, ArrayList<BookObject> bookObjects){
+    public adapterBookList(Context c, ArrayList<BookObject> bookObjects,int key){
         mContext = c;
         list = bookObjects;
+        k = key;
     }
 
 
@@ -61,7 +63,7 @@ public class adapterBookList extends BaseAdapter{
         BookObject bookObject = list.get(position);
         myViewHolder.bookName.setText(bookObject.getName());
         myViewHolder.bookName.setAllCaps(true);
-        myViewHolder.bookPrice.setText("र "+bookObject.getSellingPrice());
+        setSellingPrice(myViewHolder,bookObject);
         myViewHolder.bookPublisher.setText(bookObject.getPublisher());
         String url = mContext.getResources().getString(R.string.urlBucetHost)+mContext.getResources().getString(R.string.urlBucketName)+"/"+bookObject.getPhoto0();
         Log.d("",url);
@@ -76,8 +78,32 @@ public class adapterBookList extends BaseAdapter{
         return convertView;
     }
 
+    private void setSellingPrice(MyViewHolder myViewHolder,BookObject bookObject){
+        if(k==0){
+            myViewHolder.bookPrice.setText("र "+bookObject.getSellingPrice());
+        }else {
+
+            myViewHolder.bookPrice.setText("र "+ (bookObject.getSellingPrice()+compute(bookObject.getSellingPrice())));
+        }
+    }
+
+    private double compute(int price) {
+        if (price > 0 && price < 300) {
+            return ((double) 8 / 100) * price;
+        }
+        if (price >= 300 && price <= 999) {
+            return ((double) 6 / 100) * price;
+        }
+        if (price > 999) {
+            return ((double) 4 / 100) * price;
+        }
+        return 0;
+    }
+
     private void setColor(Palette p,MyViewHolder myViewHolder){
-        myViewHolder.bookTextConatiner.setBackgroundColor(p.getDarkMutedColor(mContext.getResources().getColor(R.color.colorPrimary)));
+        if(p!=null){
+            myViewHolder.bookTextConatiner.setBackgroundColor(p.getDarkMutedColor(mContext.getResources().getColor(R.color.colorPrimary)));
+        }
     }
 
     public class setColor extends AsyncTask<Void,Void,Palette>{

@@ -23,7 +23,7 @@
             android:layout_margin="@dimen/sixteen"
             android:fontFamily="sans-serif-light"
             android:textSize="48sp"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/colorAccent"
             android:text="@string/app_name"/>
 
     </LinearLayout>

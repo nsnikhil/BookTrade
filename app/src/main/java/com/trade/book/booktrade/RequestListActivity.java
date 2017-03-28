@@ -1,6 +1,7 @@
 package com.trade.book.booktrade;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,23 +14,35 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.adapters.*;
 import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentRequest;
 import com.trade.book.booktrade.objects.BookObject;
 import com.trade.book.booktrade.objects.RequestObject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class RequestListActivity extends AppCompatActivity {
 
     ListView requestList;
     Toolbar requestToolbar;
     FloatingActionButton requestAdd;
+    ArrayList<RequestObject> requestObjectList;
+    adapterRequest adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_list);
         intilize();
-        addList();
+        downloadList();
     }
 
     private void intilize() {
@@ -38,6 +51,7 @@ public class RequestListActivity extends AppCompatActivity {
         setSupportActionBar(requestToolbar);
         getSupportActionBar().setTitle("Book Request");
         requestList = (ListView) findViewById(R.id.requestList);
+        requestObjectList = new ArrayList<>();
         requestAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,34 +59,63 @@ public class RequestListActivity extends AppCompatActivity {
                 dialogFragmentRequest.show(getSupportFragmentManager(), "request");
             }
         });
-    }
-
-    private void addList() {
-        ArrayList<RequestObject> name = new ArrayList<>();
-        name.add(new RequestObject("Physics","Publishera"));
-        name.add(new RequestObject("Chemistry","Publisherb"));
-        name.add(new RequestObject("Biology","Publisherc"));
-        name.add(new RequestObject("Maths","Publisherd"));
-        name.add(new RequestObject("History","Publishere"));
-        name.add(new RequestObject("Geogrpahy","Publisherf"));
-        name.add(new RequestObject("Accounts","Publisherg"));
-        name.add(new RequestObject("Economics","Publisherh"));
-        name.add(new RequestObject("Thermodynamics","Publisheri"));
-        adapterRequest adapter = new adapterRequest(getApplicationContext(), name);
-        requestList.setAdapter(adapter);
         requestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AlertDialog.Builder have = new AlertDialog.Builder(RequestListActivity.this)
+            public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
+                /*AlertDialog.Builder have = new AlertDialog.Builder(RequestListActivity.this)
                         .setMessage("Do you want to sell this book")
                         .setPositiveButton("Sell", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getApplicationContext(),"Will start add books activity",Toast.LENGTH_SHORT).show();
+                                RequestObject object = (RequestObject) parent.getItemAtPosition(position);
+                                Intent sell = new Intent(RequestListActivity.this,AddBook.class);
+                                sell.putExtra(getResources().getString(R.string.intentRequestBookName),object.getName());
+                                sell.putExtra(getResources().getString(R.string.intentRequestBookPublisher), object.getPublisher());
+                                sell.putExtra(getResources().getString(R.string.intentRequestBookPublisher), object.getRequestId());
+                                startActivity(sell);
                             }
                         });
-                have.create().show();
+                have.create().show();*/
             }
         });
     }
+
+    private void addToList(JSONArray array) throws JSONException {
+        if(array.length()>0){
+            for(int i=0;i<array.length();i++){
+                JSONObject object = array.getJSONObject(i);
+                String name = object.getString("name");
+                String uid = object.getString("id");
+                String publisher = object.getString("publisher");
+                int rid = object.getInt("rid");
+                requestObjectList.add(new RequestObject(name,publisher,uid,rid));
+            }
+            adapter = new adapterRequest(getApplicationContext(),requestObjectList);
+            requestList.setAdapter(adapter);
+        }
+    }
+
+    private void downloadList(){
+        String host = getResources().getString(R.string.urlServer);
+        String queryFilename = getResources().getString(R.string.urlRequestQuery);
+        String url = host+queryFilename;
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    addToList(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(jsonArrayRequest);
+    }
+
 }

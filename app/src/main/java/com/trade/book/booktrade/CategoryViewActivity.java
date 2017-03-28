@@ -49,7 +49,12 @@ public class CategoryViewActivity extends AppCompatActivity {
         catUri = getIntent().getExtras().getString(getResources().getString(R.string.intencateuri));
         mUploadIndicator = getIntent().getExtras().getInt(getResources().getString(R.string.intenupind));
         initilize();
-        getList(catUri);
+        if(mUploadIndicator==123){
+            getList(catUri,1);
+        }else {
+            getList(catUri,0);
+        }
+
     }
 
     private void initilize() {
@@ -162,18 +167,18 @@ public class CategoryViewActivity extends AppCompatActivity {
             if(resultCode==RESULT_OK){
                 catList.setAdapter(null);
                 categoryList.clear();
-                getList(catUri);
+                getList(catUri,0);
             }
         }
     }
 
-    private void getList(String url){
+    private void getList(String url, final int k){
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 try {
-                    addToList(response);
+                    addToList(response,k);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -187,7 +192,7 @@ public class CategoryViewActivity extends AppCompatActivity {
         requestQueue.add(jsonArrayRequest);
     }
 
-    private void addToList(JSONArray response) throws JSONException {
+    private void addToList(JSONArray response,int k) throws JSONException {
         catProgress.setVisibility(View.GONE);
         if (response.length() > 0) {
             for (int i = 0; i < response.length(); i++) {
@@ -215,7 +220,7 @@ public class CategoryViewActivity extends AppCompatActivity {
                 categoryList.add(new BookObject(bid,name, publisher, costPrice, sellingPrice, edition, description, condtn, cateogory, userId, itemId
                         ,photoUrlName0,photoUrlName1,photoUrlName2,photoUrlName3,photoUrlName4,photoUrlName5,photoUrlName6,photoUrlName7,status));
             }
-            adapterBookList bookAdapter = new adapterBookList(getApplicationContext(), categoryList);
+            adapterBookList bookAdapter = new adapterBookList(getApplicationContext(), categoryList,k);
             catList.setAdapter(bookAdapter);
         }else {
             emptyCat.setVisibility(View.VISIBLE);

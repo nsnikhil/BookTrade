@@ -35,6 +35,11 @@
     <string name="urlTransactionQueryYour" translatable="false">booktrade/transactionYourPurchase.php</string>
     <string name="urlTransactionDelete" translatable="false">booktrade/transactionDelete.php</string>
 
+    <string name="urlRequestInsert" translatable="false">booktrade/requestInsert.php</string>
+    <string name="urlRequestDelete" translatable="false">booktrade/requestDelete.php</string>
+    <string name="urlRequestQuery" translatable="false">booktrade/requestQueryAll.php</string>
+
+
     <string name="urlBucetHost" translatable="false">https://s3-ap-northeast-1.amazonaws.com/</string>
     <string name="urlBucketName" translatable="false">nsnikbkimg</string>
     <!-- -->
@@ -112,6 +117,9 @@
     <string name="intentImageUrl">intimgurlky</string>
     <string name="intentfromupload">intenfrmupky</string>
     <string name="intentEditObject">inkyedob</string>
+    <string name="intentRequestBookName">inrqbknm</string>
+    <string name="intentRequestBookPublisher">inrqbkpb</string>
+    <string name="intentRequestBookRid">inrqbkrid</string>
     <!-- -->
 
     <!-- prefStrings-->
@@ -123,8 +131,8 @@
     <!-- -->
 
     <!-- TermsAndCondition-->
-    <string name="condition">We charge convenience fee to run our servers and provide you this service for each book being sold for less than Rs300 we charge
-    8 fee from both buyer and seller for range between 300 to 999 we charge a fee of 6 and for any book with selling price of Rs1000 and above a fee of 4 is being charged</string>
+    <string name="condition" formatted="false">We charge convenience fee to run our servers and provide you this service for each book being sold for less than Rs300 we charge
+    8% fee from both buyer and seller for range between 300 to 999 we charge a fee of 6% and for any book with selling price of Rs1000 and above a fee of 4% is being charged</string>
     <!-- -->
 
 </resources>

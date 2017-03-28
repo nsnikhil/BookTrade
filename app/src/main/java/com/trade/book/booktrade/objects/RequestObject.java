@@ -6,11 +6,14 @@ package com.trade.book.booktrade.objects;
 
 public class RequestObject {
 
-    String name,publisher;
+    String name,publisher,userId;
+    int requestId;
 
-    public RequestObject(String nm,String pb){
+    public RequestObject(String nm,String pb,String uid,int rid){
         name = nm;
         publisher =pb;
+        userId = uid;
+        requestId = rid;
     }
 
     public String getName() {
@@ -20,4 +23,14 @@ public class RequestObject {
     public String getPublisher() {
         return publisher;
     }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public int getRequestId() {
+        return requestId;
+    }
+
+
 }

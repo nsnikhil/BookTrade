@@ -271,6 +271,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         cv.put(tablecart.mPhoto5,bObject.getPhoto5());
         cv.put(tablecart.mPhoto6,bObject.getPhoto6());
         cv.put(tablecart.mPhoto7,bObject.getPhoto7());
+        cv.put(tablecart.mstatus,bObject.getStatus());
         Uri u = getContentResolver().insert(CartTables.mCartContentUri,cv);
         Toast.makeText(getApplicationContext(),"Added to cart",Toast.LENGTH_SHORT).show();
         setCartText();
