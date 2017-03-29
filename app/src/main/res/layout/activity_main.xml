@@ -4,27 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainDrawerLayout"
     style="@style/matchParent"
-    android:fitsSystemWindows="true"
     android:background="@color/colorBackground"
+    android:fitsSystemWindows="true"
     tools:context="com.trade.book.booktrade.MainActivity">
 
-    <RelativeLayout style="@style/matchParent"
-        android:id="@+id/mainRelativeLayout">
+
+    <RelativeLayout
+        android:id="@+id/mainRelativeLayout"
+        style="@style/matchParent">
 
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbarMain"
-            android:theme="@style/AppToolbar"
-            android:contentInsetLeft="0dp"
-            android:contentInsetStart="0dp"
-            app:contentInsetLeft="0dp"
-            app:contentInsetStart="0dp"
+            style="@style/toolbar"
             android:background="@drawable/toolbargradeint"
-            android:contentInsetRight="0dp"
-            android:contentInsetEnd="0dp"
-            app:contentInsetRight="0dp"
+            android:theme="@style/AppToolbar"
             app:contentInsetEnd="0dp"
-            style="@style/toolbar" >
+            app:contentInsetLeft="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetStart="0dp"
+            app:layout_scrollFlags="scroll|enterAlways">
 
             <com.lapism.searchview.SearchView
                 android:id="@+id/searchView"
@@ -34,17 +33,20 @@
 
         </android.support.v7.widget.Toolbar>
 
+
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayoutMain"
             style="@style/toolbar"
+            android:layout_below="@id/toolbarMain"
             android:background="@drawable/toolbargradeint"
             app:tabSelectedTextColor="@color/white"
-            app:tabTextColor="#E0E0E0"
-            android:layout_below="@id/toolbarMain" />
+            app:tabTextColor="#E0E0E0" />
 
-        <android.support.v4.view.ViewPager style="@style/matchParent"
-            android:layout_below="@id/tabLayoutMain"
-            android:id="@+id/mainContainer"/>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/mainContainer"
+            style="@style/matchParent"
+            android:layout_below="@id/tabLayoutMain" />
 
 
         <android.support.design.widget.FloatingActionButton
@@ -54,16 +56,16 @@
             app:fabSize="normal" />
 
         <ImageView
-            android:layout_width="240dp"
             android:id="@+id/errorImage"
-            android:visibility="gone"
-            android:src="@drawable/nointernet"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
             android:layout_centerInParent="true"
-            android:layout_height="240dp" />
-
+            android:src="@drawable/nointernet"
+            android:visibility="gone" />
 
 
     </RelativeLayout>
+
 
     <android.support.design.widget.NavigationView
         android:id="@+id/mainNaviagtionView"

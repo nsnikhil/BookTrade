@@ -24,7 +24,7 @@ public class IntroActivity extends AppIntro2 {
         super.onCreate(savedInstanceState);
         addSlide(new intro1Fragment());
         addSlide(new intro2Fragment());
-        //addSlide(new intro5Fragment());
+        addSlide(new intro5Fragment());
         addSlide(new intro3Fragment());
         addSlide(new intro4Fragment());
         showSkipButton(false);

@@ -28,6 +28,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.adapters.adapterCart;
@@ -35,6 +36,10 @@ import com.trade.book.booktrade.cartData.CartTables.tablecart;
 import com.trade.book.booktrade.cartData.CartTables;
 import com.trade.book.booktrade.data.TableHelper;
 import com.trade.book.booktrade.objects.BookObject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Calendar;
 
@@ -60,6 +65,7 @@ public class MyCartActivity extends AppCompatActivity implements LoaderManager.L
         initilize();
         loadCart();
         setEmpty();
+        checkSold();
     }
 
 
@@ -290,6 +296,58 @@ public class MyCartActivity extends AppCompatActivity implements LoaderManager.L
             }
         });
         requestQueue.add(stringRequest);
+    }
+
+    private String buildSoldUri(int id){
+        String host = getResources().getString(R.string.urlServer);
+        String purchaseAvailable = getResources().getString(R.string.urlPurchaseAvailable);
+        String url = host + purchaseAvailable;
+        String bidQuery = "bd";
+        return Uri.parse(url).buildUpon()
+                .appendQueryParameter(bidQuery,String.valueOf(id))
+                .build().toString();
+    }
+
+    private void removeSold(final int bid){
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, buildSoldUri(bid), null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    removeIfAvailable(response,bid);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    private void removeIfAvailable(JSONArray status,int id) throws JSONException {
+        if(status.length()>0){
+            for(int i=0;i<status.length();i++){
+                JSONObject obj = status.getJSONObject(i);
+                int statusCode = obj.getInt("status");
+                if(statusCode==1){
+                    getContentResolver().delete(Uri.withAppendedPath(CartTables.mCartContentUri,String.valueOf(id)),null,null);
+                    Toast.makeText(getApplicationContext(),"Few items Removed as they were sold",Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    private void checkSold(){
+        Cursor c = getContentResolver().query(CartTables.mCartContentUri,null,null,null,null);
+        for(int i=0;i<c.getCount();i++){
+            while (c.moveToNext()){
+                removeSold(c.getInt(c.getColumnIndex(tablecart.mBuid)));
+            }
+        }
     }
 
     private void shift(Cursor cursor) {

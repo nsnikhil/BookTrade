@@ -24,6 +24,7 @@ import com.trade.book.booktrade.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +44,10 @@ public class intro3Fragment extends Fragment implements ISlidePolicy {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_intro3, container, false);
         initilize(v);
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        if(!spf.getString(getResources().getString(R.string.prefAccountId),mNullValue).equalsIgnoreCase(mNullValue)){
+            preFetchValues();
+        }
         return v;
     }
 
@@ -50,6 +55,44 @@ public class intro3Fragment extends Fragment implements ISlidePolicy {
         phone = (EditText)v.findViewById(R.id.intro3Phoneno);
         address = (EditText)v.findViewById(R.id.intro3Address);
     }
+
+    private String  buildSetUri(){
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String host = getResources().getString(R.string.urlServer);
+        String queryUserName = getResources().getString(R.string.urlUserQuery);
+        String url = host+queryUserName;
+        String uidQuery = "uid";
+        return Uri.parse(url).buildUpon().appendQueryParameter(uidQuery,spf.getString(getResources().getString(R.string.prefAccountId),mNullValue)).build().toString();
+    }
+
+    private void preFetchValues(){
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, buildSetUri(), null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    setValues(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getActivity(),"Error",Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    private void setValues(JSONArray response) throws JSONException {
+        if(response.length()>0){
+            JSONObject object  = response.getJSONObject(0);
+            phone.setText(object.getString("phoneno"));
+            address.setText(object.getString("address"));
+        }
+    }
+
 
     private boolean verify(){
         if(phone.getText().toString().isEmpty()||phone.getText().toString().length()==0){

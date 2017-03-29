@@ -8,6 +8,8 @@
     <string name="setting">Settings</string>
     <string name="searchHint">Search books by Name</string>
     <string name="facebook_app_id">1653383558302081</string>
+    <string name="speech_prompt">Say the book name</string>
+    <string name="speech_not_supported">Sorry! Your device doesnot support speech input</string>
 
     <!-- url-->
     <string name="urlServer" translatable="false">http://ec2-35-154-208-1.ap-south-1.compute.amazonaws.com/</string>
@@ -17,12 +19,13 @@
     <string name="urlQueryAvailable" translatable="false">booktrade/bookQueryAvailable.php</string>
     <string name="urlQueryInTransit" translatable="false">booktrade/bookQueryInTransit.php</string>
     <string name="urlSearchQuery" translatable="false">booktrade/bookSearchAll.php</string>
-    <string name="urlSearchCatQuery" translatable="false">booktrade/bookSearchCategory.php</string>
-
+    <string name="urlSearchCatQuery" translatable="false">booktrade/bookAvailableToPurchase.php</string>
 
     <string name="urlMoveToTransit" translatable="false">booktrade/bookMoveToTransit.php</string>
     <string name="urlMoveToAvailable" translatable="false">booktrade/bookMoveToAvalilable.php</string>
     <string name="urlDeleteSingle" translatable="false">booktrade/bookDeleteSingle.php</string>
+    <string name="urlPurchaseAvailable" translatable="false">booktrade/bookDeleteSingle.php</string>
+
 
     <string name="urlUserUploads" translatable="false">booktrade/bookQueryUserAll.php</string>
     <string name="urlUpdateSingle" translatable="false">booktrade/bookUpdate.php</string>
@@ -70,7 +73,7 @@
     <string-array name="bookCateogories">
         <item>Art and Photography</item>
         <item>Biographies and Memoirs</item>
-        <item>Busniness and investing</item>
+        <item>Business and investing</item>
         <item>Adventure</item>
         <item>Philosophy</item>
         <item>Computer and Technology</item>
@@ -78,10 +81,10 @@
         <item>Education and Reference</item>
         <item>History</item>
         <item>Entertainment and Humour</item>
-        <item>Litrature and Fiction</item>
+        <item>Literature and Fiction</item>
         <item>Politics and Social Science</item>
         <item>Professional and Technical</item>
-        <item>Religion and Sprituality</item>
+        <item>Religion and Spirituality</item>
         <item>Romance</item>
         <item>School Stories</item>
         <item>Animals</item>

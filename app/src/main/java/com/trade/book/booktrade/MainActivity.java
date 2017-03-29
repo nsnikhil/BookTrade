@@ -1,5 +1,6 @@
 package com.trade.book.booktrade;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.FloatingActionButton;
@@ -38,6 +40,8 @@ import com.trade.book.booktrade.adapters.adapterBookPager;
 import com.trade.book.booktrade.fragments.dialogfragments.*;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TabLayout TabsMain;
     int mRequestCode = 1080;
     private static final String mNullValue = "N/A";
+    private static final int REQ_CODE_SPEECH_INPUT = 564;
     CircularImageView profileImage;
     int REQUEST_EXIT = 1520;
 
@@ -108,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         searchView.setOnVoiceClickListener(new SearchView.OnVoiceClickListener() {
             @Override
             public void onVoiceClick() {
-                Toast.makeText(getApplicationContext(),"Will Start Voice Search",Toast.LENGTH_LONG).show();
+               promptSpeechInput();
             }
         });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -129,6 +134,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         addOnConnection();
+    }
+
+    private void promptSpeechInput() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech_prompt));
+        try {
+            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
+        } catch (ActivityNotFoundException a) {
+            Toast.makeText(getApplicationContext(), getString(R.string.speech_not_supported), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void addOnConnection() {
@@ -261,5 +278,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (requestCode == REQUEST_EXIT && resultCode == RESULT_OK) {
             this.finish();
         }
+        if (requestCode == REQ_CODE_SPEECH_INPUT && resultCode == RESULT_OK && null != data) {
+            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            searchView.setTextOnly(result.get(0));
+            Intent search = new Intent(MainActivity.this,SearchActivity.class);
+            search.putExtra(getResources().getString(R.string.intenSearchKey),result.get(0));
+            search.setAction(Intent.ACTION_SEARCH);
+            startActivity(search);
+            searchView.clearFocus();
+        }
+
     }
 }

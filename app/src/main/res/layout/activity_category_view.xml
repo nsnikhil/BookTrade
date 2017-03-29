@@ -8,9 +8,12 @@
     android:fitsSystemWindows="true"
     tools:context="com.trade.book.booktrade.CategoryViewActivity">
 
+
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbarCategory"
         style="@style/toolbar"
+        app:layout_scrollFlags="scroll|enterAlways"
         android:theme="@style/AppToolbar" />
 
 
@@ -36,5 +39,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
+
 
 </RelativeLayout>
