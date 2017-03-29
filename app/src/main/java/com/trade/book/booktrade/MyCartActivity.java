@@ -1,6 +1,7 @@
 package com.trade.book.booktrade;
 
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -186,7 +187,7 @@ public class MyCartActivity extends AppCompatActivity implements LoaderManager.L
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                uploadigDialog();
+                uploadigDialog().show();
                 checkOutFromCart();
             }
         });
@@ -194,9 +195,11 @@ public class MyCartActivity extends AppCompatActivity implements LoaderManager.L
         dialog.show();
     }
 
-    private void uploadigDialog(){
+    private Dialog uploadigDialog(){
         AlertDialog.Builder uploading = new AlertDialog.Builder(MyCartActivity.this);
         uploading.setTitle("\n"+"Processing..."+"\n").setCancelable(false).create().show();
+        Dialog up = uploading.create();
+        return up;
     }
 
     private void checkOutFromCart(){
@@ -210,6 +213,7 @@ public class MyCartActivity extends AppCompatActivity implements LoaderManager.L
         handler.postDelayed(new Runnable() {
             public void run() {
                 finish();
+                uploadigDialog().dismiss();
                 startActivity(new Intent(MyCartActivity.this, MainActivity.class));
             }
         }, 2000);

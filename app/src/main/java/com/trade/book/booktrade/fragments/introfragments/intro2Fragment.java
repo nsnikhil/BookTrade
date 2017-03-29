@@ -172,9 +172,13 @@ public class intro2Fragment extends Fragment implements ISlidePolicy,View.OnClic
             GoogleSignInAccount acct = result.getSignInAccount();
             spf.edit().putString(getResources().getString(R.string.prefAccountId),acct.getId()).apply();
             spf.edit().putString(getResources().getString(R.string.prefAccountName), acct.getDisplayName()).apply();
-            new DownloadImage().execute(acct.getPhotoUrl().toString());
-        } else {
-
+            if(acct.getPhotoUrl()!=null){
+                new DownloadImage().execute(acct.getPhotoUrl().toString());
+            }else {
+                signedIn = true;
+                Toast.makeText(getActivity(),"Signed In",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"Swipe Left",Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
