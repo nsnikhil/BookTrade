@@ -152,6 +152,7 @@ public class intro2Fragment extends Fragment implements ISlidePolicy,View.OnClic
 
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        signInIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 

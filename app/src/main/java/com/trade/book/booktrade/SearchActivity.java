@@ -2,6 +2,7 @@ package com.trade.book.booktrade;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.adapters.adapterBookList;
+import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentRequest;
 import com.trade.book.booktrade.objects.BookObject;
 
 import org.json.JSONArray;
@@ -33,6 +35,7 @@ public class SearchActivity extends AppCompatActivity {
     ProgressBar searchProgress;
     ArrayList<BookObject> srchList;
     com.lapism.searchview.SearchView searchView;
+    FloatingActionButton request;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,14 @@ public class SearchActivity extends AppCompatActivity {
         searchProgress = (ProgressBar) findViewById(R.id.searchProgress);
         searchView = (com.lapism.searchview.SearchView)findViewById(R.id.sSearchView);
         searchView.setHint(getResources().getString(R.string.searchHint));
+        request = (FloatingActionButton)findViewById(R.id.searchRequest);
+        request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogFragmentRequest dialogFragmentRequest = new dialogFragmentRequest();
+                dialogFragmentRequest.show(getSupportFragmentManager(), "request");
+            }
+        });
         searchView.setElevation(8);
         searchView.setOnVoiceClickListener(new com.lapism.searchview.SearchView.OnVoiceClickListener() {
             @Override
@@ -62,6 +73,7 @@ public class SearchActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 searchProgress.setVisibility(View.VISIBLE);
                 noList.setVisibility(View.GONE);
+                request.setVisibility(View.GONE);
                 inSearch(query);
                 searchView.close(true);
                 return false;
@@ -164,6 +176,8 @@ public class SearchActivity extends AppCompatActivity {
             searchList.setAdapter(bookAdapter);
         }else {
             noList.setVisibility(View.VISIBLE);
+            request.setVisibility(View.VISIBLE);
+            Toast.makeText(getApplicationContext(),"You can add book request clicking the  + icon",Toast.LENGTH_LONG).show();
         }
     }
 

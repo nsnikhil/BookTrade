@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntro2;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.trade.book.booktrade.fragments.introfragments.intro1Fragment;
 import com.trade.book.booktrade.fragments.introfragments.intro2Fragment;
 import com.trade.book.booktrade.fragments.introfragments.intro3Fragment;
@@ -23,8 +25,6 @@ public class IntroActivity extends AppIntro2 {
         addSlide(new intro4Fragment());
         showSkipButton(false);
         setProgressButtonEnabled(false);
-        setVibrate(true);
-        setVibrateIntensity(10);
         setIndicatorColor(getResources().getColor(R.color.colorAccent),getResources().getColor(R.color.cardview_dark_background));
     }
 
@@ -32,8 +32,9 @@ public class IntroActivity extends AppIntro2 {
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
         finish();
-        startActivity(new Intent(IntroActivity.this,MainActivity.class));
+        Intent mainStart = new Intent(IntroActivity.this, MainActivity.class);
+        mainStart.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(mainStart);
     }
-
 
 }

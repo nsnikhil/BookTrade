@@ -77,7 +77,6 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     ArrayList<Bitmap> imageList;
     ArrayList<String> imageUrls;
     adapterImage imageAdapter;
-    //adapterPurchaseImage editImageAdapter;
     String tempImageFolder = "tempImage";
     String[] fileArrayNames = {null, null, null, null, null, null, null, null};
     File[] fileArray;
@@ -99,9 +98,11 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-    private void uploadigDialog(){
+    private Dialog uploadigDialog(){
         AlertDialog.Builder uploading = new AlertDialog.Builder(AddBook.this);
-        uploading.setTitle("\n"+"Processing..."+"\n").setCancelable(false).create().show();
+        uploading.setTitle("\n"+"Processing..."+"\n"+"\n").setCancelable(false);
+        Dialog d = uploading.create();
+        return d;
     }
 
     private void setTwoVal() {
@@ -425,9 +426,9 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addBookDone:
-                uploadigDialog();
                 if (getIntent().getExtras() != null) {
                     if (verifyFields()) {
+                        uploadigDialog().show();
                         makeNames();
                         for (int i = 0; i < imageList.size(); i++) {
                             makeFile(fileArrayNames[i], i);
@@ -438,6 +439,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                             public void onResponse(String response) {
                                 Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
                                 setResult(RESULT_OK, null);
+                                uploadigDialog().dismiss();
                                 finish();
                                 startActivity(new Intent(AddBook.this, MainActivity.class));
                             }
@@ -451,6 +453,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                     }
                 } else {
                     if (verifyFields()) {
+                        uploadigDialog().show();
                         makeNames();
                         for (int i = 0; i < imageList.size(); i++) {
                             makeFile(fileArrayNames[i], i);
@@ -461,13 +464,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                             public void onResponse(String response) {
                                 Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
                                 setResult(RESULT_OK, null);
-                                Bundle numInt = getIntent().getExtras();
-                                /*if (numInt!=null) {
-                                    if(numInt.getInt(getResources().getString(R.string.intentRequestBookRid))!=0){
-                                        deleteRequest();
-                                    }
-
-                                }*/
+                                uploadigDialog().dismiss();
                                 finish();
                                 startActivity(new Intent(AddBook.this, MainActivity.class));
                             }
@@ -489,42 +486,6 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                 }
                 break;
         }
-    }
-
-    private File makeIntentFileName() {
-        File folder = getExternalFilesDir("booktrade");
-        if (!folder.exists()) {
-            folder.mkdir();
-        }
-        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String id = spf.getString(getResources().getString(R.string.prefAccountId), mNullValue);
-        return new File(folder, id + name.getText().toString() + imageList.size() + ".jpg");
-    }
-
-
-    private String buildDeleteRequestUri() {
-        String server = getResources().getString(R.string.urlServer);
-        String requestAdd = getResources().getString(R.string.urlRequestDelete);
-        String url = server + requestAdd;
-        String ridQuery = "rid";
-        int ridValue = getIntent().getExtras().getInt(getResources().getString(R.string.intentRequestBookRid));
-        return Uri.parse(url).buildUpon().appendQueryParameter(ridQuery, String.valueOf(ridValue)).build().toString();
-    }
-
-    private void deleteRequest() {
-        RequestQueue requestObject = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, buildDeleteRequestUri(), new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        requestObject.add(stringRequest);
     }
 
     private void chooseImageAction() {
@@ -572,21 +533,18 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 imageList.add(imageBitmap);
                 imageContainer.swapAdapter(imageAdapter, true);
-                /*Bitmap imageBitmap = BitmapFactory.decodeFile(makeIntentFileName().toString());
-                imageList.add(imageBitmap));
-                imageContainer.swapAdapter(imageAdapter, true);*/
             }
         }
     }
 
 
     private void makeFile(String fileName, int position) {
-        FileOutputStream fos = null;
         File fldr = getExternalFilesDir(tempImageFolder);
-        if (!fldr.exists()) {
+        if (fldr != null && !fldr.exists()) {
             fldr.mkdir();
         }
         fileArray[position] = new File(fldr, fileName);
+        FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(fileArray[position]);
             imageList.get(position).compress(Bitmap.CompressFormat.PNG, 100, fos);
@@ -614,8 +572,8 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     private CognitoCachingCredentialsProvider getCredentials() {
         CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
                 getApplicationContext(),
-                "ap-northeast-1:b3d1bc05-d6f7-4fc7-bcdb-dbb9b7fd1d4c", // Identity Pool ID
-                Regions.AP_NORTHEAST_1 // Region
+                "ap-northeast-1:b3d1bc05-d6f7-4fc7-bcdb-dbb9b7fd1d4c",
+                Regions.AP_NORTHEAST_1 //
         );
         return credentialsProvider;
     }

@@ -37,4 +37,11 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/searchRequest"
+        style="@style/fab"
+        android:visibility="gone"
+        android:src="@drawable/ic_add_white_48dp"
+        app:fabSize="normal" />
+
 </RelativeLayout>
