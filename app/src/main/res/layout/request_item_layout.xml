@@ -46,6 +46,7 @@
                     style="@style/wrapContent"
                     android:layout_marginStart="@dimen/sixteen"
                     android:fontFamily="sans-serif-condensed"
+                    android:textColor="@color/cardview_dark_background"
                     android:text="@string/app_name"
                     android:textStyle="bold"
                     android:textSize="18sp" />
@@ -54,6 +55,7 @@
                     android:id="@+id/requestPublisher"
                     style="@style/wrapContent"
                     android:layout_marginStart="@dimen/sixteen"
+                    android:textColor="@color/cardview_dark_background"
                     android:fontFamily="sans-serif-light"
                     android:text="@string/app_name"
                     android:textSize="14sp" />

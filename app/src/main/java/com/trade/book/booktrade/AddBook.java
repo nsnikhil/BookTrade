@@ -560,6 +560,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                 try {
                     is = getContentResolver().openInputStream(data.getData());
                     Bitmap b = BitmapFactory.decodeStream(is);
+                    b.compress(Bitmap.CompressFormat.JPEG,50,null);
                     imageList.add(b);
                     imageContainer.swapAdapter(imageAdapter, true);
                 } catch (FileNotFoundException e) {
