@@ -4,11 +4,14 @@ package com.trade.book.booktrade.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -32,6 +35,8 @@ public class fragmentBookList extends Fragment {
 
     GridView bookListGrid;
     ArrayList<BookObject> bookList = new ArrayList<>();
+    ImageView noBooks;
+    SwipeRefreshLayout mSwipeRefresh;
 
     public fragmentBookList() {
     }
@@ -40,6 +45,7 @@ public class fragmentBookList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.fragment_book_list,container,false);
         initilize(v);
+        mSwipeRefresh.setRefreshing(true);
         getList();
         return v;
     }
@@ -68,37 +74,46 @@ public class fragmentBookList extends Fragment {
     }
 
     private void addToList(JSONArray response) throws JSONException {
-        for(int i =0;i<response.length();i++){
-            JSONObject jsonObject = response.getJSONObject(i);
-            int bid = jsonObject.getInt("id");
-            String name = jsonObject.getString("Name");
-            String publisher = jsonObject.getString("Publisher");
-            int costPrice = jsonObject.getInt("CostPrice");
-            int sellingPrice = jsonObject.getInt("SellingPrice");
-            int edition = jsonObject.getInt("Edition");
-            String description = jsonObject.getString("Description");
-            String condtn = jsonObject.getString("Cndtn");
-            String cateogory = jsonObject.getString("Cateogory");
-            String userId = jsonObject.getString("userId");
-            int itemId = jsonObject.getInt("id");
-            String photoUrlName0 = jsonObject.getString("pic0");
-            String photoUrlName1 = jsonObject.getString("pic1");
-            String photoUrlName2 = jsonObject.getString("pic2");
-            String photoUrlName3 = jsonObject.getString("pic3");
-            String photoUrlName4 = jsonObject.getString("pic4");
-            String photoUrlName5 = jsonObject.getString("pic5");
-            String photoUrlName6 = jsonObject.getString("pic6");
-            String photoUrlName7 = jsonObject.getString("pic7");
-            int status = jsonObject.getInt("status");
-            bookList.add(new BookObject(bid,name,publisher,costPrice,sellingPrice,edition,description,condtn,cateogory,userId,itemId
-                    ,photoUrlName0,photoUrlName1,photoUrlName2,photoUrlName3,photoUrlName4,photoUrlName5,photoUrlName6,photoUrlName7,status));
+        if(response.length()>0) {
+            for (int i = 0; i < response.length(); i++) {
+                JSONObject jsonObject = response.getJSONObject(i);
+                int bid = jsonObject.getInt("id");
+                String name = jsonObject.getString("Name");
+                String publisher = jsonObject.getString("Publisher");
+                int costPrice = jsonObject.getInt("CostPrice");
+                int sellingPrice = jsonObject.getInt("SellingPrice");
+                int edition = jsonObject.getInt("Edition");
+                String description = jsonObject.getString("Description");
+                String condtn = jsonObject.getString("Cndtn");
+                String cateogory = jsonObject.getString("Cateogory");
+                String userId = jsonObject.getString("userId");
+                int itemId = jsonObject.getInt("id");
+                String photoUrlName0 = jsonObject.getString("pic0");
+                String photoUrlName1 = jsonObject.getString("pic1");
+                String photoUrlName2 = jsonObject.getString("pic2");
+                String photoUrlName3 = jsonObject.getString("pic3");
+                String photoUrlName4 = jsonObject.getString("pic4");
+                String photoUrlName5 = jsonObject.getString("pic5");
+                String photoUrlName6 = jsonObject.getString("pic6");
+                String photoUrlName7 = jsonObject.getString("pic7");
+                int status = jsonObject.getInt("status");
+                bookList.add(new BookObject(bid, name, publisher, costPrice, sellingPrice, edition, description, condtn, cateogory, userId, itemId
+                        , photoUrlName0, photoUrlName1, photoUrlName2, photoUrlName3, photoUrlName4, photoUrlName5, photoUrlName6, photoUrlName7, status));
+            }
+            mSwipeRefresh.setRefreshing(false);
+            adapterBookList bookAdapter = new adapterBookList(getActivity(), bookList, 0);
+            bookListGrid.setAdapter(bookAdapter);
         }
-        adapterBookList bookAdapter = new adapterBookList(getActivity(),bookList,0);
-        bookListGrid.setAdapter(bookAdapter);
+        else {
+            mSwipeRefresh.setRefreshing(false);
+            noBooks.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initilize(View v) {
         bookListGrid = (GridView)v.findViewById(R.id.bookListGrid);
+        noBooks = (ImageView)v.findViewById(R.id.bookListNoBook);
+        mSwipeRefresh = (SwipeRefreshLayout)v.findViewById(R.id.bookListSwipeRefresh);
         bookListGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -110,6 +125,15 @@ public class fragmentBookList extends Fragment {
                 startActivity(detail);
             }
         });
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                                                          @Override
+                                                          public void onRefresh() {
+                                                              bookListGrid.setAdapter(null);
+                                                              bookList.clear();
+                                                              getList();
+                                                          }
+                                                      }
+        );
     }
 
 }

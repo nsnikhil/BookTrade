@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
@@ -12,8 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -22,11 +25,14 @@ import com.trade.book.booktrade.cartData.CartTables;
 
 import java.io.File;
 
+import jp.wasabeef.blurry.Blurry;
+
 public class AccountActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String mNullValue = "N/A";
     Button signOut,purchase,uploads;
     TextView name;
+    ImageView accoutBack;
     CircularImageView profile;
 
     @Override
@@ -63,8 +69,15 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         signOut.setOnClickListener(this);
         purchase.setOnClickListener(this);
         uploads.setOnClickListener(this);
-    }
+        accoutBack = (ImageView)findViewById(R.id.accountBackground);
+        Glide.with(getApplicationContext())
+                    .load(R.drawable.accountback)
+                    .centerCrop()
+                    .placeholder(R.color.colorPrimaryDark)
+                    .crossFade()
+                    .into(accoutBack);
 
+    }
 
 
     @Override

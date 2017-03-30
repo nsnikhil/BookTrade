@@ -1,13 +1,27 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/verticalLinearLayout"
     android:background="@color/colorBackground"
     tools:context="com.trade.book.booktrade.fragments.fragmentBookList">
 
-    <GridView
-        style="@style/matchParent"
-        android:numColumns="2"
-        android:id="@+id/bookListGrid">
-    </GridView>
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/bookListSwipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</LinearLayout>
+        <GridView
+            android:id="@+id/bookListGrid"
+            style="@style/matchParent"
+            android:numColumns="2"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <ImageView
+        android:id="@+id/bookListNoBook"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/noobook"
+        android:visibility="gone" />
+
+</RelativeLayout>

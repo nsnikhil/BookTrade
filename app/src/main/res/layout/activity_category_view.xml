@@ -16,12 +16,18 @@
         app:layout_scrollFlags="scroll|enterAlways"
         android:theme="@style/AppToolbar" />
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/catListSwipeRefresh"
+        android:layout_below="@id/toolbarCategory"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <GridView
         android:id="@+id/catrLst"
         style="@style/matchParent"
-        android:layout_below="@id/toolbarCategory"
         android:numColumns="2"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
     <ImageView

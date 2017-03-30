@@ -80,6 +80,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     String tempImageFolder = "tempImage";
     String[] fileArrayNames = {null, null, null, null, null, null, null, null};
     File[] fileArray;
+    private int mRequestCode = 2147483646;
     BookObject bookEditObject = null;
 
     @Override
@@ -108,6 +109,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     private void setTwoVal() {
         name.setText(getIntent().getExtras().getString(getResources().getString(R.string.intentRequestBookName)));
         publisher.setText(getIntent().getExtras().getString(getResources().getString(R.string.intentRequestBookPublisher)));
+        mRequestCode = getIntent().getExtras().getInt(getResources().getString(R.string.intentRequestBookRid));
     }
 
     private void setValue(BookObject bookEditObject) {
@@ -426,6 +428,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addBookDone:
+                if(mRequestCode==2147483646){
                 if (getIntent().getExtras() != null) {
                     if (verifyFields()) {
                         uploadigDialog().show();
@@ -451,6 +454,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                         });
                         request.add(stringRequest);
                     }
+                }
                 } else {
                     if (verifyFields()) {
                         uploadigDialog().show();
@@ -462,7 +466,9 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                         StringRequest stringRequest = new StringRequest(Request.Method.GET, buildUrl(), new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+                                if(mRequestCode!=2147483646){
+                                    removeRequest();
+                                }
                                 setResult(RESULT_OK, null);
                                 uploadigDialog().dismiss();
                                 finish();
@@ -486,6 +492,30 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                 }
                 break;
         }
+    }
+
+    private String buildDeleteFromRequestUri(){
+        String host = getResources().getString(R.string.urlServer);
+        String deleteRequest = getResources().getString(R.string.urlRequestDelete);
+        String url = host + deleteRequest;
+        String requestIdQuery = "rid";
+        return Uri.parse(url).buildUpon().appendQueryParameter(requestIdQuery,String.valueOf(mRequestCode)).build().toString();
+    }
+
+    private void removeRequest(){
+        RequestQueue remove = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, buildDeleteFromRequestUri(), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_SHORT).show();
+            }
+        });
+        remove.add(stringRequest);
     }
 
     private void chooseImageAction() {

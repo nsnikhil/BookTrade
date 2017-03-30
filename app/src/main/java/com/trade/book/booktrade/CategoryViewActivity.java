@@ -3,6 +3,7 @@ package com.trade.book.booktrade;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,10 +36,10 @@ public class CategoryViewActivity extends AppCompatActivity {
     GridView catList;
     ImageView emptyCat;
     Toolbar catToolbar;
-    ProgressBar catProgress;
     ArrayList<BookObject> categoryList;
     int mUploadIndicator = 0;
     private static final int mRequestCode = 151;
+    SwipeRefreshLayout mSwipeRefresh;
     String catUri;
 
 
@@ -49,6 +50,7 @@ public class CategoryViewActivity extends AppCompatActivity {
         catUri = getIntent().getExtras().getString(getResources().getString(R.string.intencateuri));
         mUploadIndicator = getIntent().getExtras().getInt(getResources().getString(R.string.intenupind));
         initilize();
+        mSwipeRefresh.setRefreshing(true);
         if(mUploadIndicator==123){
             getList(catUri,1);
         }else {
@@ -61,6 +63,7 @@ public class CategoryViewActivity extends AppCompatActivity {
         catList = (GridView)findViewById(R.id.catrLst);
         emptyCat = (ImageView)findViewById(R.id.categoryEmpty);
         catToolbar = (Toolbar)findViewById(R.id.toolbarCategory);
+        mSwipeRefresh = (SwipeRefreshLayout)findViewById(R.id.catListSwipeRefresh);
         setSupportActionBar(catToolbar);
         if(mUploadIndicator==0){
             getSupportActionBar().setTitle(getResources().getStringArray(R.array.bookCateogories)[ getIntent().getExtras().getInt(getResources().getString(R.string.intencateuripos))]);
@@ -69,9 +72,20 @@ public class CategoryViewActivity extends AppCompatActivity {
         } else {
             getSupportActionBar().setTitle("My Uploads");
         }
-        catProgress = (ProgressBar)findViewById(R.id.cateogoryProgress);
-        catProgress.setVisibility(View.VISIBLE);
         categoryList = new ArrayList<>();
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                catList.setAdapter(null);
+                categoryList.clear();
+                if(mUploadIndicator==123){
+                    getList(catUri,1);
+                }else {
+                    getList(catUri,0);
+                }
+            }
+        }
+        );
         catList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -193,7 +207,6 @@ public class CategoryViewActivity extends AppCompatActivity {
     }
 
     private void addToList(JSONArray response,int k) throws JSONException {
-        catProgress.setVisibility(View.GONE);
         if (response.length() > 0) {
             for (int i = 0; i < response.length(); i++) {
                 JSONObject jsonObject = response.getJSONObject(i);
@@ -220,9 +233,11 @@ public class CategoryViewActivity extends AppCompatActivity {
                 categoryList.add(new BookObject(bid,name, publisher, costPrice, sellingPrice, edition, description, condtn, cateogory, userId, itemId
                         ,photoUrlName0,photoUrlName1,photoUrlName2,photoUrlName3,photoUrlName4,photoUrlName5,photoUrlName6,photoUrlName7,status));
             }
+            mSwipeRefresh.setRefreshing(false);
             adapterBookList bookAdapter = new adapterBookList(getApplicationContext(), categoryList,k);
             catList.setAdapter(bookAdapter);
         }else {
+            mSwipeRefresh.setRefreshing(false);
             emptyCat.setVisibility(View.VISIBLE);
         }
     }

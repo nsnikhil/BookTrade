@@ -3,12 +3,14 @@ package com.trade.book.booktrade;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -36,12 +38,15 @@ public class RequestListActivity extends AppCompatActivity {
     FloatingActionButton requestAdd;
     ArrayList<RequestObject> requestObjectList;
     adapterRequest adapter;
+    ImageView noRequest;
+    SwipeRefreshLayout mSwipeRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_list);
         intilize();
+        mSwipeRefresh.setRefreshing(true);
         downloadList();
     }
 
@@ -51,6 +56,8 @@ public class RequestListActivity extends AppCompatActivity {
         setSupportActionBar(requestToolbar);
         getSupportActionBar().setTitle("Book Request");
         requestList = (ListView) findViewById(R.id.requestList);
+        noRequest = (ImageView)findViewById(R.id.requestListNoRequest);
+        mSwipeRefresh = (SwipeRefreshLayout)findViewById(R.id.requestListSwipeRefresh);
         requestObjectList = new ArrayList<>();
         requestAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,8 +75,8 @@ public class RequestListActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 RequestObject object = (RequestObject) parent.getItemAtPosition(position);
-                                Intent sell = new Intent(RequestListActivity.this,AddBook.class);
-                                sell.putExtra(getResources().getString(R.string.intentRequestBookName),object.getName());
+                                Intent sell = new Intent(RequestListActivity.this, AddBook.class);
+                                sell.putExtra(getResources().getString(R.string.intentRequestBookName), object.getName());
                                 sell.putExtra(getResources().getString(R.string.intentRequestBookPublisher), object.getPublisher());
                                 sell.putExtra(getResources().getString(R.string.intentRequestBookRid), object.getRequestId());
                                 startActivity(sell);
@@ -78,27 +85,40 @@ public class RequestListActivity extends AppCompatActivity {
                 have.create().show();
             }
         });
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                requestList.setAdapter(null);
+                requestObjectList.clear();
+                downloadList();
+            }
+        }
+        );
     }
 
     private void addToList(JSONArray array) throws JSONException {
-        if(array.length()>0){
-            for(int i=0;i<array.length();i++){
+        if (array.length() > 0) {
+            for (int i = 0; i < array.length(); i++) {
                 JSONObject object = array.getJSONObject(i);
                 String name = object.getString("name");
                 String uid = object.getString("id");
                 String publisher = object.getString("publisher");
                 int rid = object.getInt("rid");
-                requestObjectList.add(new RequestObject(name,publisher,uid,rid));
+                requestObjectList.add(new RequestObject(name, publisher, uid, rid));
             }
-            adapter = new adapterRequest(getApplicationContext(),requestObjectList);
+            noRequest.setVisibility(View.GONE);
+            mSwipeRefresh.setRefreshing(false);
+            adapter = new adapterRequest(getApplicationContext(), requestObjectList);
             requestList.setAdapter(adapter);
+        }else {
+            noRequest.setVisibility(View.VISIBLE);
         }
     }
 
-    private void downloadList(){
+    private void downloadList() {
         String host = getResources().getString(R.string.urlServer);
         String queryFilename = getResources().getString(R.string.urlRequestQuery);
-        String url = host+queryFilename;
+        String url = host + queryFilename;
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -112,7 +132,7 @@ public class RequestListActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
         requestQueue.add(jsonArrayRequest);

@@ -218,6 +218,7 @@ public class MyCartActivity extends AppCompatActivity implements LoaderManager.L
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
+                getContentResolver().delete(CartTables.mCartContentUri,null,null);
                 finish();
                 uploadigDialog().dismiss();
                 startActivity(new Intent(MyCartActivity.this, MainActivity.class));

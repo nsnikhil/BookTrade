@@ -10,16 +10,31 @@
         style="@style/toolbar"
         android:theme="@style/AppToolbar" />
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/requestListSwipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_below="@id/toolbarRequest"
+        android:layout_height="match_parent">
+
     <ListView
         style="@style/matchParent"
         android:divider="@null"
-        android:layout_below="@id/toolbarRequest"
         android:id="@+id/requestList"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/requestAdd"
         style="@style/fab"
         android:src="@drawable/ic_add_white_48dp"
         app:fabSize="normal" />
+
+    <ImageView
+        android:id="@+id/requestListNoRequest"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/norequest"
+        android:visibility="gone" />
 
 </RelativeLayout>

@@ -4,13 +4,12 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/matchParent"
-    android:background="@drawable/toolbargradeint"
+    android:background="@color/colorBackground"
     tools:context="com.trade.book.booktrade.AccountActivity">
 
     <ImageView
         style="@style/matchParent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/back"/>
+        android:id="@+id/accountBackground" />
 
     <LinearLayout
         style="@style/verticalLinearLayout"
