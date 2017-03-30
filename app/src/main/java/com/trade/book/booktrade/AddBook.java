@@ -80,8 +80,8 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     String tempImageFolder = "tempImage";
     String[] fileArrayNames = {null, null, null, null, null, null, null, null};
     File[] fileArray;
-    private int mRequestCode = 2147483646;
     BookObject bookEditObject = null;
+    private int mRequestCode = 2147483646;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,9 +99,9 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-    private Dialog uploadigDialog(){
+    private Dialog uploadigDialog() {
         AlertDialog.Builder uploading = new AlertDialog.Builder(AddBook.this);
-        uploading.setTitle("\n"+"Processing..."+"\n"+"\n").setCancelable(false);
+        uploading.setTitle("\n" + "Processing..." + "\n" + "\n").setCancelable(false);
         Dialog d = uploading.create();
         return d;
     }
@@ -428,60 +428,14 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addBookDone:
-                if(mRequestCode==2147483646){
                 if (getIntent().getExtras() != null) {
-                    if (verifyFields()) {
-                        uploadigDialog().show();
-                        makeNames();
-                        for (int i = 0; i < imageList.size(); i++) {
-                            makeFile(fileArrayNames[i], i);
-                        }
-                        RequestQueue request = Volley.newRequestQueue(getApplicationContext());
-                        StringRequest stringRequest = new StringRequest(Request.Method.GET, buildUpdateUrl(), new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
-                                setResult(RESULT_OK, null);
-                                uploadigDialog().dismiss();
-                                finish();
-                                startActivity(new Intent(AddBook.this, MainActivity.class));
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        request.add(stringRequest);
+                    if (mRequestCode == 2147483646) {
+                       editBookExtra();
+                    } else {
+                        addBookNoExtra();
                     }
-                }
                 } else {
-                    if (verifyFields()) {
-                        uploadigDialog().show();
-                        makeNames();
-                        for (int i = 0; i < imageList.size(); i++) {
-                            makeFile(fileArrayNames[i], i);
-                        }
-                        RequestQueue request = Volley.newRequestQueue(getApplicationContext());
-                        StringRequest stringRequest = new StringRequest(Request.Method.GET, buildUrl(), new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                if(mRequestCode!=2147483646){
-                                    removeRequest();
-                                }
-                                setResult(RESULT_OK, null);
-                                uploadigDialog().dismiss();
-                                finish();
-                                startActivity(new Intent(AddBook.this, MainActivity.class));
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        request.add(stringRequest);
-                    }
+                    addBookNoExtra();
                 }
                 break;
             case R.id.addBookNewImage:
@@ -494,15 +448,71 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-    private String buildDeleteFromRequestUri(){
+    private void editBookExtra(){
+        if (verifyFields()) {
+            uploadigDialog().show();
+            makeNames();
+            for (int i = 0; i < imageList.size(); i++) {
+                makeFile(fileArrayNames[i], i);
+            }
+            RequestQueue request = Volley.newRequestQueue(getApplicationContext());
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, buildUpdateUrl(), new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK, null);
+                    uploadigDialog().dismiss();
+                    finish();
+                    startActivity(new Intent(AddBook.this, MainActivity.class));
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            request.add(stringRequest);
+        }
+    }
+
+    private void addBookNoExtra() {
+        if (verifyFields()) {
+            uploadigDialog().show();
+            makeNames();
+            for (int i = 0; i < imageList.size(); i++) {
+                makeFile(fileArrayNames[i], i);
+            }
+            RequestQueue request = Volley.newRequestQueue(getApplicationContext());
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, buildUrl(), new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    if (mRequestCode != 2147483646) {
+                        removeRequest();
+                    }
+                    setResult(RESULT_OK, null);
+                    uploadigDialog().dismiss();
+                    finish();
+                    startActivity(new Intent(AddBook.this, MainActivity.class));
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                }
+            });
+            request.add(stringRequest);
+        }
+    }
+
+    private String buildDeleteFromRequestUri() {
         String host = getResources().getString(R.string.urlServer);
         String deleteRequest = getResources().getString(R.string.urlRequestDelete);
         String url = host + deleteRequest;
         String requestIdQuery = "rid";
-        return Uri.parse(url).buildUpon().appendQueryParameter(requestIdQuery,String.valueOf(mRequestCode)).build().toString();
+        return Uri.parse(url).buildUpon().appendQueryParameter(requestIdQuery, String.valueOf(mRequestCode)).build().toString();
     }
 
-    private void removeRequest(){
+    private void removeRequest() {
         RequestQueue remove = Volley.newRequestQueue(getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, buildDeleteFromRequestUri(), new Response.Listener<String>() {
             @Override
@@ -512,7 +522,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
         remove.add(stringRequest);

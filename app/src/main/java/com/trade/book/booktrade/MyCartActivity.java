@@ -155,15 +155,20 @@ public class MyCartActivity extends AppCompatActivity implements LoaderManager.L
         switch (v.getId()){
             case R.id.cartCheckOut:
             Cursor c = getContentResolver().query(CartTables.mCartContentUri,null,null,null,null);
-                int sp=0;
-                while (c.moveToNext()){
-                    sp = sp+c.getInt(c.getColumnIndex(tablecart.mSellingPrice));
+                if(c.getCount()>0){
+                    int sp=0;
+                    while (c.moveToNext()){
+                        sp = sp+c.getInt(c.getColumnIndex(tablecart.mSellingPrice));
+                    }
+                    buildCheckOutDialog("Total Price    : "+ sp+"\n"
+                            +"\n"
+                            +"Total Tax      : "+compute(sp)+"\n"
+                            +"\n"
+                            +"Final Amount   : "+(sp+compute(sp)));
+                }else {
+                    Toast.makeText(getApplicationContext(),"Cart Empty",Toast.LENGTH_SHORT).show();
                 }
-                buildCheckOutDialog("Total Price    : "+ sp+"\n"
-                        +"\n"
-                        +"Total Tax      : "+compute(sp)+"\n"
-                        +"\n"
-                        +"Final Amount   : "+(sp+compute(sp)));
+
             break;
         }
     }

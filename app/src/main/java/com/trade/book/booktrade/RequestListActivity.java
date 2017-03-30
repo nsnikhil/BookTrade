@@ -71,6 +71,12 @@ public class RequestListActivity extends AppCompatActivity {
             public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
                 AlertDialog.Builder have = new AlertDialog.Builder(RequestListActivity.this)
                         .setMessage("Do you want to sell this book")
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
                         .setPositiveButton("Sell", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
