@@ -55,7 +55,9 @@ public class adapterCart extends CursorAdapter{
     }
 
     private void setColor(Context c,Palette p, MyViewHolder myViewHolder){
-        myViewHolder.bookTextConatiner.setBackgroundColor(p.getDarkMutedColor(c.getResources().getColor(R.color.colorPrimary)));
+        if(p!=null){
+            myViewHolder.bookTextConatiner.setBackgroundColor(p.getDarkMutedColor(c.getResources().getColor(R.color.colorPrimary)));
+        }
     }
 
     public class setColor extends AsyncTask<Void,Void,Palette> {

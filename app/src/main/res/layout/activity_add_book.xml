@@ -2,18 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/tools"
-    android:fitsSystemWindows="true"
+    style="@style/matchParent"
     android:background="@color/colorBackground"
-    style="@style/matchParent">
+    android:fitsSystemWindows="true">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbarAddBook"
-        android:theme="@style/AppToolbar"
-        style="@style/toolbar" />
+        style="@style/toolbar"
+        android:theme="@style/AppToolbar" />
 
     <ScrollView
-        style="@style/matchParent"
         android:id="@+id/addBookScrollView"
+        style="@style/matchParent"
         android:layout_below="@id/toolbarAddBook">
 
         <LinearLayout style="@style/verticalLinearLayout">
@@ -55,34 +55,21 @@
 
                     <ImageView
                         style="@style/addBookIcon"
-                        android:tint="@color/colorAccent"
-                        android:src="@drawable/ic_book_black_48dp" />
+                        android:src="@drawable/ic_book_black_48dp"
+                        android:tint="@color/colorAccent" />
 
-                    <EditText
-                        android:id="@+id/addBookName"
-                        style="@style/addBookText"
-                        android:singleLine="true"
-                        android:nextFocusDown="@+id/addBookPublisher"
-                        android:hint="@string/bookName" />
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                </LinearLayout>
+                        <EditText
+                            android:id="@+id/addBookName"
+                            style="@style/addBookText"
+                            android:hint="@string/bookName"
+                            android:nextFocusDown="@+id/addBookPublisher"
+                            android:singleLine="true" />
 
-                <LinearLayout
-                    style="@style/wrapContent"
-                    android:layout_width="match_parent"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        style="@style/addBookIcon"
-                        android:tint="@color/colorAccent"
-                        android:src="@drawable/ic_profile_banner_black_48d" />
-
-                    <EditText
-                        android:id="@+id/addBookPublisher"
-                        style="@style/addBookText"
-                        android:singleLine="true"
-                        android:nextFocusDown="@+id/addBookCostPrice"
-                        android:hint="@string/bookPublisher" />
+                    </android.support.design.widget.TextInputLayout>
 
                 </LinearLayout>
 
@@ -93,36 +80,21 @@
 
                     <ImageView
                         style="@style/addBookIcon"
-                        android:tint="@color/colorAccent"
-                        android:src="@drawable/indianrupee_48" />
+                        android:src="@drawable/ic_profile_banner_black_48d"
+                        android:tint="@color/colorAccent" />
 
-                    <EditText
-                        android:id="@+id/addBookCostPrice"
-                        style="@style/addBookText"
-                        android:hint="@string/bookCp"
-                        android:singleLine="true"
-                        android:nextFocusDown="@+id/addBookSellingPrice"
-                        android:inputType="number" />
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                </LinearLayout>
+                        <EditText
+                            android:id="@+id/addBookPublisher"
+                            style="@style/addBookText"
+                            android:hint="@string/bookPublisher"
+                            android:nextFocusDown="@+id/addBookCostPrice"
+                            android:singleLine="true" />
 
-                <LinearLayout
-                    style="@style/wrapContent"
-                    android:layout_width="match_parent"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        style="@style/addBookIcon"
-                        android:tint="@color/colorAccent"
-                        android:src="@drawable/indianrupee_48" />
-
-                    <EditText
-                        android:id="@+id/addBookSellingPrice"
-                        style="@style/addBookText"
-                        android:hint="@string/bookSp"
-                        android:singleLine="true"
-                        android:nextFocusDown="@+id/addBookEdition"
-                        android:inputType="number" />
+                    </android.support.design.widget.TextInputLayout>
 
                 </LinearLayout>
 
@@ -133,16 +105,22 @@
 
                     <ImageView
                         style="@style/addBookIcon"
-                        android:tint="@color/colorAccent"
-                        android:src="@drawable/ic_date_range_black_48dp" />
+                        android:src="@drawable/indianrupee_48"
+                        android:tint="@color/colorAccent" />
 
-                    <EditText
-                        android:id="@+id/addBookEdition"
-                        style="@style/addBookText"
-                        android:hint="@string/bookEdition"
-                        android:singleLine="true"
-                        android:nextFocusDown="@+id/addBookComments"
-                        android:inputType="number" />
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/addBookCostPrice"
+                            style="@style/addBookText"
+                            android:hint="@string/bookCp"
+                            android:inputType="number"
+                            android:nextFocusDown="@+id/addBookSellingPrice"
+                            android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
 
                 </LinearLayout>
 
@@ -153,21 +131,79 @@
 
                     <ImageView
                         style="@style/addBookIcon"
-                        android:tint="@color/colorAccent"
-                        android:src="@drawable/ic_comment_black_48dp" />
+                        android:src="@drawable/indianrupee_48"
+                        android:tint="@color/colorAccent" />
 
-                    <EditText
-                        android:id="@+id/addBookComments"
-                        style="@style/addBookText"
-                        android:hint="@string/bookDescription"
-                        android:inputType="textMultiLine" />
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/addBookSellingPrice"
+                            style="@style/addBookText"
+                            android:hint="@string/bookSp"
+                            android:inputType="number"
+                            android:nextFocusDown="@+id/addBookEdition"
+                            android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
+                    style="@style/wrapContent"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        style="@style/addBookIcon"
+                        android:src="@drawable/ic_date_range_black_48dp"
+                        android:tint="@color/colorAccent" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/addBookEdition"
+                            style="@style/addBookText"
+                            android:hint="@string/bookEdition"
+                            android:inputType="number"
+                            android:nextFocusDown="@+id/addBookComments"
+                            android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/wrapContent"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        style="@style/addBookIcon"
+                        android:src="@drawable/ic_comment_black_48dp"
+                        android:tint="@color/colorAccent" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/addBookComments"
+                            style="@style/addBookText"
+                            android:hint="@string/bookDescription"
+                            android:inputType="textMultiLine" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/conditionSpinnerContainer"
                     style="@style/matchParent"
                     android:layout_margin="@dimen/eight"
-                    android:id="@+id/conditionSpinnerContainer"
                     android:orientation="horizontal">
 
                     <TextView
@@ -183,9 +219,9 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/cateogorySpinnerContainer"
                     style="@style/matchParent"
                     android:layout_margin="@dimen/eight"
-                    android:id="@+id/cateogorySpinnerContainer"
                     android:orientation="horizontal">
 
                     <TextView
@@ -202,7 +238,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"/>
+                    android:layout_height="56dp" />
 
             </LinearLayout>
         </LinearLayout>

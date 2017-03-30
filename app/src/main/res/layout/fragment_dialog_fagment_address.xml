@@ -4,31 +4,48 @@
     android:padding="@dimen/sixteen"
     tools:context="com.trade.book.booktrade.fragments.dialogfragments.dialogFagmentAddress">
 
-    <EditText
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/eight"
-        android:id="@+id/dialogAddress"
-        android:inputType="textPostalAddress"
-        android:hint="Address" />
 
-    <EditText
+    <android.support.design.widget.TextInputLayout
         android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/eight"
-        android:id="@+id/dialogPhone"
-        android:inputType="phone"
-        android:hint="Phone No" />
+        android:layout_height="wrap_content">
+
+
+        <EditText
+            android:id="@+id/dialogPhone"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:hint="Phone No"
+            android:inputType="phone"
+            android:padding="@dimen/eight"
+            android:singleLine="true" />
+
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="250dp"
+        android:layout_height="wrap_content">
+
+
+        <EditText
+            android:id="@+id/dialogAddress"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:hint="Address"
+            android:inputType="textPostalAddress"
+            android:padding="@dimen/eight" />
+
+    </android.support.design.widget.TextInputLayout>
 
     <Button
-        android:layout_marginTop="@dimen/eight"
-        android:layout_width="wrap_content"
-        android:text="Save"
         android:id="@+id/dialogSave"
-        android:theme="@style/buttonClr"
-        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_height="wrap_content" />
+        android:layout_marginTop="@dimen/eight"
+        android:text="Save"
+        android:textColor="@color/white"
+        android:theme="@style/buttonClr" />
 
 
 </LinearLayout>

@@ -6,4 +6,5 @@
     <color name="colorBackground">#F5F5F5</color>
     <color name="colorAccent">#311B92</color>
     <color name="white">#FFFFFF</color>
+    <color name="errorRed">#D32F2F</color>
 </resources>

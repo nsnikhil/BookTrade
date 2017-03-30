@@ -14,6 +14,11 @@
         android:layout_width="250dp"
         android:text="Add book for request" />
 
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
     <EditText
         android:id="@+id/requestName"
         style="@style/addBookText"
@@ -22,6 +27,13 @@
         android:hint="@string/bookName"
         android:inputType="textMultiLine" />
 
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
     <EditText
         android:id="@+id/requestPublisher"
         style="@style/addBookText"
@@ -29,6 +41,8 @@
         android:layout_width="250dp"
         android:hint="@string/bookPublisher"
         android:inputType="textMultiLine" />
+
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:layout_marginTop="@dimen/eight"
