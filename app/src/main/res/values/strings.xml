@@ -19,7 +19,7 @@
     <string name="urlQueryAvailable" translatable="false">booktrade/bookQueryAvailable.php</string>
     <string name="urlQueryInTransit" translatable="false">booktrade/bookQueryInTransit.php</string>
     <string name="urlSearchQuery" translatable="false">booktrade/bookSearchAll.php</string>
-    <string name="urlSearchCatQuery" translatable="false">booktrade/bookAvailableToPurchase.php</string>
+    <string name="urlSearchCatQuery" translatable="false">booktrade/bookSearchCategory.php</string>
 
     <string name="urlMoveToTransit" translatable="false">booktrade/bookMoveToTransit.php</string>
     <string name="urlMoveToAvailable" translatable="false">booktrade/bookMoveToAvalilable.php</string>
