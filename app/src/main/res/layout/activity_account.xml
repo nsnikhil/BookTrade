@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/matchParent"
     android:background="@color/colorBackground"
-    tools:context="com.trade.book.booktrade.AccountActivity">
+    tools:context="com.trade.book.booktrade.fragments.AccountFragment">
+
 
     <ImageView
-        style="@style/matchParent"
-        android:id="@+id/accountBackground" />
+       style="@style/matchParent"
+        android:scaleType="centerCrop"
+        android:background="@drawable/back2"/>
 
     <LinearLayout
-        style="@style/verticalLinearLayout"
+        style="@style/horizontalLinearLayout"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+        android:layout_margin="@dimen/sixteen">
 
         <com.mikhaellopez.circularimageview.CircularImageView
-            android:layout_width="180dp"
-            android:layout_height="180dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_gravity="center"
             android:id="@+id/accountPicture"
             android:src="@drawable/profile" />
@@ -26,58 +27,64 @@
         <TextView
             android:id="@+id/accountName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="@dimen/sixteen"
-            android:gravity="center"
+            android:gravity="center_vertical"
+            android:textStyle="bold"
             android:text="Name"
-            android:textColor="@color/white"
+            android:textColor="@color/colorBackground"
             android:textSize="24sp" />
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/accountSignOut"
-        android:textStyle="bold"
-        android:layout_width="match_parent"
-        android:textSize="24sp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/roundbutton"
-        android:padding="@dimen/eight"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/eight"
-        android:textColor="@color/white"
-        android:text="Sign Out" />
-
 
     <LinearLayout
-        android:layout_above="@id/accountSignOut"
         style="@style/horizontalLinearLayout"
+        android:layout_centerInParent="true"
         android:id="@+id/accountActivitiyLayout"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
 
         <Button
             android:id="@+id/accountPurchase"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_margin="@dimen/eight"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:layout_weight="1"
             android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:padding="@dimen/sixteen"
             android:background="@drawable/roundbutton"
-            android:textColor="@color/white"
+            android:textColor="#D32F2F"
             android:text="My Purchases" />
 
         <Button
             android:id="@+id/accountUploads"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
             android:textSize="14sp"
-            android:layout_weight="1"
+            android:padding="@dimen/sixteen"
             android:background="@drawable/roundbutton"
             android:layout_margin="@dimen/eight"
-            android:textColor="@color/white"
+            android:textColor="#D32F2F"
             android:text="My Uploads " />
+
+        <Button
+            android:id="@+id/accountSignOut"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:textSize="14sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="@dimen/sixteen"
+            android:background="@drawable/roundbutton"
+            android:layout_margin="@dimen/eight"
+            android:textColor="#D32F2F"
+            android:text="Sign Out" />
 
     </LinearLayout>
 

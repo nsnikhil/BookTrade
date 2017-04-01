@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -21,13 +21,7 @@
             android:authorities="com.facebook.app.FacebookContentProvider"
             android:exported="true" />
 
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".MainActivity"/>
         <activity
             android:name=".AddBook"
             android:label="Add Book" />
@@ -44,7 +38,7 @@
             android:exported="false" />
 
         <activity android:name=".PurchaseActivity" />
-        <activity android:name=".AccountActivity" />
+        <activity android:name=".fragments.AccountFragment" />
         <activity
             android:name=".PrefActivity"
             android:label="@string/setting" />
@@ -59,7 +53,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".MyCartActivity"
+            android:name=".fragments.MyCartFragment"
             android:label="My Cart" />
         <activity android:name=".CategoryViewActivity" />
 
@@ -69,7 +63,13 @@
 
         <activity android:name=".IntroActivity" />
         <activity android:name=".ImageActivity" />
-        <activity android:name=".RequestListActivity"></activity>
+        <activity android:name=".fragments.RequestListFragment" />
+        <activity android:name=".StartActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

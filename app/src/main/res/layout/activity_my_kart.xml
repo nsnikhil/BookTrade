@@ -3,18 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/matchParent"
     android:background="@color/colorBackground"
-    tools:context="com.trade.book.booktrade.MyCartActivity">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbarCart"
-        style="@style/toolbar"
-        android:theme="@style/AppToolbar" />
+    tools:context="com.trade.book.booktrade.fragments.MyCartFragment">
 
 
     <GridView
         android:id="@+id/cartList"
         style="@style/matchParent"
-        android:layout_below="@id/toolbarCart"
         android:numColumns="2"/>
 
 

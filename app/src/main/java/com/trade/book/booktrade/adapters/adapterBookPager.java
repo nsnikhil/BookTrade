@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.trade.book.booktrade.fragments.fragmentBookList;
-import com.trade.book.booktrade.fragments.fragmentCategory;
+import com.trade.book.booktrade.fragments.BookListFragment;
+import com.trade.book.booktrade.fragments.CategoryFragment;
 
 
 public class adapterBookPager extends FragmentStatePagerAdapter{
@@ -21,10 +21,10 @@ public class adapterBookPager extends FragmentStatePagerAdapter{
     public Fragment getItem(int position) {
         Fragment f = null;
         if(position==0){
-            f = new fragmentBookList();
+            f = new BookListFragment();
         }
         if(position==1){
-            f = new fragmentCategory();
+            f = new CategoryFragment();
         }
         return f;
     }

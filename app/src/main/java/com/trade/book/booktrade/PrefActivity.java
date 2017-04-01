@@ -14,7 +14,7 @@ public class PrefActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pref);
         initilize();
-        getSupportFragmentManager().beginTransaction().add(R.id.prefContainer,new fragmentMore()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.prefContainer,new MoreFragment()).commit();
     }
 
     private void initilize() {

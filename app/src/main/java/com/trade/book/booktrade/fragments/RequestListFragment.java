@@ -1,14 +1,17 @@
-package com.trade.book.booktrade;
+package com.trade.book.booktrade.fragments;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -22,54 +25,53 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.trade.book.booktrade.AddBook;
+import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.adapters.*;
 import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentRequest;
-import com.trade.book.booktrade.objects.BookObject;
 import com.trade.book.booktrade.objects.RequestObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RequestListActivity extends AppCompatActivity {
+public class RequestListFragment extends Fragment {
 
     ListView requestList;
-    Toolbar requestToolbar;
     FloatingActionButton requestAdd;
     ArrayList<RequestObject> requestObjectList;
     adapterRequest adapter;
     ImageView noRequest;
     SwipeRefreshLayout mSwipeRefresh;
 
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_request_list);
-        intilize();
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.activity_request_list,container,false);
+        intilize(v);
         mSwipeRefresh.setRefreshing(true);
         downloadList();
+        return v;
     }
 
-    private void intilize() {
-        requestAdd = (FloatingActionButton) findViewById(R.id.requestAdd);
-        requestToolbar = (Toolbar) findViewById(R.id.toolbarRequest);
-        setSupportActionBar(requestToolbar);
-        getSupportActionBar().setTitle("Book Request");
-        requestList = (ListView) findViewById(R.id.requestList);
-        noRequest = (ImageView)findViewById(R.id.requestListNoRequest);
-        mSwipeRefresh = (SwipeRefreshLayout)findViewById(R.id.requestListSwipeRefresh);
+    private void intilize(View v) {
+        requestAdd = (FloatingActionButton) v.findViewById(R.id.requestAdd);
+        requestList = (ListView) v.findViewById(R.id.requestList);
+        noRequest = (ImageView)v.findViewById(R.id.requestListNoRequest);
+        mSwipeRefresh = (SwipeRefreshLayout)v.findViewById(R.id.requestListSwipeRefresh);
         requestObjectList = new ArrayList<>();
         requestAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialogFragmentRequest dialogFragmentRequest = new dialogFragmentRequest();
-                dialogFragmentRequest.show(getSupportFragmentManager(), "request");
+                dialogFragmentRequest.show(getActivity().getSupportFragmentManager(), "request");
             }
         });
         requestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
-                AlertDialog.Builder have = new AlertDialog.Builder(RequestListActivity.this)
+                AlertDialog.Builder have = new AlertDialog.Builder(getActivity())
                         .setMessage("Do you want to sell this book")
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             @Override
@@ -81,7 +83,7 @@ public class RequestListActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 RequestObject object = (RequestObject) parent.getItemAtPosition(position);
-                                Intent sell = new Intent(RequestListActivity.this, AddBook.class);
+                                Intent sell = new Intent(getActivity(), AddBook.class);
                                 sell.putExtra(getResources().getString(R.string.intentRequestBookName), object.getName());
                                 sell.putExtra(getResources().getString(R.string.intentRequestBookPublisher), object.getPublisher());
                                 sell.putExtra(getResources().getString(R.string.intentRequestBookRid), object.getRequestId());
@@ -114,7 +116,7 @@ public class RequestListActivity extends AppCompatActivity {
             }
             noRequest.setVisibility(View.GONE);
             mSwipeRefresh.setRefreshing(false);
-            adapter = new adapterRequest(getApplicationContext(), requestObjectList);
+            adapter = new adapterRequest(getActivity(), requestObjectList);
             requestList.setAdapter(adapter);
         }else {
             noRequest.setVisibility(View.VISIBLE);
@@ -125,7 +127,7 @@ public class RequestListActivity extends AppCompatActivity {
         String host = getResources().getString(R.string.urlServer);
         String queryFilename = getResources().getString(R.string.urlRequestQuery);
         String url = host + queryFilename;
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -138,7 +140,7 @@ public class RequestListActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
         requestQueue.add(jsonArrayRequest);

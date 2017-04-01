@@ -36,7 +36,7 @@ public class IntroActivity extends AppIntro2 {
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
         finish();
-        Intent mainStart = new Intent(IntroActivity.this, MainActivity.class);
+        Intent mainStart = new Intent(IntroActivity.this, StartActivity.class);
         mainStart.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(mainStart);
     }

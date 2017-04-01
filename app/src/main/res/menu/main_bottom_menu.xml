@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/bottomMenuBooks"
+        android:title="Book List"
+        android:icon="@drawable/ic_book_white_24dp" />
+
+    <item android:id="@+id/bottomMenuRequest"
+        android:title="@string/navRequest"
+        android:icon="@drawable/ic_playlist_add_white_24dp" />
+
+    <item android:id="@+id/bottomMenuCart"
+        android:title="@string/navMyCart"
+        android:icon="@drawable/ic_shopping_cart_white_24dp" />
+
+    <item android:id="@+id/bottomMenuAccount"
+        android:title="@string/navaccount"
+        android:icon="@drawable/ic_account_circle_white_24dp" />
+
+    <item android:id="@+id/bottomMenuMore"
+        android:title="@string/navMore"
+        android:icon="@drawable/ic_more_white_24dp" />
+
+</menu>

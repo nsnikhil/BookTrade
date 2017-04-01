@@ -20,11 +20,11 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class fragmentMore extends Fragment {
+public class MoreFragment extends Fragment {
 
     ListView moreList;
 
-    public fragmentMore() {
+    public MoreFragment() {
 
     }
 

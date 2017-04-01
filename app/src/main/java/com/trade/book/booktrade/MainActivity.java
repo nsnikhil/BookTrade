@@ -2,7 +2,6 @@ package com.trade.book.booktrade;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -20,30 +19,26 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
 import com.lapism.searchview.SearchView;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.trade.book.booktrade.adapters.adapterBookPager;
-import com.trade.book.booktrade.fragments.dialogfragments.*;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
     Toolbar toolbarMain;
     FloatingActionButton mainAdd;
@@ -68,12 +63,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             setTheme(R.style.tranparentStatusBar);
         }
         setContentView(R.layout.activity_main);
-        initilize();
-        initilizeDrawer();
-        setClickListener();
+        //initilize();
+        //initilizeDrawer();
+        //setClickListener();
     }
 
-    private void checkFirst() {
+    /*private void checkFirst() {
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean id = spf.getBoolean(getResources().getString(R.string.prefAccountIndicator), false);
         if (!id) {
@@ -196,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {
                 mainDrawerLayout.closeDrawers();
                 if(spf.getBoolean(getResources().getString(R.string.prefAccountIndicator),false)){
-                    startActivityForResult(new Intent(MainActivity.this, AccountActivity.class), REQUEST_EXIT);
+                    startActivityForResult(new Intent(MainActivity.this, AccountFragment.class), REQUEST_EXIT);
                 }else {
                     checkFirst();
                 }
@@ -211,14 +206,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     switch (item.getItemId()) {
                         case R.id.navItemMyCart:
                             if (spf.getBoolean(getResources().getString(R.string.prefAccountIndicator), false)) {
-                                startActivity(new Intent(MainActivity.this, MyCartActivity.class));
+                                startActivity(new Intent(MainActivity.this, MyCartFragment.class));
                             } else {
                                 checkFirst();
                             }
                             break;
                         case R.id.navItemAccount:
                             if (spf.getBoolean(getResources().getString(R.string.prefAccountIndicator), false)) {
-                                startActivityForResult(new Intent(MainActivity.this, AccountActivity.class), REQUEST_EXIT);
+                                startActivityForResult(new Intent(MainActivity.this, AccountFragment.class), REQUEST_EXIT);
                             } else {
                                 checkFirst();
                             }
@@ -230,7 +225,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             Toast.makeText(getApplicationContext(), "Will Send Feedback once we have a public email id", Toast.LENGTH_LONG).show();
                             break;
                         case R.id.navItemRequest:
-                            startActivity(new Intent(MainActivity.this, RequestListActivity.class));
+                            startActivity(new Intent(MainActivity.this, RequestListFragment.class));
+                            break;
+                        case R.id.navTemp:
+                            startActivity(new Intent(MainActivity.this, StartActivity.class));
                             break;
                     }
                 }else {
@@ -265,8 +263,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     checkFirst();
                 }
                 break;
-            case R.id.addBookNewImage:
-                break;
         }
     }
 
@@ -287,6 +283,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(search);
             searchView.clearFocus();
         }
-
-    }
+    }*/
 }

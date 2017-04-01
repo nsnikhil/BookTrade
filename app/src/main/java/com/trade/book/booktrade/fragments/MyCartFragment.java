@@ -1,4 +1,4 @@
-package com.trade.book.booktrade;
+package com.trade.book.booktrade.fragments;
 
 
 import android.app.Dialog;
@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.CursorLoader;
@@ -20,7 +21,9 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -33,6 +36,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.trade.book.booktrade.PurchaseActivity;
+import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.adapters.adapterCart;
 import com.trade.book.booktrade.cartData.CartTables.tablecart;
 import com.trade.book.booktrade.cartData.CartTables;
@@ -46,39 +51,41 @@ import org.json.JSONObject;
 import java.util.Calendar;
 
 
-public class MyCartActivity extends AppCompatActivity implements View.OnClickListener, android.app.LoaderManager.LoaderCallbacks<Cursor> {
+public class MyCartFragment extends Fragment implements View.OnClickListener, android.app.LoaderManager.LoaderCallbacks<Cursor> {
 
     GridView bookCartGrid;
     ImageView noItem;
-    Toolbar cartToolbar;
     FloatingActionButton checkOut;
     private static final int mCartLoaderId = 2;
     adapterCart cartAdapter;
     private static final String mNullValue = "N/A";
 
-    public MyCartActivity() {
+    public MyCartFragment() {
 
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.activity_my_kart,container,false);
+        initilize(v);
+        setEmpty();
+        checkSold();
+        return v;
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_kart);
-        initilize();
-        getLoaderManager().initLoader(mCartLoaderId, null, this);
-        setEmpty();
-        checkSold();
+        getActivity().getLoaderManager().initLoader(mCartLoaderId, null, this);
     }
 
-
-    private void initilize() {
-        bookCartGrid = (GridView) findViewById(R.id.cartList);
-        noItem = (ImageView) findViewById(R.id.cartEmpty);
-        cartAdapter = new adapterCart(getApplicationContext(), null);
+    private void initilize(View v) {
+        bookCartGrid = (GridView) v.findViewById(R.id.cartList);
+        noItem = (ImageView) v.findViewById(R.id.cartEmpty);
+        cartAdapter = new adapterCart(getActivity(), null);
         bookCartGrid.setAdapter(cartAdapter);
-        cartToolbar = (Toolbar) findViewById(R.id.toolbarCart);
-        setSupportActionBar(cartToolbar);
-        checkOut = (FloatingActionButton) findViewById(R.id.cartCheckOut);
+        checkOut = (FloatingActionButton) v.findViewById(R.id.cartCheckOut);
         checkOut.setOnClickListener(this);
         bookCartGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -105,7 +112,7 @@ public class MyCartActivity extends AppCompatActivity implements View.OnClickLis
                             , c.getString(c.getColumnIndex(tablecart.mPhoto6))
                             , c.getString(c.getColumnIndex(tablecart.mPhoto7))
                             , c.getInt(c.getColumnIndex(tablecart.mstatus)));
-                    Intent detail = new Intent(getApplicationContext(), PurchaseActivity.class);
+                    Intent detail = new Intent(getActivity(), PurchaseActivity.class);
                     Bundle b = new Bundle();
                     b.putSerializable(getResources().getString(R.string.intenKeyObejct), bookObject);
                     detail.putExtras(b);
@@ -117,7 +124,7 @@ public class MyCartActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void setEmpty() {
-        if (getContentResolver().query(CartTables.mCartContentUri, null, null, null, null).getCount() <= 0) {
+        if (getActivity().getContentResolver().query(CartTables.mCartContentUri, null, null, null, null).getCount() <= 0) {
             noItem.setVisibility(View.VISIBLE);
         } else {
             noItem.setVisibility(View.GONE);
@@ -129,7 +136,7 @@ public class MyCartActivity extends AppCompatActivity implements View.OnClickLis
     public android.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id){
             case mCartLoaderId:
-                return new android.content.CursorLoader(getApplicationContext(),CartTables.mCartContentUri,null,null,null,null);
+                return new android.content.CursorLoader(getActivity(),CartTables.mCartContentUri,null,null,null,null);
         }
         return null;
     }
@@ -146,19 +153,11 @@ public class MyCartActivity extends AppCompatActivity implements View.OnClickLis
 
 
 
-    private void loadCart() {
-        if (getLoaderManager().getLoader(mCartLoaderId) == null) {
-            getLoaderManager().initLoader(mCartLoaderId, null, this).forceLoad();
-        } else {
-            getLoaderManager().restartLoader(mCartLoaderId, null, this).forceLoad();
-        }
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cartCheckOut:
-                Cursor c = getContentResolver().query(CartTables.mCartContentUri, null, null, null, null);
+                Cursor c = getActivity().getContentResolver().query(CartTables.mCartContentUri, null, null, null, null);
                 if (c.getCount() > 0) {
                     int sp = 0;
                     while (c.moveToNext()) {
@@ -170,7 +169,7 @@ public class MyCartActivity extends AppCompatActivity implements View.OnClickLis
                             + "\n"
                             + "Final Amount   : " + (sp + compute(sp)));
                 } else {
-                    Toast.makeText(getApplicationContext(), "Cart Empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Cart Empty", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -193,7 +192,7 @@ public class MyCartActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void buildCheckOutDialog(String message) {
-        final AlertDialog.Builder abd = new AlertDialog.Builder(MyCartActivity.this);
+        final AlertDialog.Builder abd = new AlertDialog.Builder(getActivity());
         AlertDialog dialog;
         abd.setTitle("Check Out");
         abd.setMessage(message);
@@ -210,26 +209,26 @@ public class MyCartActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private Dialog uploadigDialog() {
-        AlertDialog.Builder uploading = new AlertDialog.Builder(MyCartActivity.this);
+        AlertDialog.Builder uploading = new AlertDialog.Builder(getActivity());
         uploading.setTitle("\n" + "Processing..." + "\n").setCancelable(false).create().show();
         Dialog up = uploading.create();
         return up;
     }
 
     private void checkOutFromCart() {
-        Cursor c = getContentResolver().query(CartTables.mCartContentUri, null, null, null, null);
+        Cursor c = getActivity().getContentResolver().query(CartTables.mCartContentUri, null, null, null, null);
         while (c.moveToNext()) {
             buy(c);
             shift(c);
         }
-        Toast.makeText(getApplicationContext(), "Purchase Successfull", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Purchase Successfull", Toast.LENGTH_SHORT).show();
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                getContentResolver().delete(CartTables.mCartContentUri, null, null);
-                finish();
+                getActivity().getContentResolver().delete(CartTables.mCartContentUri, null, null);
+                getActivity().finish();
                 uploadigDialog().dismiss();
-                startActivity(new Intent(MyCartActivity.this, MainActivity.class));
+                //startActivity(new Intent(getActivity(), StartActivity.class));
             }
         }, 2000);
     }
@@ -248,7 +247,7 @@ public class MyCartActivity extends AppCompatActivity implements View.OnClickLis
 
     private String buildTransactionUri(Cursor cursor) {
 
-        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         String host = getResources().getString(R.string.urlServer);
 
@@ -292,7 +291,7 @@ public class MyCartActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void buy(Cursor cursor) {
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, buildTransactionUri(cursor), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -301,7 +300,7 @@ public class MyCartActivity extends AppCompatActivity implements View.OnClickLis
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
         requestQueue.add(stringRequest);
@@ -318,7 +317,7 @@ public class MyCartActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void removeSold(final int bid) {
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, buildSoldUri(bid), null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -331,7 +330,7 @@ public class MyCartActivity extends AppCompatActivity implements View.OnClickLis
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
         requestQueue.add(jsonArrayRequest);
@@ -342,15 +341,15 @@ public class MyCartActivity extends AppCompatActivity implements View.OnClickLis
             JSONObject obj = status.getJSONObject(0);
             int statusCode = obj.getInt("status");
             if (statusCode == 1) {
-                getContentResolver().delete(Uri.withAppendedPath(CartTables.mCartContentUri, String.valueOf(id)), null, null);
-                Toast.makeText(getApplicationContext(), "Few items Removed as they were sold", Toast.LENGTH_SHORT).show();
+                getActivity().getContentResolver().delete(Uri.withAppendedPath(CartTables.mCartContentUri, String.valueOf(id)), null, null);
+                Toast.makeText(getActivity(), "Few items Removed as they were sold", Toast.LENGTH_SHORT).show();
             }
 
         }
     }
 
     private void checkSold() {
-        Cursor c = getContentResolver().query(CartTables.mCartContentUri, null, null, null, null);
+        Cursor c = getActivity().getContentResolver().query(CartTables.mCartContentUri, null, null, null, null);
         while (c.moveToNext()) {
             removeSold(c.getInt(c.getColumnIndex(tablecart.mBuid)));
         }
@@ -358,7 +357,7 @@ public class MyCartActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void shift(Cursor cursor) {
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, buildUpdateUri(cursor), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -367,7 +366,7 @@ public class MyCartActivity extends AppCompatActivity implements View.OnClickLis
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
         requestQueue.add(stringRequest);

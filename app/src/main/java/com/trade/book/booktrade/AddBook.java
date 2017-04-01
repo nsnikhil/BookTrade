@@ -463,7 +463,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                     setResult(RESULT_OK, null);
                     uploadigDialog().dismiss();
                     finish();
-                    startActivity(new Intent(AddBook.this, MainActivity.class));
+                    startActivity(new Intent(AddBook.this, StartActivity.class));
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -492,7 +492,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                     setResult(RESULT_OK, null);
                     uploadigDialog().dismiss();
                     finish();
-                    startActivity(new Intent(AddBook.this, MainActivity.class));
+                    startActivity(new Intent(AddBook.this, StartActivity.class));
                 }
             }, new Response.ErrorListener() {
                 @Override

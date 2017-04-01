@@ -30,7 +30,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class fragmentBookList extends Fragment {
+public class BookListFragment extends Fragment {
 
 
     GridView bookListGrid;
@@ -38,7 +38,7 @@ public class fragmentBookList extends Fragment {
     ImageView noBooks;
     SwipeRefreshLayout mSwipeRefresh;
 
-    public fragmentBookList() {
+    public BookListFragment() {
     }
 
     @Override

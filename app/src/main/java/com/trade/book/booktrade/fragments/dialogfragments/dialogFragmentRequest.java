@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +20,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.trade.book.booktrade.MainActivity;
 import com.trade.book.booktrade.R;
-import com.trade.book.booktrade.RequestListActivity;
-import com.trade.book.booktrade.objects.RequestObject;
+import com.trade.book.booktrade.fragments.RequestListFragment;
 
 
 public class dialogFragmentRequest extends DialogFragment {
@@ -87,7 +84,7 @@ public class dialogFragmentRequest extends DialogFragment {
             @Override
             public void onResponse(String response) {
                 getActivity().finish();
-                startActivity(new Intent(getActivity(), RequestListActivity.class));
+                startActivity(new Intent(getActivity(), RequestListFragment.class));
             }
         }, new Response.ErrorListener() {
             @Override

@@ -18,11 +18,11 @@ import com.trade.book.booktrade.adapters.adapterList;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class fragmentCategory extends Fragment {
+public class CategoryFragment extends Fragment {
 
     ListView catList;
 
-    public fragmentCategory() {
+    public CategoryFragment() {
     }
 
 

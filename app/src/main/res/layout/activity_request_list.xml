@@ -3,17 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/matchParent"
-    tools:context="com.trade.book.booktrade.RequestListActivity">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbarRequest"
-        style="@style/toolbar"
-        android:theme="@style/AppToolbar" />
+    tools:context="com.trade.book.booktrade.fragments.RequestListFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/requestListSwipeRefresh"
         android:layout_width="match_parent"
-        android:layout_below="@id/toolbarRequest"
         android:layout_height="match_parent">
 
     <ListView

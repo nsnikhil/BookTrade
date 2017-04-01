@@ -24,6 +24,10 @@
         android:id="@+id/grp2"
         android:checkableBehavior="single">
         <item
+            android:id="@+id/navTemp"
+            android:icon="@drawable/ic_feedback_white_48dp"
+            android:title="Temp" />
+        <item
             android:id="@+id/navItemFeedback"
             android:icon="@drawable/ic_feedback_white_48dp"
             android:title="@string/navfeedback" />
