@@ -23,6 +23,7 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/cartCheckOut"
         style="@style/fab"
+        app:backgroundTint="#03A9F4"
         android:src="@drawable/ic_shopping_cart_white_48dp"
         app:fabSize="normal" />
 

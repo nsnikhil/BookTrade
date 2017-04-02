@@ -34,7 +34,6 @@
         android:layout_gravity="end"
         android:layout_margin="@dimen/sixteen"
         android:src="@drawable/ic_add_white_48dp"
-        app:backgroundTint="#00796b"
         app:fabSize="normal" />
 
     <RelativeLayout
