@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/verticalLinearLayout"
-    android:background="@color/colorBackground"
+    android:background="@drawable/background"
     tools:context="com.trade.book.booktrade.fragments.BookListFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout

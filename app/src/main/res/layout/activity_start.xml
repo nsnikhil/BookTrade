@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/matchParent"
-    android:fitsSystemWindows="true"
+    android:background="@color/colorBackground"
     tools:context="com.trade.book.booktrade.StartActivity">
+
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/bottomToolbar"
         style="@style/toolbar"
         android:background="@drawable/toolbargradeint"
-        android:theme="@style/AppToolbar">
-
-    </android.support.v7.widget.Toolbar>
+        android:theme="@style/AppToolbar"
+        app:layout_scrollFlags="scroll|enterAlways" />
 
 
     <android.support.design.widget.BottomNavigationView
@@ -20,17 +20,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:elevation="6dp"
         app:itemBackground="@color/colorPrimary"
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white"
         app:menu="@menu/main_bottom_menu" />
 
-    <RelativeLayout
-        style="@style/matchParent"
-        android:layout_below="@id/bottomToolbar"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/bottomFabAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_above="@id/mainBottomNaviagtion"
-        android:id="@+id/bottomMainContainer"/>
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end"
+        android:layout_margin="@dimen/sixteen"
+        android:src="@drawable/ic_add_white_48dp"
+        app:backgroundTint="#00796b"
+        app:fabSize="normal" />
+
+    <RelativeLayout
+        android:id="@+id/bottomMainContainer"
+        style="@style/matchParent"
+        android:layout_above="@id/mainBottomNaviagtion"
+        android:layout_below="@id/bottomToolbar"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
 
     <ImageView
         android:id="@+id/bottomErrorImage"
@@ -40,20 +53,12 @@
         android:src="@drawable/nointernet"
         android:visibility="gone" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/sixteen"
-        android:layout_alignParentEnd="true"
-        android:layout_above="@id/mainBottomNaviagtion"
-        android:id="@+id/bottomFabAdd"
-        android:src="@drawable/ic_add_white_48dp"
-        app:fabSize="normal" />
 
     <com.claudiodegio.msv.MaterialSearchView
         android:id="@+id/bottomSearchView"
-        android:elevation="5dip"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:elevation="5dip" />
+
 
 </RelativeLayout>

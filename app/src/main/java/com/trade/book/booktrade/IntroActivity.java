@@ -32,13 +32,4 @@ public class IntroActivity extends AppIntro2 {
         setIndicatorColor(getResources().getColor(R.color.colorAccent),getResources().getColor(R.color.cardview_dark_background));
     }
 
-    @Override
-    public void onDonePressed(Fragment currentFragment) {
-        super.onDonePressed(currentFragment);
-        finish();
-        Intent mainStart = new Intent(IntroActivity.this, StartActivity.class);
-        mainStart.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(mainStart);
-    }
-
 }

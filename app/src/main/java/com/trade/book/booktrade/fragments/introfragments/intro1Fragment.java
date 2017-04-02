@@ -25,7 +25,6 @@ public class intro1Fragment extends Fragment implements ISlidePolicy {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_intro1, container, false);
-        Toast.makeText(getActivity(),"Swipe left to start",Toast.LENGTH_SHORT).show();
         return v;
     }
 

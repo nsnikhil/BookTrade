@@ -25,6 +25,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.MainActivity;
 import com.trade.book.booktrade.R;
+import com.trade.book.booktrade.StartActivity;
 import com.trade.book.booktrade.cartData.CartTables;
 
 import java.util.Calendar;
@@ -172,7 +173,7 @@ public class dialogFragmentPurchase extends DialogFragment {
                 Toast.makeText(getActivity(), response, Toast.LENGTH_SHORT).show();
                 removefromCart();
                 getActivity().finish();
-                startActivity(new Intent(getActivity(), MainActivity.class));
+                startActivity(new Intent(getActivity(), StartActivity.class));
             }
         }, new Response.ErrorListener() {
             @Override

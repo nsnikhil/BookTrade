@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -23,9 +24,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.claudiodegio.msv.MaterialSearchView;
 import com.claudiodegio.msv.OnSearchViewListener;
+import com.mikhaellopez.circularimageview.CircularImageView;
 import com.trade.book.booktrade.fragments.*;
 
 
@@ -37,7 +40,7 @@ public class StartActivity extends AppCompatActivity {
     MaterialSearchView mBottomSearchView;
     private static final String[] colorArray = {"#5D4037","#FFA000","#D32F2F","#388E3C"};
     private static final String[] colorArrayDark = {"#3E2723","#FF6F00","#B71C1C","#1B5E20"};
-    BookListFragment mFragmentBookList;
+    BookPagerFragment mFragmentBookPager;
     RequestListFragment mRequestListFragment;
     AccountFragment mAccountFragment;
     MoreFragment mMoreFragment;
@@ -60,17 +63,17 @@ public class StartActivity extends AppCompatActivity {
     private void addFragments(Bundle savedInstanceState) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (savedInstanceState == null) {
-            mFragmentBookList = new BookListFragment();
+            mFragmentBookPager = new BookPagerFragment();
             mRequestListFragment = new RequestListFragment();
             mAccountFragment =  new AccountFragment();;
             mMoreFragment = new MoreFragment();;
             myCartFragment = new MyCartFragment();;
-            ft.add(R.id.bottomMainContainer, mFragmentBookList);
+            ft.add(R.id.bottomMainContainer, mFragmentBookPager);
             ft.add(R.id.bottomMainContainer, mRequestListFragment);
             ft.add(R.id.bottomMainContainer, mAccountFragment);
             ft.add(R.id.bottomMainContainer, mMoreFragment);
             ft.add(R.id.bottomMainContainer, myCartFragment);
-            ft.show(mFragmentBookList);
+            ft.show(mFragmentBookPager);
             ft.hide(mRequestListFragment);
             ft.hide(mAccountFragment);
             ft.hide(mMoreFragment);
@@ -85,6 +88,14 @@ public class StartActivity extends AppCompatActivity {
         MenuItem item = menu.findItem(R.id.menuBottomMainSearch);
         mBottomSearchView.setMenuItem(item);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+        }
+        return false;
     }
 
     private void initialize(Bundle savedInstanceState) {
@@ -104,7 +115,7 @@ public class StartActivity extends AppCompatActivity {
         if (!id) {
             finish();
             Intent intro = new Intent(StartActivity.this, IntroActivity.class);
-            intro.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intro.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intro);
         }
     }
@@ -167,7 +178,7 @@ public class StartActivity extends AppCompatActivity {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 switch (item.getItemId()){
                     case R.id.bottomMenuBooks:
-                        ft.show(mFragmentBookList);
+                        ft.show(mFragmentBookPager);
                         ft.hide(mRequestListFragment);
                         ft.hide(mAccountFragment);
                         ft.hide(mMoreFragment);
@@ -175,7 +186,7 @@ public class StartActivity extends AppCompatActivity {
                         bottomSelection(0);
                         break;
                     case R.id.bottomMenuCart:
-                        ft.hide(mFragmentBookList);
+                        ft.hide(mFragmentBookPager);
                         ft.hide(mRequestListFragment);
                         ft.hide(mAccountFragment);
                         ft.hide(mMoreFragment);
@@ -183,7 +194,7 @@ public class StartActivity extends AppCompatActivity {
                         bottomSelection(2);
                         break;
                     case R.id.bottomMenuRequest:
-                        ft.hide(mFragmentBookList);
+                        ft.hide(mFragmentBookPager);
                         ft.show(mRequestListFragment);
                         ft.hide(mAccountFragment);
                         ft.hide(mMoreFragment);
@@ -191,7 +202,7 @@ public class StartActivity extends AppCompatActivity {
                         bottomSelection(1);
                         break;
                     case R.id.bottomMenuAccount:
-                        ft.hide(mFragmentBookList);
+                        ft.hide(mFragmentBookPager);
                         ft.hide(mRequestListFragment);
                         ft.show(mAccountFragment);
                         ft.hide(mMoreFragment);
@@ -199,7 +210,7 @@ public class StartActivity extends AppCompatActivity {
                         bottomSelection(3);
                         break;
                     case R.id.bottomMenuMore:
-                        ft.hide(mFragmentBookList);
+                        ft.hide(mFragmentBookPager);
                         ft.hide(mRequestListFragment);
                         ft.hide(mAccountFragment);
                         ft.show(mMoreFragment);
@@ -218,7 +229,6 @@ public class StartActivity extends AppCompatActivity {
 
             @Override
             public void onSearchViewClosed() {
-
             }
 
             @Override
@@ -245,7 +255,6 @@ public class StartActivity extends AppCompatActivity {
         MenuItem menuRequest = mBottomNaviagtionView.getMenu().getItem(2).setChecked(false);
         MenuItem menuAccount = mBottomNaviagtionView.getMenu().getItem(3).setChecked(false);
         MenuItem menuMore = mBottomNaviagtionView.getMenu().getItem(4).setChecked(false);
-
         switch (key) {
             case 0:
                 getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
@@ -254,6 +263,7 @@ public class StartActivity extends AppCompatActivity {
                     getWindow().setStatusBarColor( getResources().getColor(R.color.colorPrimaryDark));
                     mBottomToolbar.setBackground(getResources().getDrawable(R.drawable.toolbargradeint));
                     mBottomNaviagtionView.setItemBackgroundResource(R.drawable.booknav);
+                    getSupportActionBar().setElevation(0);
                 }
                 if(mFabAddBook.getVisibility()==View.GONE){
                     mFabAddBook.setVisibility(View.VISIBLE);
@@ -284,6 +294,7 @@ public class StartActivity extends AppCompatActivity {
             mFabAddBook.setVisibility(View.GONE);
         }
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getSupportActionBar().setElevation(getResources().getDimension(R.dimen.toolbarElevation));
             getWindow().setNavigationBarColor( Color.parseColor(darkColor));
             getWindow().setStatusBarColor( Color.parseColor(darkColor));
             mBottomToolbar.setBackgroundColor(Color.parseColor(color));

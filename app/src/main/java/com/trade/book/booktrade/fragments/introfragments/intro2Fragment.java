@@ -1,6 +1,7 @@
 package com.trade.book.booktrade.fragments.introfragments;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -60,10 +61,13 @@ public class intro2Fragment extends Fragment implements ISlidePolicy,View.OnClic
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
     boolean signedIn = false;
+    SignInButton signInButton;
 
     public intro2Fragment() {
-        // Required empty public constructor
+
     }
+
+
 
 
     @Override
@@ -80,7 +84,7 @@ public class intro2Fragment extends Fragment implements ISlidePolicy,View.OnClic
 
 
     private void initilize(View v) {
-        SignInButton signInButton = (SignInButton) v.findViewById(R.id.sign_in_button);
+        signInButton = (SignInButton) v.findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_WIDE);
         signInButton.setOnClickListener(this);
         loginButton = (LoginButton) v.findViewById(R.id.login_button);
@@ -182,10 +186,13 @@ public class intro2Fragment extends Fragment implements ISlidePolicy,View.OnClic
         }
     }
 
+
+
+
     public void closeSingInActivity() {
         signedIn = true;
+        signInButton.setEnabled(false);
         Toast.makeText(getActivity(),"Signed In",Toast.LENGTH_SHORT).show();
-        Toast.makeText(getActivity(),"Swipe Left",Toast.LENGTH_SHORT).show();
         //getActivity().finish();
         //startActivity(new Intent(getActivity(),MainActivity.class));
     }

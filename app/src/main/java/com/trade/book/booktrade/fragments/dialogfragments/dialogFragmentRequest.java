@@ -1,6 +1,7 @@
 package com.trade.book.booktrade.fragments.dialogfragments;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -21,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.R;
+import com.trade.book.booktrade.StartActivity;
 import com.trade.book.booktrade.fragments.RequestListFragment;
 
 
@@ -29,6 +31,8 @@ public class dialogFragmentRequest extends DialogFragment {
     EditText name,publisher;
     Button save;
     private static final String mNullValue = "N/A";
+
+
 
     public dialogFragmentRequest() {
     }
@@ -84,7 +88,7 @@ public class dialogFragmentRequest extends DialogFragment {
             @Override
             public void onResponse(String response) {
                 getActivity().finish();
-                startActivity(new Intent(getActivity(), RequestListFragment.class));
+                startActivity(new Intent(getActivity(), StartActivity.class));
             }
         }, new Response.ErrorListener() {
             @Override

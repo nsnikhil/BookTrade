@@ -5,22 +5,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -32,8 +28,6 @@ import com.trade.book.booktrade.cartData.CartTables;
 
 import java.io.File;
 
-import jp.wasabeef.blurry.Blurry;
-
 public class AccountFragment extends Fragment implements View.OnClickListener{
 
     private static final String mNullValue = "N/A";
@@ -44,7 +38,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.activity_account,container,false);
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_account,container,false);
         initilize(v);
         setVal();
         return v;

@@ -193,7 +193,6 @@ public class intro3Fragment extends Fragment implements ISlidePolicy {
             public void onResponse(String response) {
                 Toast.makeText(getActivity(),"Values Updated",Toast.LENGTH_SHORT).show();
                 hasExtra = true;
-                Toast.makeText(getActivity(),"Swipe Left",Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override

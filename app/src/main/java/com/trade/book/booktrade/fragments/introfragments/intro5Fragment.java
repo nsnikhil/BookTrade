@@ -156,7 +156,6 @@ public class intro5Fragment extends Fragment implements ISlidePolicy, GoogleApiC
         JSONObject adr = array.getJSONObject(0);
         locate.setText("Your current location is\n"+adr.getString("formatted_address"));
         Toast.makeText(getActivity(),"Located",Toast.LENGTH_SHORT).show();
-        Toast.makeText(getActivity(),"Swipe Left",Toast.LENGTH_SHORT).show();
     }
 
 

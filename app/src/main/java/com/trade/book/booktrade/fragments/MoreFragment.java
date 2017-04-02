@@ -47,6 +47,7 @@ public class MoreFragment extends Fragment {
         moreItem.add("Refer a Freind");
         moreItem.add("Help");
         moreItem.add("Chat with us");
+        moreItem.add("Send Feedback");
         moreItem.add("Settings");
         adapterList adptr = new adapterList(getActivity(),moreItem);
         moreList.setAdapter(adptr);
@@ -74,6 +75,9 @@ public class MoreFragment extends Fragment {
                 Toast.makeText(getActivity(),"Will start chat once we have public email",Toast.LENGTH_SHORT).show();
                 break;
             case 4:
+                Toast.makeText(getActivity(),"Will allow to send feedback",Toast.LENGTH_SHORT).show();
+                break;
+            case 5:
                 Toast.makeText(getActivity(),"Nothing in settings",Toast.LENGTH_SHORT).show();
                 break;
         }

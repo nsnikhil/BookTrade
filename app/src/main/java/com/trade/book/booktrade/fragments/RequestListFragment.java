@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,16 +42,17 @@ public class RequestListFragment extends Fragment {
     adapterRequest adapter;
     ImageView noRequest;
     SwipeRefreshLayout mSwipeRefresh;
+    View mainView = null;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.activity_request_list,container,false);
-        intilize(v);
+        mainView= LayoutInflater.from(getActivity()).inflate(R.layout.fragment_request_list,container,false);
+        intilize(mainView);
         mSwipeRefresh.setRefreshing(true);
         downloadList();
-        return v;
+        return mainView;
     }
 
     private void intilize(View v) {
@@ -145,5 +145,4 @@ public class RequestListFragment extends Fragment {
         });
         requestQueue.add(jsonArrayRequest);
     }
-
 }

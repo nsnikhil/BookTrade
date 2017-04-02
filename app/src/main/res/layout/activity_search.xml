@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/matchParent"
-    android:background="@color/colorBackground"
+    android:background="@drawable/background"
     tools:context="com.trade.book.booktrade.SearchActivity">
 
 
@@ -11,8 +11,7 @@
         android:id="@+id/sSearchView"
         android:layout_marginBottom="@dimen/sixteen"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
 
     <GridView
         style="@style/matchParent"
