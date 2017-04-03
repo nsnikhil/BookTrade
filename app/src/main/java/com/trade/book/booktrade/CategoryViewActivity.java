@@ -164,7 +164,7 @@ public class CategoryViewActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 Toast.makeText(getApplicationContext(),response,Toast.LENGTH_SHORT).show();
                 finish();
-                startActivity(new Intent(CategoryViewActivity.this,MainActivity.class));
+                startActivity(new Intent(CategoryViewActivity.this,StartActivity.class));
             }
         }, new Response.ErrorListener() {
             @Override

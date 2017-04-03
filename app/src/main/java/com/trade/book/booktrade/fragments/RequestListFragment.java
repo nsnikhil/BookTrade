@@ -1,5 +1,8 @@
 package com.trade.book.booktrade.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -11,6 +14,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -26,8 +30,10 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.AddBook;
 import com.trade.book.booktrade.R;
+import com.trade.book.booktrade.StartActivity;
 import com.trade.book.booktrade.adapters.*;
 import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentRequest;
+import com.trade.book.booktrade.interfaces.RequestListScrollChange;
 import com.trade.book.booktrade.objects.RequestObject;
 
 import org.json.JSONArray;
@@ -44,6 +50,8 @@ public class RequestListFragment extends Fragment {
     SwipeRefreshLayout mSwipeRefresh;
     View mainView = null;
 
+    RequestListScrollChange scrollChange;
+
 
     @Nullable
     @Override
@@ -53,6 +61,16 @@ public class RequestListFragment extends Fragment {
         mSwipeRefresh.setRefreshing(true);
         downloadList();
         return mainView;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            scrollChange = (RequestListScrollChange) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
+        }
     }
 
     private void intilize(View v) {
@@ -102,6 +120,44 @@ public class RequestListFragment extends Fragment {
             }
         }
         );
+        requestList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            int prevVisibleItem;
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if(prevVisibleItem != firstVisibleItem){
+                    if(prevVisibleItem < firstVisibleItem){
+                        if (requestAdd.getVisibility() == View.VISIBLE) {
+                            requestAdd.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    requestAdd.setVisibility(View.GONE);
+                                }
+                            });
+                        }
+                        scrollChange.hideItems();
+                    }
+                    else{
+                        if (requestAdd.getVisibility() == View.GONE) {
+                            requestAdd.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    requestAdd.setVisibility(View.VISIBLE);
+                                }
+                            });
+                        }
+                        scrollChange.showItems();
+                    }
+                    prevVisibleItem = firstVisibleItem;
+                }
+            }
+        });
     }
 
     private void addToList(JSONArray array) throws JSONException {

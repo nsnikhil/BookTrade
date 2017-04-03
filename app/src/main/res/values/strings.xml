@@ -24,7 +24,7 @@
     <string name="urlMoveToTransit" translatable="false">booktrade/bookMoveToTransit.php</string>
     <string name="urlMoveToAvailable" translatable="false">booktrade/bookMoveToAvalilable.php</string>
     <string name="urlDeleteSingle" translatable="false">booktrade/bookDeleteSingle.php</string>
-    <string name="urlPurchaseAvailable" translatable="false">booktrade/bookDeleteSingle.php</string>
+    <string name="urlPurchaseAvailable" translatable="false">booktrade/bookAvailableToPurchase.php</string>
 
 
     <string name="urlUserUploads" translatable="false">booktrade/bookQueryUserAll.php</string>

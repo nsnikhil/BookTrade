@@ -23,7 +23,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.trade.book.booktrade.MainActivity;
 import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.StartActivity;
 import com.trade.book.booktrade.cartData.CartTables;

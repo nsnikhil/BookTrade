@@ -34,9 +34,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.trade.book.booktrade.MainActivity;
 import com.trade.book.booktrade.R;
-import com.trade.book.booktrade.SignInActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -193,8 +191,6 @@ public class intro2Fragment extends Fragment implements ISlidePolicy,View.OnClic
         signedIn = true;
         signInButton.setEnabled(false);
         Toast.makeText(getActivity(),"Signed In",Toast.LENGTH_SHORT).show();
-        //getActivity().finish();
-        //startActivity(new Intent(getActivity(),MainActivity.class));
     }
 
     public class DownloadImage extends AsyncTask<String,Void,Void> {

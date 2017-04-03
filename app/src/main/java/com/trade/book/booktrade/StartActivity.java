@@ -1,6 +1,8 @@
 package com.trade.book.booktrade;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,7 +10,9 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BaseTransientBottomBar;
@@ -16,12 +20,15 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -30,22 +37,23 @@ import com.claudiodegio.msv.MaterialSearchView;
 import com.claudiodegio.msv.OnSearchViewListener;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.trade.book.booktrade.fragments.*;
+import com.trade.book.booktrade.interfaces.RequestListScrollChange;
 
 
-public class StartActivity extends AppCompatActivity {
+public class StartActivity extends AppCompatActivity implements RequestListScrollChange {
 
     BottomNavigationView mBottomNaviagtionView;
     Toolbar mBottomToolbar;
     FloatingActionButton mFabAddBook;
     MaterialSearchView mBottomSearchView;
-    private static final String[] colorArray = {"#5D4037","#FFA000","#D32F2F","#388E3C"};
-    private static final String[] colorArrayDark = {"#3E2723","#FF6F00","#B71C1C","#1B5E20"};
+    private static final String[] colorArray = {"#5D4037", "#FFA000", "#455A64", "#388E3C"};
+    private static final String[] colorArrayDark = {"#3E2723", "#FF6F00", "#263238", "#1B5E20"};
     BookPagerFragment mFragmentBookPager;
     RequestListFragment mRequestListFragment;
     AccountFragment mAccountFragment;
     MoreFragment mMoreFragment;
     MyCartFragment myCartFragment;
-    RelativeLayout mBottomConatainer;
+    RelativeLayout mBottomConatainer,mEntireContainer;
     int mAddBookRequestCode = 1080;
     ImageView errorImage;
 
@@ -65,9 +73,12 @@ public class StartActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             mFragmentBookPager = new BookPagerFragment();
             mRequestListFragment = new RequestListFragment();
-            mAccountFragment =  new AccountFragment();;
-            mMoreFragment = new MoreFragment();;
-            myCartFragment = new MyCartFragment();;
+            mAccountFragment = new AccountFragment();
+            ;
+            mMoreFragment = new MoreFragment();
+            ;
+            myCartFragment = new MyCartFragment();
+            ;
             ft.add(R.id.bottomMainContainer, mFragmentBookPager);
             ft.add(R.id.bottomMainContainer, mRequestListFragment);
             ft.add(R.id.bottomMainContainer, mAccountFragment);
@@ -100,12 +111,13 @@ public class StartActivity extends AppCompatActivity {
 
     private void initialize(Bundle savedInstanceState) {
         mBottomNaviagtionView = (BottomNavigationView) findViewById(R.id.mainBottomNaviagtion);
-        mBottomToolbar = (Toolbar)findViewById(R.id.bottomToolbar);
+        mBottomToolbar = (Toolbar) findViewById(R.id.bottomToolbar);
         setSupportActionBar(mBottomToolbar);
-        mBottomSearchView = (MaterialSearchView)findViewById(R.id.bottomSearchView);
-        mFabAddBook = (FloatingActionButton)findViewById(R.id.bottomFabAdd);
-        mBottomConatainer = (RelativeLayout)findViewById(R.id.bottomMainContainer);
-        errorImage = (ImageView)findViewById(R.id.bottomErrorImage);
+        mBottomSearchView = (MaterialSearchView) findViewById(R.id.bottomSearchView);
+        mFabAddBook = (FloatingActionButton) findViewById(R.id.bottomFabAdd);
+        mBottomConatainer = (RelativeLayout) findViewById(R.id.bottomMainContainer);
+        mEntireContainer = (RelativeLayout) findViewById(R.id.entireContainer);
+        errorImage = (ImageView) findViewById(R.id.bottomErrorImage);
         addOnConnection(savedInstanceState);
     }
 
@@ -160,14 +172,14 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
-    private void setClickListeners(){
+    private void setClickListeners() {
         mFabAddBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                if(spf.getBoolean(getResources().getString(R.string.prefAccountIndicator),false)){
+                if (spf.getBoolean(getResources().getString(R.string.prefAccountIndicator), false)) {
                     startActivityForResult(new Intent(StartActivity.this, AddBook.class), mAddBookRequestCode);
-                }else {
+                } else {
                     checkFirst();
                 }
             }
@@ -176,46 +188,56 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.bottomMenuBooks:
-                        ft.show(mFragmentBookPager);
-                        ft.hide(mRequestListFragment);
-                        ft.hide(mAccountFragment);
-                        ft.hide(mMoreFragment);
-                        ft.hide(myCartFragment);
-                        bottomSelection(0);
+                        if (mFragmentBookPager.isHidden()) {
+                            ft.show(mFragmentBookPager);
+                            ft.hide(mRequestListFragment);
+                            ft.hide(mAccountFragment);
+                            ft.hide(mMoreFragment);
+                            ft.hide(myCartFragment);
+                            bottomSelection(0);
+                        }
                         break;
                     case R.id.bottomMenuCart:
-                        ft.hide(mFragmentBookPager);
-                        ft.hide(mRequestListFragment);
-                        ft.hide(mAccountFragment);
-                        ft.hide(mMoreFragment);
-                        ft.show(myCartFragment);
-                        bottomSelection(2);
+                        if (myCartFragment.isHidden()) {
+                            ft.hide(mFragmentBookPager);
+                            ft.hide(mRequestListFragment);
+                            ft.hide(mAccountFragment);
+                            ft.hide(mMoreFragment);
+                            ft.show(myCartFragment);
+                            bottomSelection(2);
+                        }
                         break;
                     case R.id.bottomMenuRequest:
-                        ft.hide(mFragmentBookPager);
-                        ft.show(mRequestListFragment);
-                        ft.hide(mAccountFragment);
-                        ft.hide(mMoreFragment);
-                        ft.hide(myCartFragment);
-                        bottomSelection(1);
+                        if (mRequestListFragment.isHidden()) {
+                            ft.hide(mFragmentBookPager);
+                            ft.show(mRequestListFragment);
+                            ft.hide(mAccountFragment);
+                            ft.hide(mMoreFragment);
+                            ft.hide(myCartFragment);
+                            bottomSelection(1);
+                        }
                         break;
                     case R.id.bottomMenuAccount:
-                        ft.hide(mFragmentBookPager);
-                        ft.hide(mRequestListFragment);
-                        ft.show(mAccountFragment);
-                        ft.hide(mMoreFragment);
-                        ft.hide(myCartFragment);
-                        bottomSelection(3);
+                        if (mAccountFragment.isHidden()) {
+                            ft.hide(mFragmentBookPager);
+                            ft.hide(mRequestListFragment);
+                            ft.show(mAccountFragment);
+                            ft.hide(mMoreFragment);
+                            ft.hide(myCartFragment);
+                            bottomSelection(3);
+                        }
                         break;
                     case R.id.bottomMenuMore:
-                        ft.hide(mFragmentBookPager);
-                        ft.hide(mRequestListFragment);
-                        ft.hide(mAccountFragment);
-                        ft.show(mMoreFragment);
-                        ft.hide(myCartFragment);
-                        bottomSelection(4);
+                        if (mMoreFragment.isHidden()) {
+                            ft.hide(mFragmentBookPager);
+                            ft.hide(mRequestListFragment);
+                            ft.hide(mAccountFragment);
+                            ft.show(mMoreFragment);
+                            ft.hide(myCartFragment);
+                            bottomSelection(4);
+                        }
                         break;
                 }
                 ft.commit();
@@ -233,8 +255,8 @@ public class StartActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextSubmit(String s) {
-                Intent search = new Intent(StartActivity.this,SearchActivity.class);
-                search.putExtra(getResources().getString(R.string.intenSearchKey),s);
+                Intent search = new Intent(StartActivity.this, SearchActivity.class);
+                search.putExtra(getResources().getString(R.string.intenSearchKey), s);
                 search.setAction(Intent.ACTION_SEARCH);
                 startActivity(search);
                 mBottomSearchView.clearFocus();
@@ -259,46 +281,47 @@ public class StartActivity extends AppCompatActivity {
             case 0:
                 getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    getWindow().setNavigationBarColor( getResources().getColor(R.color.colorPrimaryDark));
-                    getWindow().setStatusBarColor( getResources().getColor(R.color.colorPrimaryDark));
+                    getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimaryDark));
+                    getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
                     mBottomToolbar.setBackground(getResources().getDrawable(R.drawable.toolbargradeint));
                     mBottomNaviagtionView.setItemBackgroundResource(R.drawable.booknav);
                     getSupportActionBar().setElevation(0);
                 }
-                if(mFabAddBook.getVisibility()==View.GONE){
+                if (mFabAddBook.getVisibility() == View.GONE) {
                     mFabAddBook.setVisibility(View.VISIBLE);
                 }
                 menuBook.setChecked(true);
                 break;
             case 1:
-                setColor(colorArray[1],colorArrayDark[1],0);
+                setColor(colorArray[1], colorArrayDark[1], 0);
                 menuCart.setChecked(true);
                 break;
             case 2:
-                setColor(colorArray[0],colorArrayDark[0],1);
+                setColor(colorArray[0], colorArrayDark[0], 1);
                 menuRequest.setChecked(true);
                 break;
             case 3:
-                setColor(colorArray[2],colorArrayDark[2],2);
+                setColor(colorArray[2], colorArrayDark[2], 2);
                 menuAccount.setChecked(true);
                 break;
             case 4:
-                setColor(colorArray[3],colorArrayDark[3],3);
+                setColor(colorArray[3], colorArrayDark[3], 3);
                 menuMore.setChecked(true);
                 break;
         }
     }
 
-    private void setColor(String color,String darkColor,int code){
-        if(mFabAddBook.getVisibility()==View.VISIBLE){
+
+    private void setColor(String color, String darkColor, int code) {
+        if (mFabAddBook.getVisibility() == View.VISIBLE) {
             mFabAddBook.setVisibility(View.GONE);
         }
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getSupportActionBar().setElevation(getResources().getDimension(R.dimen.toolbarElevation));
-            getWindow().setNavigationBarColor( Color.parseColor(darkColor));
-            getWindow().setStatusBarColor( Color.parseColor(darkColor));
+            getWindow().setNavigationBarColor(Color.parseColor(darkColor));
+            getWindow().setStatusBarColor(Color.parseColor(darkColor));
             mBottomToolbar.setBackgroundColor(Color.parseColor(color));
-            switch (code){
+            switch (code) {
                 case 0:
                     mBottomNaviagtionView.setItemBackgroundResource(R.drawable.reqnav);
                     getSupportActionBar().setTitle(getResources().getString(R.string.navRequest));
@@ -319,4 +342,88 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void hideItems() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                animateOut();
+            }
+        }, 50);
+    }
+
+    private void animateOut() {
+        if (!mFragmentBookPager.isHidden()) {
+            if (mFabAddBook.getVisibility() == View.VISIBLE) {
+                mFabAddBook.animate().alpha(0.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        mFabAddBook.setVisibility(View.GONE);
+                    }
+                });
+            }
+        }
+        if (mBottomNaviagtionView.getVisibility() == View.VISIBLE) {
+            mBottomNaviagtionView.animate().alpha(0.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    mBottomNaviagtionView.setVisibility(View.GONE);
+                }
+            });
+        }
+        if (mBottomToolbar.getVisibility() == View.VISIBLE) {
+            mBottomToolbar.animate().alpha(0.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    mBottomToolbar.setVisibility(View.GONE);
+                }
+            });
+        }
+    }
+
+    private void animateIn() {
+        if (!mFragmentBookPager.isHidden()) {
+            if (mFabAddBook.getVisibility() == View.GONE) {
+                mFabAddBook.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        mFabAddBook.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        }
+        if (mBottomNaviagtionView.getVisibility() == View.GONE) {
+            mBottomNaviagtionView.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    mBottomNaviagtionView.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+        if (mBottomToolbar.getVisibility() == View.GONE) {
+            mBottomToolbar.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    mBottomToolbar.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+
+    }
+
+    @Override
+    public void showItems() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                animateIn();
+            }
+        }, 50);
+    }
 }

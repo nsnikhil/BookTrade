@@ -21,7 +21,6 @@
             android:authorities="com.facebook.app.FacebookContentProvider"
             android:exported="true" />
 
-        <activity android:name=".MainActivity"/>
         <activity
             android:name=".AddBook"
             android:label="Add Book" />
@@ -38,11 +37,9 @@
             android:exported="false" />
 
         <activity android:name=".PurchaseActivity" />
-        <activity android:name=".fragments.AccountFragment" />
         <activity
             android:name=".PrefActivity"
             android:label="@string/setting" />
-        <activity android:name=".SignInActivity" />
         <activity android:name=".SearchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -52,9 +49,6 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity
-            android:name=".fragments.MyCartFragment"
-            android:label="My Cart" />
         <activity android:name=".CategoryViewActivity" />
 
         <service
@@ -63,8 +57,8 @@
 
         <activity android:name=".IntroActivity" />
         <activity android:name=".ImageActivity" />
-        <activity android:name=".fragments.RequestListFragment" />
-        <activity android:name=".StartActivity">
+        <activity android:name=".StartActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

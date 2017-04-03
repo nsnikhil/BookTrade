@@ -1,13 +1,18 @@
 package com.trade.book.booktrade.fragments;
 
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -20,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.adapters.adapterBookList;
+import com.trade.book.booktrade.interfaces.RequestListScrollChange;
 import com.trade.book.booktrade.objects.BookObject;
 import com.trade.book.booktrade.PurchaseActivity;
 import com.trade.book.booktrade.R;
@@ -38,6 +44,8 @@ public class BookListFragment extends Fragment {
     ImageView noBooks;
     SwipeRefreshLayout mSwipeRefresh;
 
+    RequestListScrollChange scrollChange;
+
     public BookListFragment() {
     }
 
@@ -48,6 +56,16 @@ public class BookListFragment extends Fragment {
         mSwipeRefresh.setRefreshing(true);
         getList();
         return v;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            scrollChange = (RequestListScrollChange) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
+        }
     }
 
     private void getList(){
@@ -122,18 +140,45 @@ public class BookListFragment extends Fragment {
                 Bundle b = new Bundle();
                 b.putSerializable(getActivity().getResources().getString(R.string.intenKeyObejct), bookObject);
                 detail.putExtras(b);
-                startActivity(detail);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    Pair<View, String> p1 = Pair.create(view, "transitionBookName");
+                    Pair<View, String> p2 = Pair.create(view, "transitionBookPublisher");
+                    Pair<View, String> p3 = Pair.create(view, "transitionBookImage");
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),p1,p2,p3);
+                    startActivity(detail, options.toBundle());
+                }else {
+                    startActivity(detail);
+                }
             }
         });
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                                                          @Override
-                                                          public void onRefresh() {
-                                                              bookListGrid.setAdapter(null);
-                                                              bookList.clear();
-                                                              getList();
-                                                          }
-                                                      }
+            @Override
+            public void onRefresh() {
+                bookListGrid.setAdapter(null);
+                bookList.clear();
+                getList();
+            }
+        }
         );
+        bookListGrid.setOnScrollListener(new AbsListView.OnScrollListener() {
+            int prevVisibleItem;
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if(prevVisibleItem != firstVisibleItem){
+                    if(prevVisibleItem < firstVisibleItem){
+                        scrollChange.hideItems();
+                    }
+                    else{
+                        scrollChange.showItems();
+                    }
+                    prevVisibleItem = firstVisibleItem;
+                }
+            }
+        });
     }
 
 }

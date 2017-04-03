@@ -14,6 +14,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/purchaseBookView"
                 style="@style/matchParent"
+                android:transitionName="transitionBookImage"
                 android:layout_height="300dp" />
 
             <RelativeLayout
@@ -38,6 +39,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/eight"
                         android:fontFamily="sans-serif-light"
+                        android:transitionName="transitionBookName"
                         android:text="@string/bookName"
                         android:textAllCaps="true"
                         android:textSize="28sp"
@@ -46,6 +48,7 @@
                     <TextView
                         android:id="@+id/purchasePublisher"
                         android:layout_width="wrap_content"
+                        android:transitionName="transitionBookPublisher"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/purchaseName"
                         android:layout_margin="@dimen/eight"

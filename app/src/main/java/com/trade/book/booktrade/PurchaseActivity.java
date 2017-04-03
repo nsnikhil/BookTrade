@@ -202,7 +202,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
             public void onResponse(String response) {
                 Toast.makeText(getApplicationContext(),"Deleted",Toast.LENGTH_SHORT).show();
                 finish();
-                startActivity(new Intent(PurchaseActivity.this, MainActivity.class));
+                startActivity(new Intent(PurchaseActivity.this, StartActivity.class));
             }
         }, new Response.ErrorListener() {
             @Override

@@ -13,9 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
 import com.github.paolorotolo.appintro.ISlidePolicy;
-import com.trade.book.booktrade.MainActivity;
 import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.StartActivity;
 

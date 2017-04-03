@@ -1,22 +1,29 @@
 package com.trade.book.booktrade.fragments;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -34,6 +41,7 @@ import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.adapters.adapterCart;
 import com.trade.book.booktrade.cartData.CartTables.tablecart;
 import com.trade.book.booktrade.cartData.CartTables;
+import com.trade.book.booktrade.interfaces.RequestListScrollChange;
 import com.trade.book.booktrade.objects.BookObject;
 
 import org.json.JSONArray;
@@ -51,6 +59,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     private static final int mCartLoaderId = 2;
     adapterCart cartAdapter;
     private static final String mNullValue = "N/A";
+    RequestListScrollChange scrollChange;
 
     public MyCartFragment() {
 
@@ -64,6 +73,16 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
         setEmpty();
         checkSold();
         return v;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            scrollChange = (RequestListScrollChange) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
+        }
     }
 
     @Override
@@ -113,6 +132,44 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
                 }
             }
         });
+        bookCartGrid.setOnScrollListener(new AbsListView.OnScrollListener() {
+            int prevVisibleItem;
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if(prevVisibleItem != firstVisibleItem){
+                    if(prevVisibleItem < firstVisibleItem){
+                        if (checkOut.getVisibility() == View.VISIBLE) {
+                            checkOut.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    checkOut.setVisibility(View.GONE);
+                                }
+                            });
+                        }
+                        scrollChange.hideItems();
+                    }
+                    else{
+                        if (checkOut.getVisibility() == View.GONE) {
+                            checkOut.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    checkOut.setVisibility(View.VISIBLE);
+                                }
+                            });
+                        }
+                        scrollChange.showItems();
+                    }
+                    prevVisibleItem = firstVisibleItem;
+                }
+            }
+        });
     }
 
     private void setEmpty() {
@@ -135,6 +192,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
 
     @Override
     public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor data) {
+        setEmpty();
         cartAdapter.swapCursor(data);
     }
 
@@ -144,6 +202,14 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     }
 
 
+    @Override
+    public void setMenuVisibility(final boolean visible) {
+        if (visible) {
+           Toast.makeText(getActivity(),"Visible",Toast.LENGTH_SHORT).show();
+        }
+
+        super.setMenuVisibility(visible);
+    }
 
     @Override
     public void onClick(View v) {
@@ -220,7 +286,6 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
                 getActivity().getContentResolver().delete(CartTables.mCartContentUri, null, null);
                 getActivity().finish();
                 uploadigDialog().dismiss();
-                //startActivity(new Intent(getActivity(), StartActivity.class));
             }
         }, 2000);
     }
@@ -334,9 +399,11 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
             int statusCode = obj.getInt("status");
             if (statusCode == 1) {
                 getActivity().getContentResolver().delete(Uri.withAppendedPath(CartTables.mCartContentUri, String.valueOf(id)), null, null);
-                Toast.makeText(getActivity(), "Few items Removed as they were sold", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Few items removed from cart as they were sold", Toast.LENGTH_SHORT).show();
             }
 
+        }else {
+            Toast.makeText(getActivity(), "Nothing", Toast.LENGTH_SHORT).show();
         }
     }
 
