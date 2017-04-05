@@ -533,7 +533,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         AlertDialog.Builder choosePath = new AlertDialog.Builder(AddBook.this);
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(AddBook.this, android.R.layout.simple_list_item_1);
         arrayAdapter.add("Take a picture");
-        arrayAdapter.add("Choose from galley");
+        arrayAdapter.add("Choose from gallery");
         choosePath.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int position) {
