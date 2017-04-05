@@ -67,6 +67,7 @@
                             style="@style/addBookText"
                             android:hint="@string/bookName"
                             android:nextFocusDown="@+id/addBookPublisher"
+                            android:singleLine="true"
                             android:maxLines="1" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -94,6 +95,7 @@
                             style="@style/addBookText"
                             android:hint="@string/bookPublisher"
                             android:nextFocusDown="@+id/addBookCostPrice"
+                            android:singleLine="true"
                             android:maxLines="1" />
 
                     </android.support.design.widget.TextInputLayout>
