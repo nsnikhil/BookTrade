@@ -71,10 +71,10 @@ public class dialogFragmentPurchase extends DialogFragment {
         String publisher = args.getString(getActivity().getResources().getString(R.string.bundleBookPublisher));
         int price = args.getInt(getActivity().getResources().getString(R.string.bundleBookPrice));
         title.setText(name.toUpperCase() + " by " + publisher + " will be delivered to " + spf.getString(getActivity().getResources().getString(R.string.prefAccountAddress), mNullValue) + " within one week");
-        actualPrice.setText((double) price + "");
+        actualPrice.setText("र "+(double) price );
         double taxPrice = Double.parseDouble(String.format("%.2f", compute(price)));
-        extraPrice.setText(taxPrice+"");
-        totalPrice.setText((price + taxPrice )+ "");
+        extraPrice.setText("र "+taxPrice);
+        totalPrice.setText("र "+(price + taxPrice ));
     }
 
     private double compute(int price) {

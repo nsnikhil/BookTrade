@@ -25,7 +25,7 @@
         android:padding="@dimen/eight"
         android:layout_width="250dp"
         android:hint="@string/bookName"
-        android:inputType="textMultiLine" />
+        android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>
 

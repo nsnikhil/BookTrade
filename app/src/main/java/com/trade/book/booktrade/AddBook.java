@@ -101,7 +101,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
 
     private Dialog uploadigDialog() {
         AlertDialog.Builder uploading = new AlertDialog.Builder(AddBook.this);
-        uploading.setTitle("\n" + "Processing..." + "\n" + "\n").setCancelable(false);
+        uploading.setTitle("\n" + "Processing..." + "\n").setMessage("\n").setCancelable(false);
         Dialog d = uploading.create();
         return d;
     }

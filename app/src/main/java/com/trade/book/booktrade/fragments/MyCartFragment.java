@@ -71,7 +71,6 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_my_cart,container,false);
         initilize(v);
         setEmpty();
-        checkSold();
         return v;
     }
 
@@ -215,17 +214,10 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cartCheckOut:
+
                 Cursor c = getActivity().getContentResolver().query(CartTables.mCartContentUri, null, null, null, null);
                 if (c.getCount() > 0) {
-                    int sp = 0;
-                    while (c.moveToNext()) {
-                        sp = sp + c.getInt(c.getColumnIndex(tablecart.mSellingPrice));
-                    }
-                    buildCheckOutDialog("Total Price    : " + sp + "\n"
-                            + "\n"
-                            + "Total Tax      : " + compute(sp) + "\n"
-                            + "\n"
-                            + "Final Amount   : " + (sp + compute(sp)));
+                    checkSold();
                 } else {
                     Toast.makeText(getActivity(), "Cart Empty", Toast.LENGTH_SHORT).show();
                 }
@@ -268,7 +260,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
 
     private Dialog uploadigDialog() {
         AlertDialog.Builder uploading = new AlertDialog.Builder(getActivity());
-        uploading.setTitle("\n" + "Processing..." + "\n").setCancelable(false).create().show();
+        uploading.setTitle("\n" + "Processing..." + "\n").setMessage("\n").setCancelable(false).create().show();
         Dialog up = uploading.create();
         return up;
     }
@@ -279,7 +271,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
             buy(c);
             shift(c);
         }
-        Toast.makeText(getActivity(), "Purchase Successfull", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Purchase Successful", Toast.LENGTH_SHORT).show();
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -399,20 +391,35 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
             int statusCode = obj.getInt("status");
             if (statusCode == 1) {
                 getActivity().getContentResolver().delete(Uri.withAppendedPath(CartTables.mCartContentUri, String.valueOf(id)), null, null);
-                Toast.makeText(getActivity(), "Few items removed from cart as they were sold", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Item removed from cart as it was sold", Toast.LENGTH_SHORT).show();
             }
-
-        }else {
-            Toast.makeText(getActivity(), "Nothing", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void checkSold() {
-        Cursor c = getActivity().getContentResolver().query(CartTables.mCartContentUri, null, null, null, null);
+        final Cursor c = getActivity().getContentResolver().query(CartTables.mCartContentUri, null, null, null, null);
+        AlertDialog.Builder wait = new AlertDialog.Builder(getActivity());
+        wait.setMessage("Verifying");
+        final Dialog d = wait.create();
+        d.show();
         while (c.moveToNext()) {
             removeSold(c.getInt(c.getColumnIndex(tablecart.mBuid)));
         }
+        showCheckOutDialog(d);
+    }
 
+    private void showCheckOutDialog(Dialog d){
+        d.dismiss();
+        Cursor c = getActivity().getContentResolver().query(CartTables.mCartContentUri, null, null, null, null);
+        int sp = 0;
+        while (c.moveToNext()) {
+            sp = sp + c.getInt(c.getColumnIndex(tablecart.mSellingPrice));
+        }
+        buildCheckOutDialog("Total Price    : " + "र "+sp + "\n"
+                + "\n"
+                + "Convenience Fee     : " + "र "+compute(sp) + "\n"
+                + "\n"
+                + "Final Amount   : " + "र "+(sp + compute(sp)));
     }
 
     private void shift(Cursor cursor) {

@@ -1,5 +1,6 @@
 package com.trade.book.booktrade;
 
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.cartData.CartTables;
@@ -30,6 +32,10 @@ import com.trade.book.booktrade.cartData.CartTables.tablecart;
 import com.trade.book.booktrade.objects.BookObject;
 import com.trade.book.booktrade.adapters.*;
 import com.trade.book.booktrade.fragments.dialogfragments.*;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -176,17 +182,68 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
                     detail.putExtras(b);
                     startActivityForResult(detail,mEditRequestCode);
                 }else {
-                    dialogFragmentPurchase dialogFragmentPurchase = new dialogFragmentPurchase();
-                    Bundle args = new Bundle();
-                    args.putString(getResources().getString(R.string.bundleBookName),name.getText().toString());
-                    args.putString(getResources().getString(R.string.bundleBookPublisher),publisher.getText().toString());
-                    args.putInt(getResources().getString(R.string.bundleBookPrice),bObject.getSellingPrice());
-                    args.putString(getResources().getString(R.string.bundleBookSellerUid),bObject.getUserId());
-                    args.putInt(getResources().getString(R.string.bundleBookBookId),bObject.getBid());
-                    dialogFragmentPurchase.setArguments(args);
-                    dialogFragmentPurchase.show(getSupportFragmentManager(),"purchase");
+                  checkSold(bObject.getBid());
                 }
                 break;
+        }
+    }
+
+    private void showPurchaseDialog(){
+        dialogFragmentPurchase dialogFragmentPurchase = new dialogFragmentPurchase();
+        Bundle args = new Bundle();
+        args.putString(getResources().getString(R.string.bundleBookName),name.getText().toString());
+        args.putString(getResources().getString(R.string.bundleBookPublisher),publisher.getText().toString());
+        args.putInt(getResources().getString(R.string.bundleBookPrice),bObject.getSellingPrice());
+        args.putString(getResources().getString(R.string.bundleBookSellerUid),bObject.getUserId());
+        args.putInt(getResources().getString(R.string.bundleBookBookId),bObject.getBid());
+        dialogFragmentPurchase.setArguments(args);
+        dialogFragmentPurchase.show(getSupportFragmentManager(),"purchase");
+    }
+
+    private String buildSoldUri(int id) {
+        String host = getResources().getString(R.string.urlServer);
+        String purchaseAvailable = getResources().getString(R.string.urlPurchaseAvailable);
+        String url = host + purchaseAvailable;
+        String bidQuery = "bd";
+        return Uri.parse(url).buildUpon()
+                .appendQueryParameter(bidQuery, String.valueOf(id))
+                .build().toString();
+    }
+
+    private void checkSold(int bid) {
+        AlertDialog.Builder wait = new AlertDialog.Builder(PurchaseActivity.this);
+        wait.setMessage("Verifying");
+        final Dialog dw = wait.create();
+        dw.show();
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, buildSoldUri(bid), null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    showIfAvailable(response,dw);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    private void showIfAvailable(JSONArray status,Dialog d) throws JSONException {
+        if (status.length() > 0) {
+            JSONObject obj = status.getJSONObject(0);
+            int statusCode = obj.getInt("status");
+            d.dismiss();
+            if (statusCode == 1) {
+               Toast.makeText(getApplicationContext(),"Book sold",Toast.LENGTH_LONG).show();
+            }else {
+                showPurchaseDialog();
+            }
         }
     }
 

@@ -124,7 +124,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener{
     private void makeDialog() {
         AlertDialog.Builder alerDialog = new AlertDialog.Builder(getActivity());
         alerDialog.setTitle("Warning");
-        alerDialog.setMessage("Are you sre you want to sign out");
+        alerDialog.setMessage("Are you sure you want to sign out");
         alerDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

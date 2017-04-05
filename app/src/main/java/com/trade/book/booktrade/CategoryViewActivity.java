@@ -3,6 +3,9 @@ package com.trade.book.booktrade;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -74,17 +77,17 @@ public class CategoryViewActivity extends AppCompatActivity {
         }
         categoryList = new ArrayList<>();
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                                               @Override
-                                               public void onRefresh() {
-                                                   catList.setAdapter(null);
-                                                   categoryList.clear();
-                                                   if (mUploadIndicator == 123) {
-                                                       getList(catUri, 1);
-                                                   } else {
-                                                       getList(catUri, 0);
-                                                   }
-                                               }
-                                           }
+            @Override
+            public void onRefresh() {
+                catList.setAdapter(null);
+                categoryList.clear();
+                if (mUploadIndicator == 123) {
+                    getList(catUri, 1);
+                } else {
+                    getList(catUri, 0);
+                }
+            }
+        }
         );
         catList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -98,7 +101,15 @@ public class CategoryViewActivity extends AppCompatActivity {
                     if (mUploadIndicator != 0) {
                         detail.putExtra(getResources().getString(R.string.intentfromupload), 123);
                     }
-                    startActivityForResult(detail, mRequestCode);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        Pair<View, String> p1 = Pair.create(view, "transitionBookName");
+                        Pair<View, String> p2 = Pair.create(view, "transitionBookPublisher");
+                        Pair<View, String> p3 = Pair.create(view, "transitionBookImage");
+                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(CategoryViewActivity.this, p1, p2, p3);
+                       startActivityForResult(detail, mRequestCode,options.toBundle());
+                    }else {
+                        startActivityForResult(detail, mRequestCode);
+                    }
                 } else {
                     final BookObject bookObject = (BookObject) parent.getItemAtPosition(position);
                     AlertDialog.Builder cancel = new AlertDialog.Builder(CategoryViewActivity.this)

@@ -66,7 +66,6 @@
                             android:id="@+id/addBookName"
                             style="@style/addBookText"
                             android:hint="@string/bookName"
-                            android:nextFocusDown="@+id/addBookPublisher"
                             android:singleLine="true"
                             android:maxLines="1" />
 
@@ -94,7 +93,6 @@
                             android:id="@+id/addBookPublisher"
                             style="@style/addBookText"
                             android:hint="@string/bookPublisher"
-                            android:nextFocusDown="@+id/addBookCostPrice"
                             android:singleLine="true"
                             android:maxLines="1" />
 
@@ -122,7 +120,6 @@
                             style="@style/addBookText"
                             android:hint="@string/bookCp"
                             android:inputType="number"
-                            android:nextFocusDown="@+id/addBookSellingPrice"
                             android:maxLines="1" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -149,7 +146,6 @@
                             style="@style/addBookText"
                             android:hint="@string/bookSp"
                             android:inputType="number"
-                            android:nextFocusDown="@+id/addBookEdition"
                             android:maxLines="1" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -176,7 +172,6 @@
                             style="@style/addBookText"
                             android:hint="@string/bookEdition"
                             android:inputType="number"
-                            android:nextFocusDown="@+id/addBookComments"
                             android:maxLines="1" />
 
                     </android.support.design.widget.TextInputLayout>

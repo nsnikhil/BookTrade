@@ -3,8 +3,11 @@ package com.trade.book.booktrade;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -97,7 +100,15 @@ public class SearchActivity extends AppCompatActivity {
                 Bundle b = new Bundle();
                 b.putSerializable(getResources().getString(R.string.intenKeyObejct), bookObject);
                 detail.putExtras(b);
-                startActivity(detail);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    Pair<View, String> p1 = Pair.create(view, "transitionBookName");
+                    Pair<View, String> p2 = Pair.create(view, "transitionBookPublisher");
+                    Pair<View, String> p3 = Pair.create(view, "transitionBookImage");
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(SearchActivity.this, p1, p2, p3);
+                    startActivity(detail,options.toBundle());
+                }else {
+                    startActivity(detail);
+                }
             }
         });
     }
