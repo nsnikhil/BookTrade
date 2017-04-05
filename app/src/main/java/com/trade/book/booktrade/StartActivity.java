@@ -37,6 +37,8 @@ import android.widget.Toast;
 
 import com.claudiodegio.msv.MaterialSearchView;
 import com.claudiodegio.msv.OnSearchViewListener;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.trade.book.booktrade.fragments.*;
 import com.trade.book.booktrade.interfaces.RequestListScrollChange;
@@ -92,6 +94,42 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
             ft.hide(myCartFragment);
             ft.commit();
         }
+    }
+
+    private void buildTapTarget(){
+        TapTargetView.showFor(this, TapTarget.forView(findViewById(R.id.bottomFabAdd), "Click + to upload a book", "")
+                .icon(getResources().getDrawable(R.drawable.ic_add_white_48dp))
+                .targetCircleColor(R.color.colorAccent),
+        new TapTargetView.Listener() {
+            SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+            @Override
+            public void onTargetClick(TapTargetView view) {
+                super.onTargetClick(view);
+                view.dismiss(false);
+                fabClick();
+            }
+
+            @Override
+            public void onTargetCancel(TapTargetView view) {
+                super.onTargetCancel(view);
+                view.dismiss(false);
+            }
+
+            @Override
+            public void onOuterCircleClick(TapTargetView view) {
+                super.onOuterCircleClick(view);
+                view.dismiss(false);
+            }
+
+            @Override
+            public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
+                spf.edit().putInt(getResources().getString(R.string.prefFirstOpen),1).apply();
+                view.dismiss(false);
+                super.onTargetDismissed(view, userInitiated);
+            }
+        });
+
     }
 
     @Override
@@ -166,6 +204,10 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
             errorImage.setVisibility(View.GONE);
             mBottomNaviagtionView.setVisibility(View.VISIBLE);
             mFabAddBook.setVisibility(View.VISIBLE);
+            SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            if(spf.getInt(getResources().getString(R.string.prefFirstOpen),0)==0){
+                buildTapTarget();
+            }
         } else {
             removeOffConnection(savedInstanceState);
         }
@@ -192,16 +234,20 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
         }
     }
 
+    private void fabClick(){
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if (spf.getBoolean(getResources().getString(R.string.prefAccountIndicator), false)) {
+            startActivityForResult(new Intent(StartActivity.this, AddBook.class), mAddBookRequestCode);
+        } else {
+            checkFirst();
+        }
+    }
+
     private void setClickListeners() {
         mFabAddBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                if (spf.getBoolean(getResources().getString(R.string.prefAccountIndicator), false)) {
-                    startActivityForResult(new Intent(StartActivity.this, AddBook.class), mAddBookRequestCode);
-                } else {
-                    checkFirst();
-                }
+               fabClick();
             }
         });
         mBottomNaviagtionView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
