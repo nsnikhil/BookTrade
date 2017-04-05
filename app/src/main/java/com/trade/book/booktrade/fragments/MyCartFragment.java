@@ -38,6 +38,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.PurchaseActivity;
 import com.trade.book.booktrade.R;
+import com.trade.book.booktrade.StartActivity;
 import com.trade.book.booktrade.adapters.adapterCart;
 import com.trade.book.booktrade.cartData.CartTables.tablecart;
 import com.trade.book.booktrade.cartData.CartTables;
@@ -60,6 +61,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     adapterCart cartAdapter;
     private static final String mNullValue = "N/A";
     RequestListScrollChange scrollChange;
+    private int mCursorCount = 0;
 
     public MyCartFragment() {
 
@@ -260,7 +262,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
 
     private Dialog uploadigDialog() {
         AlertDialog.Builder uploading = new AlertDialog.Builder(getActivity());
-        uploading.setTitle("\n" + "Processing..." + "\n").setMessage("\n").setCancelable(false).create().show();
+        uploading.setMessage("Processing...").setCancelable(false).create().show();
         Dialog up = uploading.create();
         return up;
     }
@@ -275,9 +277,10 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
+                uploadigDialog().dismiss();
                 getActivity().getContentResolver().delete(CartTables.mCartContentUri, null, null);
                 getActivity().finish();
-                uploadigDialog().dismiss();
+                startActivity(new Intent(getActivity(), StartActivity.class));
             }
         }, 2000);
     }
@@ -365,13 +368,13 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
                 .build().toString();
     }
 
-    private void removeSold(final int bid) {
+    private void removeSold(final int bid, final int count, final Dialog d) {
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, buildSoldUri(bid), null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 try {
-                    removeIfAvailable(response, bid);
+                    removeIfAvailable(response, bid,count,d);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -385,13 +388,24 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
         requestQueue.add(jsonArrayRequest);
     }
 
-    private void removeIfAvailable(JSONArray status, int id) throws JSONException {
+    private void removeIfAvailable(JSONArray status, int id,int count,Dialog d) throws JSONException {
         if (status.length() > 0) {
             JSONObject obj = status.getJSONObject(0);
             int statusCode = obj.getInt("status");
+            mCursorCount++;
             if (statusCode == 1) {
                 getActivity().getContentResolver().delete(Uri.withAppendedPath(CartTables.mCartContentUri, String.valueOf(id)), null, null);
                 Toast.makeText(getActivity(), "Item removed from cart as it was sold", Toast.LENGTH_SHORT).show();
+            }
+        }
+        if(mCursorCount==count){
+            Cursor c1 = getActivity().getContentResolver().query(CartTables.mCartContentUri, null, null, null, null);
+            mCursorCount=0;
+            d.dismiss();
+            if(c1.getCount()>0){
+                showCheckOutDialog();
+            }else {
+                Toast.makeText(getActivity(),"Cart Empty",Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -403,13 +417,11 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
         final Dialog d = wait.create();
         d.show();
         while (c.moveToNext()) {
-            removeSold(c.getInt(c.getColumnIndex(tablecart.mBuid)));
+            removeSold(c.getInt(c.getColumnIndex(tablecart.mBuid)),c.getCount(),d);
         }
-        showCheckOutDialog(d);
     }
 
-    private void showCheckOutDialog(Dialog d){
-        d.dismiss();
+    private void showCheckOutDialog(){
         Cursor c = getActivity().getContentResolver().query(CartTables.mCartContentUri, null, null, null, null);
         int sp = 0;
         while (c.moveToNext()) {

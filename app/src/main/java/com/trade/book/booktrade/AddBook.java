@@ -5,11 +5,14 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -101,7 +104,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
 
     private Dialog uploadigDialog() {
         AlertDialog.Builder uploading = new AlertDialog.Builder(AddBook.this);
-        uploading.setTitle("\n" + "Processing..." + "\n").setMessage("\n").setCancelable(false);
+        uploading.setMessage("Processing...").setCancelable(false);
         Dialog d = uploading.create();
         return d;
     }

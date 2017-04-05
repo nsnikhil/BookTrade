@@ -153,7 +153,7 @@ public class dialogFragmentPurchase extends DialogFragment {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, buildTransactionUri(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(getActivity(), response, Toast.LENGTH_SHORT).show();
+
             }
         }, new Response.ErrorListener() {
             @Override
