@@ -529,6 +529,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void chooseImageAction() {
+        Toast.makeText(getApplicationContext(),"Its is preferred to use add images via gallery because of a bug in camera upload",Toast.LENGTH_LONG).show();
         AlertDialog.Builder choosePath = new AlertDialog.Builder(AddBook.this);
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(AddBook.this, android.R.layout.simple_list_item_1);
         arrayAdapter.add("Take a picture");

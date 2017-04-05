@@ -143,7 +143,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if(prevVisibleItem != firstVisibleItem){
                     if(prevVisibleItem < firstVisibleItem){
-                        if (checkOut.getVisibility() == View.VISIBLE) {
+                        /*if (checkOut.getVisibility() == View.VISIBLE) {
                             checkOut.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
@@ -151,11 +151,11 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
                                     checkOut.setVisibility(View.GONE);
                                 }
                             });
-                        }
+                        }*/
                         scrollChange.hideItems();
                     }
                     else{
-                        if (checkOut.getVisibility() == View.GONE) {
+                        /*if (checkOut.getVisibility() == View.GONE) {
                             checkOut.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
@@ -163,7 +163,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
                                     checkOut.setVisibility(View.VISIBLE);
                                 }
                             });
-                        }
+                        }*/
                         scrollChange.showItems();
                     }
                     prevVisibleItem = firstVisibleItem;

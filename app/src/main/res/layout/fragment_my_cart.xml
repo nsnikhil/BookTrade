@@ -5,25 +5,20 @@
     android:background="@drawable/background"
     tools:context="com.trade.book.booktrade.fragments.MyCartFragment">
 
-
     <GridView
         android:id="@+id/cartList"
         style="@style/matchParent"
         android:numColumns="2"/>
 
-
     <ImageView
+        android:contentDescription="@string/ImageDescriptionError"
+        style="@style/errorImage"
         android:id="@+id/cartEmpty"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/emptycrt"
-        android:visibility="gone" />
+        android:src="@drawable/emptycrt" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/cartCheckOut"
         style="@style/fab"
-        app:backgroundTint="#03A9F4"
         android:src="@drawable/ic_shopping_cart_white_48dp"
         app:fabSize="normal" />
 

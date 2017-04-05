@@ -14,10 +14,10 @@
             android:id="@+id/dialogPhone"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:hint="Phone No"
+            android:hint="@string/dialogPhone"
             android:inputType="phone"
             android:padding="@dimen/eight"
-            android:singleLine="true" />
+            android:maxLines="1" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -31,7 +31,7 @@
             android:id="@+id/dialogAddress"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:hint="Address"
+            android:hint="@string/dialogAddress"
             android:inputType="textPostalAddress"
             android:padding="@dimen/eight" />
 
@@ -39,11 +39,10 @@
 
     <Button
         android:id="@+id/dialogSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/wrapContent"
         android:layout_gravity="end"
         android:layout_marginTop="@dimen/eight"
-        android:text="Save"
+        android:text="@string/dialogSave"
         android:textColor="@color/white"
         android:theme="@style/buttonClr" />
 

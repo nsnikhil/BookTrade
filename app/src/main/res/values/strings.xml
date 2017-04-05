@@ -10,6 +10,23 @@
     <string name="facebook_app_id">1653383558302081</string>
     <string name="speech_prompt">Say the book name</string>
     <string name="speech_not_supported">Sorry! Your device doesnot support speech input</string>
+    <string name="ImageDescriptionError">Error</string>
+    <string name="ImageDescriptionBackground">Background</string>
+
+
+    <!-- IntroText-->
+    <string name="introSignin">Sign In</string>
+    <string name="introExtraDetails">Just few more Details</string>
+    <string name="introTermsHeading">Terms and Condition</string>
+    <string name="introLocate">Let us locate you</string>
+    <!-- -->
+
+    <!-- AccoountText-->
+    <string name="accoutName">Name</string>
+    <string name="accoutPurchase">My Purchases</string>
+    <string name="accoutUpload">My Uploads</string>
+    <string name="accoutSignOut">Sign Out</string>
+    <!-- -->
 
     <!-- url-->
     <string name="urlServer" translatable="false">http://ec2-35-154-208-1.ap-south-1.compute.amazonaws.com/</string>
@@ -65,7 +82,7 @@
     <string name="bookEdition">Edition</string>
     <string name="bookDescription">Comment or Notes(if any)</string>
     <string name="bookCondition">Condition</string>
-    <string name="bookCateogory">Cateogory</string>
+    <string name="bookCateogory">Category</string>
     <string-array name="bookConditionEntry">
         <item>New</item>
         <item>Used</item>
@@ -91,6 +108,27 @@
         <item>Short Stories</item>
         <item>Other Books</item>
     </string-array>
+    <!-- -->
+
+
+    <!-- PurchaseText-->
+    <string name="purchaseBuyNow">Buy Now</string>
+    <string name="purchaseAddToCart">Add To Cart</string>
+    <string name="purchaseCannotBuyYourOwnBook">You cannot buy your own book</string>
+    <string name="purchaseCannotModifySoldBooks">You cannot modify a book that has been sold</string>
+    <string name="purchaseEdit">Edit</string>
+    <string name="purchaseDelete">Delete</string>
+    <string name="purchaseDescription">Description</string>
+    <!-- -->
+
+    <!-- dialogText-->
+    <string name="dialogPhone">Phone No</string>
+    <string name="dialogAddress">Address</string>
+    <string name="dialogSave">Save</string>
+    <string name="dialogPrice">Price</string>
+    <string name="dialogConvenience">Convenience Fee</string>
+    <string name="dialogTotal">Total Price</string>
+    <string name="dialogAddRequest">Add book for request</string>
     <!-- -->
 
 

@@ -43,7 +43,7 @@
                 android:transitionName="transitionBookPublisher"
                 android:layout_marginBottom="@dimen/eight"
                 android:layout_marginStart="@dimen/eight"
-                android:fontFamily="sans-serif-thin"
+                android:fontFamily="sans-serif-light"
                 android:textStyle="bold" />
 
             <TextView
@@ -52,7 +52,7 @@
                 android:layout_gravity="end|bottom"
                 android:layout_marginBottom="@dimen/eight"
                 android:layout_marginEnd="@dimen/eight"
-                android:fontFamily="sans-serif"
+                android:fontFamily="sans-serif-light"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />

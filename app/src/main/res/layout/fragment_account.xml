@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/matchParent"
     android:background="@color/colorBackground"
+    android:clipToPadding="false"
     tools:context="com.trade.book.booktrade.fragments.AccountFragment">
 
 
     <ImageView
+        android:contentDescription="@string/ImageDescriptionBackground"
        style="@style/matchParent"
         android:scaleType="centerCrop"
-        android:background="@drawable/back2"/>
+        android:src="@drawable/background"/>
 
     <LinearLayout
         style="@style/verticalLinearLayout"
         android:layout_height="wrap_content"
+        android:clipToPadding="false"
         android:id="@+id/accountImageContainer"
         android:layout_margin="@dimen/sixteen">
 
@@ -34,8 +36,8 @@
             android:fontFamily="sans-serif-thin"
             android:textAllCaps="true"
             android:textStyle="bold"
-            android:text="Name"
-            android:textColor="@color/colorBackground"
+            android:text="@string/app_name"
+            android:textColor="@color/colorAccent"
             android:textSize="36sp" />
 
     </LinearLayout>
@@ -58,27 +60,13 @@
 
         <Button
             android:id="@+id/accountPurchase"
-            android:layout_width="0dp"
-            android:layout_margin="@dimen/eight"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:background="@drawable/roundbutton"
-            android:textColor="#455A64"
-            android:text="My Purchases" />
+            style="@style/accountButtons"
+            android:text="@string/accoutPurchase" />
 
         <Button
             android:id="@+id/accountUploads"
-            android:layout_margin="@dimen/eight"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:background="@drawable/roundbutton"
-            android:textColor="#455A64"
-            android:text="My Uploads " />
+            style="@style/accountButtons"
+            android:text="@string/accoutUpload" />
 
         </LinearLayout>
 
@@ -92,8 +80,8 @@
             android:padding="@dimen/sixteen"
             android:background="@drawable/roundbutton"
             android:layout_margin="@dimen/sixteen"
-            android:textColor="#455A64"
-            android:text="Sign Out" />
+            android:textColor="@color/colorBackground"
+            android:text="@string/accoutSignOut" />
 
     </LinearLayout>
 

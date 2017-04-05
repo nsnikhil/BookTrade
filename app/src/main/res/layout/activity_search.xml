@@ -22,19 +22,14 @@
     </GridView>
 
     <ImageView
-        android:layout_width="240dp"
+        android:contentDescription="@string/ImageDescriptionError"
+        style="@style/errorImage"
         android:id="@+id/searchErrorImage"
-        android:visibility="gone"
-        android:src="@drawable/nodata"
-        android:layout_centerInParent="true"
-        android:layout_height="240dp" />
+        android:src="@drawable/nodata" />
 
     <ProgressBar
-        style="@android:style/Widget.DeviceDefault.ProgressBar.Large"
-        android:id="@+id/searchProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        style="@style/progressbar"
+        android:id="@+id/searchProgress" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/searchRequest"

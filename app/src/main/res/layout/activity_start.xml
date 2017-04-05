@@ -7,13 +7,8 @@
     android:background="@color/colorBackground"
     tools:context="com.trade.book.booktrade.StartActivity">
 
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/bottomToolbar"
-        style="@style/toolbar"
-        android:background="@drawable/toolbargradeint"
-        android:theme="@style/AppToolbar"
-        app:layout_scrollFlags="scroll|enterAlways" />
+    <include layout="@layout/toolbar"
+        android:id="@+id/bottomToolbar"/>
 
 
     <android.support.design.widget.BottomNavigationView
@@ -21,6 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:background="@drawable/toolbargradeint"
+        app:elevation="@dimen/toolbarElevation"
         app:itemBackground="@color/colorPrimary"
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white"

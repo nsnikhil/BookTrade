@@ -8,8 +8,6 @@
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
-
-
     <style name="AddBookTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -60,7 +58,17 @@
     <style name="toolbar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:background">@drawable/toolbargradeint</item>
+    </style>
+
+    <style name="purchaseDialog">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">@string/app_name</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="fab">
@@ -98,6 +106,29 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="purchaseTextView">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_margin">@dimen/eight</item>
+        <item name="android:padding">@dimen/eight</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="errorImage">
+        <item name="android:layout_height">@dimen/drawerWidth</item>
+        <item name="android:layout_width">@dimen/drawerWidth</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="progressbar" parent="@android:style/Widget.DeviceDefault.ProgressBar.Large">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
     <style name="detailsText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -109,11 +140,28 @@
     <style name="headerImage">
         <item name="android:layout_width">@dimen/headerCircleImage</item>
         <item name="android:layout_height">@dimen/headerCircleImage</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:src">@drawable/profile</item>
+    </style>
+
+    <style name="accountButtons">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/eight</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@drawable/roundbutton</item>
+        <item name="android:textColor">@color/colorBackground</item>
     </style>
 
     <style name="headerText">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/sixteen</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="AppToolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">

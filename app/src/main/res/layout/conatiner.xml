@@ -3,8 +3,7 @@
     android:background="@color/colorBackground"
     style="@style/verticalLinearLayout">
 
-    <android.support.v7.widget.Toolbar
-        style="@style/toolbar"
+    <include layout="@layout/toolbar"
         android:id="@+id/toolbarContainer"/>
 
     <LinearLayout

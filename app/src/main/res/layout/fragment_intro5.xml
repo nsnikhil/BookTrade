@@ -9,15 +9,14 @@
     <TextView
         style="@style/wrapContent"
         android:layout_gravity="center"
-        android:textStyle="bold"
         android:id="@+id/intro5LocateText"
         android:layout_margin="@dimen/sixteen"
-        android:fontFamily="sans-serif-thin"
+        android:fontFamily="sans-serif-light"
         android:layout_centerInParent="true"
         android:textSize="28sp"
         android:textAlignment="center"
         android:layout_above="@id/intro3DetailsConatiner"
         android:textColor="@color/colorAccent"
-        android:text="Let us locate you"/>
+        android:text="@string/introLocate"/>
 
 </RelativeLayout>

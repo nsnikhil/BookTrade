@@ -11,7 +11,7 @@
         android:textStyle="bold"
         android:fontFamily="sans-serif"
         android:textColor="@color/colorAccent"
-        android:text="Physics by nooton will be delivered to 12/1 ramlal mukherjee lane"
+        android:text="@string/app_name"
         android:layout_height="wrap_content" />
 
    <LinearLayout
@@ -20,23 +20,12 @@
        android:layout_height="wrap_content">
 
        <TextView
-           android:layout_width="0dp"
-           android:layout_weight="1"
-           android:text="Actual Price"
-           android:textSize="14sp"
-           android:textStyle="bold"
-           android:fontFamily="sans-serif-light"
-           android:layout_height="wrap_content" />
+           style="@style/purchaseDialog"
+           android:text="@string/dialogPrice" />
 
        <TextView
-           android:layout_width="0dp"
-           android:layout_weight="1"
-           android:text="0"
-           android:textSize="16sp"
-           android:textStyle="bold"
-           android:fontFamily="sans-serif-light"
-           android:id="@+id/dialogPurchasePrice"
-           android:layout_height="wrap_content" />
+           style="@style/purchaseDialog"
+           android:id="@+id/dialogPurchasePrice" />
 
    </LinearLayout>
 
@@ -46,23 +35,12 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="Convenience Fee"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-light"
-            android:layout_height="wrap_content" />
+            style="@style/purchaseDialog"
+            android:text="@string/dialogConvenience" />
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="0"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-light"
-            android:id="@+id/dialogPurchaseExtra"
-            android:layout_height="wrap_content" />
+            style="@style/purchaseDialog"
+            android:id="@+id/dialogPurchaseExtra" />
 
     </LinearLayout>
 
@@ -72,30 +50,19 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="Total"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-light"
-            android:layout_height="wrap_content" />
+            style="@style/purchaseDialog"
+            android:text="@string/dialogTotal" />
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="0"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-light"
-            android:id="@+id/dialogPurchaseTotal"
-            android:layout_height="wrap_content" />
+            style="@style/purchaseDialog"
+            android:id="@+id/dialogPurchaseTotal" />
 
     </LinearLayout>
 
     <Button
         android:layout_width="match_parent"
         android:layout_margin="@dimen/eight"
-        android:text="Buy"
+        android:text="@string/purchaseBuyNow"
         android:theme="@style/buttonClr"
         android:textColor="@color/white"
         android:id="@+id/dialogPurchaseBuy"

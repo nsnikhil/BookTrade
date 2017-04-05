@@ -56,7 +56,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
             setValue(bObject);
             SharedPreferences sfp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             if(bObject.getUserId().equalsIgnoreCase(sfp.getString(getResources().getString(R.string.prefAccountId),mNullValue))){
-                purchaseError.setText("You cannot buy your own book");
+                purchaseError.setText(getResources().getString(R.string.purchaseCannotBuyYourOwnBook));
                 purchaseError.setVisibility(View.VISIBLE);
                 buttonConatiner.setVisibility(View.GONE);
             }else {
@@ -68,14 +68,14 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         getUrl();
         if(getIntent().getExtras().getInt(getResources().getString(R.string.intentfromupload))!=0){
             if(bObject.getStatus()==1){
-                purchaseError.setText("You cannot modify a book that has been sold");
+                purchaseError.setText(getResources().getString(R.string.purchaseCannotModifySoldBooks));
                 purchaseError.setVisibility(View.VISIBLE);
                 buttonConatiner.setVisibility(View.GONE);
             }else {
                 purchaseError.setVisibility(View.GONE);
                 buttonConatiner.setVisibility(View.VISIBLE);
-                buyNow.setText("Edit");
-                addToCart.setText("Delete");
+                buyNow.setText(getResources().getString(R.string.purchaseEdit));
+                addToCart.setText(getResources().getString(R.string.purchaseDelete));
             }
         }
     }
@@ -85,7 +85,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         publisher = (TextView)findViewById(R.id.purchasePublisher);
         edition = (TextView)findViewById(R.id.purchaseEdition);
         description = (TextView)findViewById(R.id.purchaseDescription);
-        cateogory = (TextView)findViewById(R.id.purchaseCateogory);
+        cateogory = (TextView)findViewById(R.id.purchaseCategory);
         condition = (TextView)findViewById(R.id.purchaseCondition);
         buyNow = (Button)findViewById(R.id.purchaseBuy);
 
@@ -106,10 +106,14 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
     private void setValue(BookObject bookObject){
         name.setText(bookObject.getName());
         publisher.setText(bookObject.getPublisher());
-        edition.setText("Edition : "+ bookObject.getEdition());
-        description.setText("Description : "+ bookObject.getDescription());
-        cateogory.setText("Cateogory : "+ bookObject.getCateogory());
-        condition.setText("Condition : "+ bookObject.getCondition());
+        edition.setText(getResources().getString(R.string.bookEdition)+" : "+bookObject.getEdition());
+        if(bookObject.getDescription().equalsIgnoreCase("")||bookObject.getDescription().isEmpty()){
+            description.setVisibility(View.GONE);
+        }else {
+            description.setText(getResources().getString(R.string.purchaseDescription)+" : "+ bookObject.getDescription());
+        }
+        cateogory.setText(getResources().getString(R.string.bookCateogory)+" : "+ bookObject.getCateogory());
+        condition.setText(getResources().getString(R.string.bookCondition)+" : "+ bookObject.getCondition());
         imageHolder.setBackgroundColor(getResources().getColor(R.color.cardview_shadow_start_color));
         buyNow.setText(" Buy Now "+ " र " +bookObject.getSellingPrice());
     }

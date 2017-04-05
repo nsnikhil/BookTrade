@@ -15,16 +15,18 @@
 
         <LinearLayout
             style="@style/wrapContent"
-            android:layout_marginRight="@dimen/sixteen"
+            android:layout_marginEnd="@dimen/sixteen"
             android:orientation="vertical">
 
             <ImageView
+                android:contentDescription="@string/dialogPhone"
                 style="@style/wrapContent"
                 android:layout_marginBottom="@dimen/sixteen"
                 android:src="@drawable/ic_phone_black_48dp"
                 android:tint="@color/colorAccent" />
 
             <ImageView
+                android:contentDescription="@string/dialogAddress"
                 style="@style/wrapContent"
                 android:src="@drawable/ic_home_black_48dp"
                 android:tint="@color/colorAccent" />
@@ -47,7 +49,7 @@
                     style="@style/wrapContent"
                     android:layout_width="match_parent"
                     android:layout_marginBottom="@dimen/sixteen"
-                    android:hint="Phone no"
+                    android:hint="@string/dialogPhone"
                     android:inputType="phone"
                     android:src="@drawable/ic_phone_white_48dp" />
 
@@ -62,7 +64,7 @@
                     android:id="@+id/intro3Address"
                     style="@style/wrapContent"
                     android:layout_width="match_parent"
-                    android:hint="Address"
+                    android:hint="@string/dialogAddress"
                     android:src="@drawable/ic_home_white_48dp" />
 
             </android.support.design.widget.TextInputLayout>
@@ -77,11 +79,10 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:layout_margin="@dimen/sixteen"
-        android:fontFamily="sans-serif-thin"
-        android:text="Just few more Details"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/introExtraDetails"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
-        android:textSize="28sp"
-        android:textStyle="bold" />
+        android:textSize="28sp" />
 
 </RelativeLayout>

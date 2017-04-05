@@ -12,7 +12,7 @@
         android:fontFamily="sans-serif-light"
         android:textStyle="bold"
         android:layout_width="250dp"
-        android:text="Add book for request" />
+        android:text="@string/dialogAddRequest" />
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -45,13 +45,12 @@
     </android.support.design.widget.TextInputLayout>
 
     <Button
+        style="@style/wrapContent"
         android:layout_marginTop="@dimen/eight"
-        android:layout_width="wrap_content"
-        android:text="Save"
+        android:text="@string/dialogSave"
         android:id="@+id/requestSave"
         android:theme="@style/buttonClr"
         android:textColor="@color/white"
-        android:layout_gravity="end"
-        android:layout_height="wrap_content" />
+        android:layout_gravity="end" />
 
 </LinearLayout>

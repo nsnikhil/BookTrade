@@ -7,9 +7,7 @@
     <android.support.design.widget.TabLayout
         android:id="@+id/mainPagerTabs"
         style="@style/toolbar"
-        android:background="@drawable/toolbargradeint"
         android:elevation="@dimen/toolbarElevation"
-        android:theme="@style/AppToolbar"
         app:tabIndicatorColor="@color/white"
         app:tabIndicatorHeight="2dp"
         app:tabSelectedTextColor="@color/white"

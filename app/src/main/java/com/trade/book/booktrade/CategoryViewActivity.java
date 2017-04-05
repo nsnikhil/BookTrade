@@ -33,12 +33,12 @@ import java.util.ArrayList;
 
 public class CategoryViewActivity extends AppCompatActivity {
 
+    private static final int mRequestCode = 151;
     GridView catList;
     ImageView emptyCat;
     Toolbar catToolbar;
     ArrayList<BookObject> categoryList;
     int mUploadIndicator = 0;
-    private static final int mRequestCode = 151;
     SwipeRefreshLayout mSwipeRefresh;
     String catUri;
 
@@ -51,45 +51,45 @@ public class CategoryViewActivity extends AppCompatActivity {
         mUploadIndicator = getIntent().getExtras().getInt(getResources().getString(R.string.intenupind));
         initilize();
         mSwipeRefresh.setRefreshing(true);
-        if(mUploadIndicator==123){
-            getList(catUri,1);
-        }else {
-            getList(catUri,0);
+        if (mUploadIndicator == 123) {
+            getList(catUri, 1);
+        } else {
+            getList(catUri, 0);
         }
 
     }
 
     private void initilize() {
-        catList = (GridView)findViewById(R.id.catrLst);
-        emptyCat = (ImageView)findViewById(R.id.categoryEmpty);
-        catToolbar = (Toolbar)findViewById(R.id.toolbarCategory);
-        mSwipeRefresh = (SwipeRefreshLayout)findViewById(R.id.catListSwipeRefresh);
+        catList = (GridView) findViewById(R.id.catrLst);
+        emptyCat = (ImageView) findViewById(R.id.categoryEmpty);
+        catToolbar = (Toolbar) findViewById(R.id.toolbarCategory);
+        mSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.catListSwipeRefresh);
         setSupportActionBar(catToolbar);
-        if(mUploadIndicator==0){
-            getSupportActionBar().setTitle(getResources().getStringArray(R.array.bookCateogories)[ getIntent().getExtras().getInt(getResources().getString(R.string.intencateuripos))]);
-        }else if(mUploadIndicator==123){
+        if (mUploadIndicator == 0) {
+            getSupportActionBar().setTitle(getResources().getStringArray(R.array.bookCateogories)[getIntent().getExtras().getInt(getResources().getString(R.string.intencateuripos))]);
+        } else if (mUploadIndicator == 123) {
             getSupportActionBar().setTitle("My Purchases");
         } else {
             getSupportActionBar().setTitle("My Uploads");
         }
         categoryList = new ArrayList<>();
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                catList.setAdapter(null);
-                categoryList.clear();
-                if(mUploadIndicator==123){
-                    getList(catUri,1);
-                }else {
-                    getList(catUri,0);
-                }
-            }
-        }
+                                               @Override
+                                               public void onRefresh() {
+                                                   catList.setAdapter(null);
+                                                   categoryList.clear();
+                                                   if (mUploadIndicator == 123) {
+                                                       getList(catUri, 1);
+                                                   } else {
+                                                       getList(catUri, 0);
+                                                   }
+                                               }
+                                           }
         );
         catList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(mUploadIndicator!=123) {
+                if (mUploadIndicator != 123) {
                     BookObject bookObject = (BookObject) parent.getItemAtPosition(position);
                     Intent detail = new Intent(getApplicationContext(), PurchaseActivity.class);
                     Bundle b = new Bundle();
@@ -99,7 +99,7 @@ public class CategoryViewActivity extends AppCompatActivity {
                         detail.putExtra(getResources().getString(R.string.intentfromupload), 123);
                     }
                     startActivityForResult(detail, mRequestCode);
-                }else {
+                } else {
                     final BookObject bookObject = (BookObject) parent.getItemAtPosition(position);
                     AlertDialog.Builder cancel = new AlertDialog.Builder(CategoryViewActivity.this)
                             .setTitle("Warning")
@@ -112,7 +112,7 @@ public class CategoryViewActivity extends AppCompatActivity {
                             }).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                  int bookId = bookObject.getBid();
+                                    int bookId = bookObject.getBid();
                                     cancelPurchase(bookId);
                                     moveToAvailable(bookId);
                                 }
@@ -123,53 +123,53 @@ public class CategoryViewActivity extends AppCompatActivity {
         });
     }
 
-    private String buildCancelPurchaseUri(int bid){
+    private String buildCancelPurchaseUri(int bid) {
         String host = getResources().getString(R.string.urlServer);
         String cancelPurchase = getResources().getString(R.string.urlTransactionDelete);
-        String url = host+cancelPurchase;
+        String url = host + cancelPurchase;
         String bidQuery = "bkid";
-        String bidValue  = String.valueOf(bid);
-        return Uri.parse(url).buildUpon().appendQueryParameter(bidQuery,bidValue).build().toString();
+        String bidValue = String.valueOf(bid);
+        return Uri.parse(url).buildUpon().appendQueryParameter(bidQuery, bidValue).build().toString();
     }
 
-    private void cancelPurchase(int bid){
+    private void cancelPurchase(int bid) {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, buildCancelPurchaseUri(bid), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(getApplicationContext(),response,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
         requestQueue.add(stringRequest);
     }
 
-    private String buildMoveToAvailable(int bid){
+    private String buildMoveToAvailable(int bid) {
         String host = getResources().getString(R.string.urlServer);
         String cancelPurchase = getResources().getString(R.string.urlMoveToAvailable);
-        String url = host+cancelPurchase;
+        String url = host + cancelPurchase;
         String bidQuery = "id";
-        String bidValue  = String.valueOf(bid);
-        return Uri.parse(url).buildUpon().appendQueryParameter(bidQuery,bidValue).build().toString();
+        String bidValue = String.valueOf(bid);
+        return Uri.parse(url).buildUpon().appendQueryParameter(bidQuery, bidValue).build().toString();
     }
 
-    private void moveToAvailable(int bid){
+    private void moveToAvailable(int bid) {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, buildMoveToAvailable(bid), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(getApplicationContext(),response,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
                 finish();
-                startActivity(new Intent(CategoryViewActivity.this,StartActivity.class));
+                startActivity(new Intent(CategoryViewActivity.this, StartActivity.class));
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
         requestQueue.add(stringRequest);
@@ -177,22 +177,22 @@ public class CategoryViewActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==mRequestCode){
-            if(resultCode==RESULT_OK){
+        if (requestCode == mRequestCode) {
+            if (resultCode == RESULT_OK) {
                 catList.setAdapter(null);
                 categoryList.clear();
-                getList(catUri,0);
+                getList(catUri, 0);
             }
         }
     }
 
-    private void getList(String url, final int k){
+    private void getList(String url, final int k) {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 try {
-                    addToList(response,k);
+                    addToList(response, k);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -200,13 +200,13 @@ public class CategoryViewActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
         requestQueue.add(jsonArrayRequest);
     }
 
-    private void addToList(JSONArray response,int k) throws JSONException {
+    private void addToList(JSONArray response, int k) throws JSONException {
         if (response.length() > 0) {
             for (int i = 0; i < response.length(); i++) {
                 JSONObject jsonObject = response.getJSONObject(i);
@@ -230,13 +230,13 @@ public class CategoryViewActivity extends AppCompatActivity {
                 String photoUrlName6 = jsonObject.getString("pic6");
                 String photoUrlName7 = jsonObject.getString("pic7");
                 int status = jsonObject.getInt("status");
-                categoryList.add(new BookObject(bid,name, publisher, costPrice, sellingPrice, edition, description, condtn, cateogory, userId, itemId
-                        ,photoUrlName0,photoUrlName1,photoUrlName2,photoUrlName3,photoUrlName4,photoUrlName5,photoUrlName6,photoUrlName7,status));
+                categoryList.add(new BookObject(bid, name, publisher, costPrice, sellingPrice, edition, description, condtn, cateogory, userId, itemId
+                        , photoUrlName0, photoUrlName1, photoUrlName2, photoUrlName3, photoUrlName4, photoUrlName5, photoUrlName6, photoUrlName7, status));
             }
             mSwipeRefresh.setRefreshing(false);
-            adapterBookList bookAdapter = new adapterBookList(getApplicationContext(), categoryList,k);
+            adapterBookList bookAdapter = new adapterBookList(getApplicationContext(), categoryList, k);
             catList.setAdapter(bookAdapter);
-        }else {
+        } else {
             mSwipeRefresh.setRefreshing(false);
             emptyCat.setVisibility(View.VISIBLE);
         }

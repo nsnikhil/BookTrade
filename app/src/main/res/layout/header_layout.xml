@@ -4,6 +4,7 @@
     android:layout_height="100dp">
 
     <ImageView
+        android:contentDescription="@string/ImageDescriptionBackground"
         style="@style/wrapContent"
         android:scaleType="centerCrop"
         android:src="@drawable/header" />
@@ -15,19 +16,11 @@
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/headerCircleView"
-            style="@style/headerImage"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/profile" />
+            style="@style/headerImage" />
 
         <TextView
             android:id="@+id/headerTextView"
             style="@style/headerText"
-            android:layout_marginStart="@dimen/sixteen"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/sixteen"
-            android:textSize="24sp"
-            android:fontFamily="sans-serif-light"
-            android:textColor="@color/white"
             android:text="@string/app_name" />
 
     </LinearLayout>

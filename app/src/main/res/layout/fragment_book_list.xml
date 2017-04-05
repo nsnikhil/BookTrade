@@ -17,11 +17,9 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <ImageView
+        android:contentDescription="@string/ImageDescriptionError"
+        style="@style/errorImage"
         android:id="@+id/bookListNoBook"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/noobook"
-        android:visibility="gone" />
+        android:src="@drawable/noobook" />
 
 </RelativeLayout>

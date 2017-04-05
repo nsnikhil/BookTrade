@@ -50,8 +50,8 @@ public class MoreFragment extends Fragment {
 
     private void addList(){
         ArrayList<String> moreItem = new ArrayList<>();
-        moreItem.add("You Address");
-        moreItem.add("Refer a Freind");
+        moreItem.add("Your Address");
+        moreItem.add("Refer a Friend");
         moreItem.add("Help");
         moreItem.add("Chat with us");
         moreItem.add("Send Feedback");

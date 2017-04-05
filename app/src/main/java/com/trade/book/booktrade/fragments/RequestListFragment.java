@@ -131,7 +131,7 @@ public class RequestListFragment extends Fragment {
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if(prevVisibleItem != firstVisibleItem){
                     if(prevVisibleItem < firstVisibleItem){
-                        if (requestAdd.getVisibility() == View.VISIBLE) {
+                        /*if (requestAdd.getVisibility() == View.VISIBLE) {
                             requestAdd.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
@@ -139,11 +139,11 @@ public class RequestListFragment extends Fragment {
                                     requestAdd.setVisibility(View.GONE);
                                 }
                             });
-                        }
+                        }*/
                         scrollChange.hideItems();
                     }
                     else{
-                        if (requestAdd.getVisibility() == View.GONE) {
+                        /*if (requestAdd.getVisibility() == View.GONE) {
                             requestAdd.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
@@ -151,7 +151,7 @@ public class RequestListFragment extends Fragment {
                                     requestAdd.setVisibility(View.VISIBLE);
                                 }
                             });
-                        }
+                        }*/
                         scrollChange.showItems();
                     }
                     prevVisibleItem = firstVisibleItem;

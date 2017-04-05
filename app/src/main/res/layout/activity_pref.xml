@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/verticalLinearLayout"
     android:background="@drawable/background"
     tools:context="com.trade.book.booktrade.PrefActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbarPref"
-        android:theme="@style/AppToolbar"
-        style="@style/toolbar" />
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbarPref"/>
 
     <LinearLayout
         android:id="@+id/prefContainer"

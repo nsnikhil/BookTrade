@@ -3,6 +3,7 @@ package com.trade.book.booktrade.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -18,6 +19,7 @@ public class BookPagerFragment extends Fragment {
 
     ViewPager bookPager;
     TabLayout bookTabs;
+
 
     public BookPagerFragment() {
 

@@ -14,6 +14,8 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.BottomNavigationView;
@@ -38,6 +40,8 @@ import com.claudiodegio.msv.OnSearchViewListener;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.trade.book.booktrade.fragments.*;
 import com.trade.book.booktrade.interfaces.RequestListScrollChange;
+
+import java.lang.reflect.Field;
 
 
 public class StartActivity extends AppCompatActivity implements RequestListScrollChange {
@@ -74,11 +78,8 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
             mFragmentBookPager = new BookPagerFragment();
             mRequestListFragment = new RequestListFragment();
             mAccountFragment = new AccountFragment();
-            ;
             mMoreFragment = new MoreFragment();
-            ;
             myCartFragment = new MyCartFragment();
-            ;
             ft.add(R.id.bottomMainContainer, mFragmentBookPager);
             ft.add(R.id.bottomMainContainer, mRequestListFragment);
             ft.add(R.id.bottomMainContainer, mAccountFragment);
@@ -111,8 +112,10 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
 
     private void initialize(Bundle savedInstanceState) {
         mBottomNaviagtionView = (BottomNavigationView) findViewById(R.id.mainBottomNaviagtion);
+        disableShiftMode(mBottomNaviagtionView);
         mBottomToolbar = (Toolbar) findViewById(R.id.bottomToolbar);
         setSupportActionBar(mBottomToolbar);
+        getSupportActionBar().setElevation(0);
         mBottomSearchView = (MaterialSearchView) findViewById(R.id.bottomSearchView);
         mFabAddBook = (FloatingActionButton) findViewById(R.id.bottomFabAdd);
         mBottomConatainer = (RelativeLayout) findViewById(R.id.bottomMainContainer);
@@ -129,6 +132,23 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
             Intent intro = new Intent(StartActivity.this, IntroActivity.class);
             intro.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intro);
+        }
+    }
+
+    public static void disableShiftMode(BottomNavigationView view) {
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
+        try {
+            Field shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
+            shiftingMode.setAccessible(true);
+            shiftingMode.setBoolean(menuView, false);
+            shiftingMode.setAccessible(false);
+            for (int i = 0; i < menuView.getChildCount(); i++) {
+                BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
+                item.setShiftingMode(false);
+                item.setChecked(item.getItemData().isChecked());
+            }
+        } catch (NoSuchFieldException e) {
+        } catch (IllegalAccessException e) {
         }
     }
 
@@ -281,10 +301,10 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
             case 0:
                 getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimaryDark));
-                    getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-                    mBottomToolbar.setBackground(getResources().getDrawable(R.drawable.toolbargradeint));
-                    mBottomNaviagtionView.setItemBackgroundResource(R.drawable.booknav);
+                    //getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimaryDark));
+                    //getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+                    //mBottomToolbar.setBackground(getResources().getDrawable(R.drawable.toolbargradeint));
+                    //mBottomNaviagtionView.setItemBackgroundResource(R.drawable.booknav);
                     getSupportActionBar().setElevation(0);
                 }
                 if (mFabAddBook.getVisibility() == View.GONE) {
@@ -318,38 +338,38 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
         }
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getSupportActionBar().setElevation(getResources().getDimension(R.dimen.toolbarElevation));
-            getWindow().setNavigationBarColor(Color.parseColor(darkColor));
-            getWindow().setStatusBarColor(Color.parseColor(darkColor));
-            mBottomToolbar.setBackgroundColor(Color.parseColor(color));
-            switch (code) {
-                case 0:
-                    mBottomNaviagtionView.setItemBackgroundResource(R.drawable.reqnav);
-                    getSupportActionBar().setTitle(getResources().getString(R.string.navRequest));
-                    break;
-                case 1:
-                    mBottomNaviagtionView.setItemBackgroundResource(R.drawable.cartnav);
-                    getSupportActionBar().setTitle(getResources().getString(R.string.navMyCart));
-                    break;
-                case 2:
-                    mBottomNaviagtionView.setItemBackgroundResource(R.drawable.accnav);
-                    getSupportActionBar().setTitle(getResources().getString(R.string.navaccount));
-                    break;
-                case 3:
-                    mBottomNaviagtionView.setItemBackgroundResource(R.drawable.morenav);
-                    getSupportActionBar().setTitle(getResources().getString(R.string.navMore));
-                    break;
-            }
+            //getWindow().setNavigationBarColor(Color.parseColor(darkColor));
+            // getWindow().setStatusBarColor(Color.parseColor(darkColor));
+            //mBottomToolbar.setBackgroundColor(Color.parseColor(color));
+        }
+        switch (code) {
+            case 0:
+                //mBottomNaviagtionView.setItemBackgroundResource(R.drawable.reqnav);
+                getSupportActionBar().setTitle(getResources().getString(R.string.navRequest));
+                break;
+            case 1:
+                // mBottomNaviagtionView.setItemBackgroundResource(R.drawable.cartnav);
+                getSupportActionBar().setTitle(getResources().getString(R.string.navMyCart));
+                break;
+            case 2:
+                //  mBottomNaviagtionView.setItemBackgroundResource(R.drawable.accnav);
+                getSupportActionBar().setTitle(getResources().getString(R.string.navaccount));
+                break;
+            case 3:
+                //  mBottomNaviagtionView.setItemBackgroundResource(R.drawable.morenav);
+                getSupportActionBar().setTitle(getResources().getString(R.string.navMore));
+                break;
         }
     }
 
     @Override
     public void hideItems() {
-        Handler handler = new Handler();
+        /*Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
                 animateOut();
             }
-        }, 50);
+        }, 50);*/
     }
 
     private void animateOut() {
@@ -419,11 +439,11 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
 
     @Override
     public void showItems() {
-        Handler handler = new Handler();
+        /*Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
                 animateIn();
             }
-        }, 50);
+        }, 50);*/
     }
 }

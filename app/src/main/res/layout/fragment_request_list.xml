@@ -8,29 +8,25 @@
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/requestListSwipeRefresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        style="@style/matchParent">
 
-    <ListView
-        style="@style/matchParent"
-        android:divider="@null"
-        android:id="@+id/requestList"/>
+        <ListView
+            android:id="@+id/requestList"
+            style="@style/matchParent"
+            android:divider="@null" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/requestAdd"
         style="@style/fab"
-        app:backgroundTint="#00796b"
         android:src="@drawable/ic_playlist_add_white_48dp"
         app:fabSize="normal" />
 
     <ImageView
+        android:contentDescription="@string/ImageDescriptionError"
         android:id="@+id/requestListNoRequest"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/norequest"
-        android:visibility="gone" />
+        style="@style/errorImage"
+        android:src="@drawable/norequest" />
 
 </RelativeLayout>
