@@ -46,6 +46,7 @@ dependencies {
     compile 'com.romainpiel.shimmer:library:1.4.0@aar'
     compile 'jp.wasabeef:blurry:2.1.1'
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.9.1'
+    compile 'com.google.firebase:firebase-ads:10.2.1'
     testCompile 'junit:junit:4.12'
 }
 

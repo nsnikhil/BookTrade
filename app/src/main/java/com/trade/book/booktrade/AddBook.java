@@ -547,9 +547,13 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                     }
                 }
                 if (position == 1) {
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    /*Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                     intent.setType("image/*");
-                    startActivityForResult(intent, GALLERY_REQUEST_CODE);
+                    startActivityForResult(intent, GALLERY_REQUEST_CODE);*/
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_REQUEST_CODE);
                 }
             }
         });
