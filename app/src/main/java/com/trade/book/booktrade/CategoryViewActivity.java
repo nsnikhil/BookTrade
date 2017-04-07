@@ -25,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.leakcanary.LeakCanary;
 import com.trade.book.booktrade.adapters.adapterBookList;
 import com.trade.book.booktrade.objects.BookObject;
 
@@ -49,6 +50,10 @@ public class CategoryViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        LeakCanary.install(getApplication());
         setContentView(R.layout.activity_category_view);
         catUri = getIntent().getExtras().getString(getResources().getString(R.string.intencateuri));
         mUploadIndicator = getIntent().getExtras().getInt(getResources().getString(R.string.intenupind));

@@ -27,6 +27,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.leakcanary.LeakCanary;
 import com.trade.book.booktrade.cartData.CartTables;
 import com.trade.book.booktrade.cartData.CartTables.tablecart;
 import com.trade.book.booktrade.objects.BookObject;
@@ -55,6 +56,10 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        LeakCanary.install(getApplication());
         setContentView(R.layout.activity_purchase);
         initilize();
         if(getIntent().getExtras()!=null){

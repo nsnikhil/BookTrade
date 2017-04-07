@@ -1,13 +1,17 @@
 package com.trade.book.booktrade;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -24,6 +28,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.lapism.searchview.SearchView;
+import com.squareup.leakcanary.LeakCanary;
 import com.trade.book.booktrade.adapters.adapterBookList;
 import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentRequest;
 import com.trade.book.booktrade.objects.BookObject;
@@ -48,10 +53,24 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        LeakCanary.install(getApplication());
         setContentView(R.layout.activity_search);
+        if(!checkConnection()){
+            AlertDialog.Builder noInternet = new AlertDialog.Builder(SearchActivity.this);
+            noInternet.setMessage("No Internet").setCancelable(false).create().show();
+        }
         initilize();
         search();
+    }
 
+    private boolean checkConnection() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        return isConnected;
     }
 
     private void initilize() {

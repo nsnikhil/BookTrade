@@ -1,11 +1,14 @@
 package com.trade.book.booktrade;
 
 
+import android.*;
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -21,6 +24,7 @@ import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
@@ -40,6 +44,7 @@ import com.claudiodegio.msv.OnSearchViewListener;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.squareup.leakcanary.LeakCanary;
 import com.trade.book.booktrade.fragments.*;
 import com.trade.book.booktrade.interfaces.RequestListScrollChange;
 
@@ -62,6 +67,7 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
     RelativeLayout mBottomConatainer,mEntireContainer;
     int mAddBookRequestCode = 1080;
     ImageView errorImage;
+    private static final int MY_WRITE_EXTERNAL_STORAGE_CODE = 556;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +75,10 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
             setTheme(R.style.tranparentNavBar);
         }
         super.onCreate(savedInstanceState);
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        LeakCanary.install(getApplication());
         setContentView(R.layout.activity_start);
         initialize(savedInstanceState);
         setClickListeners();
@@ -213,6 +223,7 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
         }
     }
 
+
     private void removeOffConnection(final Bundle savedInstanceState) {
         errorImage.setVisibility(View.VISIBLE);
         mBottomNaviagtionView.setVisibility(View.GONE);
@@ -243,11 +254,29 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
         }
     }
 
+    private void askPermission() {
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_WRITE_EXTERNAL_STORAGE_CODE);
+        }else {
+            fabClick();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == MY_WRITE_EXTERNAL_STORAGE_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                fabClick();
+            }
+        }
+    }
+
     private void setClickListeners() {
         mFabAddBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               fabClick();
+                askPermission();
             }
         });
         mBottomNaviagtionView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

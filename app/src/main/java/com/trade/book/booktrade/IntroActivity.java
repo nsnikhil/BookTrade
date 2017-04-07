@@ -11,6 +11,7 @@ import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntro2;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.squareup.leakcanary.LeakCanary;
 import com.trade.book.booktrade.fragments.introfragments.intro1Fragment;
 import com.trade.book.booktrade.fragments.introfragments.intro2Fragment;
 import com.trade.book.booktrade.fragments.introfragments.intro3Fragment;
@@ -22,6 +23,10 @@ public class IntroActivity extends AppIntro2 {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        LeakCanary.install(getApplication());
         addSlide(new intro1Fragment());
         addSlide(new intro2Fragment());
         addSlide(new intro5Fragment());

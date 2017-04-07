@@ -2,6 +2,7 @@ package com.trade.book.booktrade;
 
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -48,6 +51,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.leakcanary.LeakCanary;
 import com.trade.book.booktrade.adapters.*;
 import com.trade.book.booktrade.objects.BookObject;
 
@@ -90,7 +94,15 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        LeakCanary.install(getApplication());
         setContentView(R.layout.activity_add_book);
+        if(!checkConnection()){
+            AlertDialog.Builder noInternet = new AlertDialog.Builder(AddBook.this);
+            noInternet.setMessage("No Internet").setCancelable(false).create().show();
+        }
         initilize();
         setClickListener();
         if (getIntent().getExtras() != null) {
@@ -101,6 +113,13 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                 setValue(bookEditObject);
             }
         }
+    }
+
+    private boolean checkConnection() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        return isConnected;
     }
 
     private Dialog uploadigDialog() {
