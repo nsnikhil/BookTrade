@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -564,7 +565,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GALLERY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                InputStream is = null;
+                /*InputStream is = null;
                 try {
                     is = getContentResolver().openInputStream(data.getData());
                     Bitmap b = BitmapFactory.decodeStream(is);
@@ -572,6 +573,23 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                     imageContainer.swapAdapter(imageAdapter, true);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
+                }*/
+                InputStream is = null;
+                BitmapDrawable bmpDrawable = null;
+                if (data != null) {
+                    try {
+                        is = getContentResolver().openInputStream(data.getData());
+                        Bitmap b = BitmapFactory.decodeStream(is);
+                        imageList.add(getResizedBitmap(b,700));
+                        imageContainer.swapAdapter(imageAdapter, true);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else if(data.getExtras()==null) {
+                    bmpDrawable = new BitmapDrawable(getResources(), data.getData().getPath());
+                    imageList.add(getResizedBitmap(bmpDrawable.getBitmap(),700));
+                    imageContainer.swapAdapter(imageAdapter, true);
                 }
             }
         }
