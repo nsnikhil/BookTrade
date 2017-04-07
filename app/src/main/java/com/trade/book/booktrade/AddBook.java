@@ -434,7 +434,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
             case R.id.addBookDone:
                 if (getIntent().getExtras() != null) {
                     if (mRequestCode == 2147483646) {
-                       editBookExtra();
+                        editBookExtra();
                     } else {
                         addBookNoExtra();
                     }
@@ -452,7 +452,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-    private void editBookExtra(){
+    private void editBookExtra() {
         if (verifyFields()) {
             uploadigDialog().show();
             makeNames();
@@ -533,7 +533,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void chooseImageAction() {
-        Toast.makeText(getApplicationContext(),"Its is preferred to use add images via gallery as we are still working on improving the camera uploads",Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Its is preferred to use add images via gallery as we are still working on improving the camera uploads", Toast.LENGTH_LONG).show();
         AlertDialog.Builder choosePath = new AlertDialog.Builder(AddBook.this);
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(AddBook.this, android.R.layout.simple_list_item_1);
         arrayAdapter.add("Take a picture");
@@ -575,20 +575,18 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                     e.printStackTrace();
                 }*/
                 InputStream is = null;
-                BitmapDrawable bmpDrawable = null;
                 if (data != null) {
                     try {
                         is = getContentResolver().openInputStream(data.getData());
                         Bitmap b = BitmapFactory.decodeStream(is);
-                        imageList.add(getResizedBitmap(b,700));
+                        imageList.add(getResizedBitmap(b, 700));
                         imageContainer.swapAdapter(imageAdapter, true);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                }
-                else if(data.getExtras()==null) {
-                    bmpDrawable = new BitmapDrawable(getResources(), data.getData().getPath());
-                    imageList.add(getResizedBitmap(bmpDrawable.getBitmap(),700));
+                } else {
+                    Bitmap b = BitmapFactory.decodeFile(data.getData().getPath());
+                    imageList.add(getResizedBitmap(b, 700));
                     imageContainer.swapAdapter(imageAdapter, true);
                 }
             }
@@ -607,7 +605,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         int width = image.getWidth();
         int height = image.getHeight();
 
-        float bitmapRatio = (float)width / (float) height;
+        float bitmapRatio = (float) width / (float) height;
         if (bitmapRatio > 1) {
             width = maxSize;
             height = (int) (width / bitmapRatio);

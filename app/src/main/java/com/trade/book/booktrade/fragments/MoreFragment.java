@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.trade.book.booktrade.AddBook;
+import com.trade.book.booktrade.PrefActivity;
 import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.adapters.adapterList;
 import com.trade.book.booktrade.fragments.dialogfragments.*;
@@ -56,6 +58,7 @@ public class MoreFragment extends Fragment {
         moreItem.add("Chat with us");
         moreItem.add("Send Feedback");
         moreItem.add("Settings");
+        moreItem.add("About");
         adapterList adptr = new adapterList(getActivity(),moreItem);
         moreList.setAdapter(adptr);
         moreList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -79,9 +82,9 @@ public class MoreFragment extends Fragment {
                 chooseHelpDialog();
                 break;
             case 3:
-                Intent email = new Intent(Intent.ACTION_SEND);
+                Intent email = new Intent(Intent.ACTION_SENDTO);
                 email.putExtra(Intent.EXTRA_EMAIL, new String[]{ "shelf.bee.corp@gmail.com"});
-                email.setType("message/rfc822");
+                email.setData(Uri.parse("mailto:"));
                 if(email.resolveActivity(getActivity().getPackageManager())!=null){
                     startActivity(email);
                 }else {
@@ -89,9 +92,9 @@ public class MoreFragment extends Fragment {
                 }
                 break;
             case 4:
-                Intent feedback = new Intent(Intent.ACTION_SEND);
+                Intent feedback = new Intent(Intent.ACTION_SENDTO);
                 feedback.putExtra(Intent.EXTRA_EMAIL, new String[]{ "shelf.bee.corp@gmail.com"});
-                feedback.setType("message/rfc822");
+                feedback.setData(Uri.parse("mailto:"));
                 if(feedback.resolveActivity(getActivity().getPackageManager())!=null){
                     startActivity(feedback);
                 }else {
@@ -99,7 +102,14 @@ public class MoreFragment extends Fragment {
                 }
                 break;
             case 5:
-                Toast.makeText(getActivity(),"Nothing in settings",Toast.LENGTH_SHORT).show();
+                Intent settings = new Intent(getActivity(),PrefActivity.class);
+                settings.putExtra(getResources().getString(R.string.intentExtraPrefrence),3002);
+                startActivity(settings);
+                break;
+            case 6:
+                Intent about = new Intent(getActivity(),PrefActivity.class);
+                about.putExtra(getResources().getString(R.string.intentExtraAbout),3003);
+                startActivity(about);
                 break;
         }
     }

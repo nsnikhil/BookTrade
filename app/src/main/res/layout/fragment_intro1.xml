@@ -16,7 +16,6 @@
             android:id="@+id/intro1Image"
             android:layout_gravity="center"
             android:src="@drawable/launcher_logo"
-
             android:layout_height="200dp" />
 
         <com.romainpiel.shimmer.ShimmerTextView

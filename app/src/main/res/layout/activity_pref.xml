@@ -1,15 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/verticalLinearLayout"
-    android:background="@drawable/background"
+    android:background="@color/colorBackground"
     tools:context="com.trade.book.booktrade.PrefActivity">
 
-    <include layout="@layout/toolbar"
-        android:id="@+id/toolbarPref"/>
+    <include
+        android:id="@+id/toolbarPref"
+        layout="@layout/toolbar" />
 
     <LinearLayout
         android:id="@+id/prefContainer"
-        style="@style/verticalLinearLayout"/>
+        style="@style/verticalLinearLayout"
+        android:layout_below="@id/toolbarPref"
+        android:visibility="gone" />
 
-</LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/aboutContainer"
+        style="@style/matchParent"
+        android:visibility="visible"
+        android:layout_below="@id/toolbarPref">
+
+        <ScrollView style="@style/matchParent">
+
+            <RelativeLayout style="@style/matchParent">
+
+                <LinearLayout
+                    android:id="@+id/aboutLogoContainer"
+                    style="@style/wrapContent"
+                    android:layout_centerHorizontal="true"
+                    android:orientation="vertical"
+                    android:padding="@dimen/sixteen">
+
+                    <ImageView
+                        android:id="@+id/intro1Image"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/ImageDescriptionBackground"
+                        android:src="@drawable/launcher_logo" />
+
+                    <com.romainpiel.shimmer.ShimmerTextView
+                        android:id="@+id/intro1Text"
+                        style="@style/wrapContent"
+                        android:fontFamily="sans-serif-light"
+                        android:text="@string/app_name"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="37sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/verticalLinearLayout"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/aboutLogoContainer">
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:padding="@dimen/sixteen"
+                        android:text="@string/aboutUs"
+                        android:textSize="16sp"
+                        android:id="@+id/aboutButtonDevs"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:padding="@dimen/sixteen"
+                        android:id="@+id/aboutButtonTerms"
+                        android:text="@string/aboutTerms"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:padding="@dimen/sixteen"
+                        android:text="@string/aboutLicense"
+                        android:id="@+id/aboutButtonLicense"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:padding="@dimen/sixteen"
+                        android:text="@string/aboutLibraries"
+                        android:id="@+id/aboutButtonLibraries"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+        </ScrollView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:padding="@dimen/sixteen"
+            android:text="@string/copyright"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

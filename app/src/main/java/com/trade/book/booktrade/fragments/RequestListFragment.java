@@ -175,6 +175,7 @@ public class RequestListFragment extends Fragment {
             adapter = new adapterRequest(getActivity(), requestObjectList);
             requestList.setAdapter(adapter);
         }else {
+            mSwipeRefresh.setRefreshing(false);
             noRequest.setVisibility(View.VISIBLE);
         }
     }
