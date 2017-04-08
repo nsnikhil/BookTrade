@@ -15,9 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -25,36 +23,37 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.squareup.leakcanary.LeakCanary;
 import com.trade.book.booktrade.adapters.adapterBookList;
 import com.trade.book.booktrade.objects.BookObject;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class CategoryViewActivity extends AppCompatActivity {
 
     private static final int mRequestCode = 151;
-    GridView catList;
-    ImageView emptyCat;
-    Toolbar catToolbar;
+    @BindView(R.id.catrLst) GridView catList;
+    @BindView(R.id.categoryEmpty) ImageView emptyCat;
+    @BindView(R.id.toolbarCategory) Toolbar catToolbar;
     ArrayList<BookObject> categoryList;
     int mUploadIndicator = 0;
-    SwipeRefreshLayout mSwipeRefresh;
+    @BindView(R.id.catListSwipeRefresh) SwipeRefreshLayout mSwipeRefresh;
     String catUri;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (LeakCanary.isInAnalyzerProcess(this)) {
+        /*if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
         }
-        LeakCanary.install(getApplication());
+        LeakCanary.install(getApplication());*/
         setContentView(R.layout.activity_category_view);
+        ButterKnife.bind(this);
         catUri = getIntent().getExtras().getString(getResources().getString(R.string.intencateuri));
         mUploadIndicator = getIntent().getExtras().getInt(getResources().getString(R.string.intenupind));
         initilize();
@@ -68,10 +67,6 @@ public class CategoryViewActivity extends AppCompatActivity {
     }
 
     private void initilize() {
-        catList = (GridView) findViewById(R.id.catrLst);
-        emptyCat = (ImageView) findViewById(R.id.categoryEmpty);
-        catToolbar = (Toolbar) findViewById(R.id.toolbarCategory);
-        mSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.catListSwipeRefresh);
         setSupportActionBar(catToolbar);
         if (mUploadIndicator == 0) {
             getSupportActionBar().setTitle(getResources().getStringArray(R.array.bookCateogories)[getIntent().getExtras().getInt(getResources().getString(R.string.intencateuripos))]);

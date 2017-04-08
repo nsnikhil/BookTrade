@@ -40,24 +40,28 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class SearchActivity extends AppCompatActivity {
 
-    GridView searchList;
-    ImageView noList;
-    ProgressBar searchProgress;
+    @BindView(R.id.searchListGrid) GridView searchList;
+    @BindView(R.id.searchErrorImage) ImageView noList;
+    @BindView(R.id.searchProgress) ProgressBar searchProgress;
+    @BindView(R.id.sSearchView) SearchView searchView;
+    @BindView(R.id.searchRequest) FloatingActionButton request;
     ArrayList<BookObject> srchList;
-    com.lapism.searchview.SearchView searchView;
-    FloatingActionButton request;
     private static final int  REQ_CODE_SPEECH_INPUT = 564;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (LeakCanary.isInAnalyzerProcess(this)) {
+        /*if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
         }
-        LeakCanary.install(getApplication());
+        LeakCanary.install(getApplication());*/
         setContentView(R.layout.activity_search);
+        ButterKnife.bind(this);
         if(!checkConnection()){
             AlertDialog.Builder noInternet = new AlertDialog.Builder(SearchActivity.this);
             noInternet.setMessage("No Internet").setCancelable(false).create().show();
@@ -74,13 +78,8 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void initilize() {
-        searchList = (GridView) findViewById(R.id.searchListGrid);
         srchList = new ArrayList<>();
-        noList = (ImageView) findViewById(R.id.searchErrorImage);
-        searchProgress = (ProgressBar) findViewById(R.id.searchProgress);
-        searchView = (com.lapism.searchview.SearchView)findViewById(R.id.sSearchView);
         searchView.setHint(getResources().getString(R.string.searchHint));
-        request = (FloatingActionButton)findViewById(R.id.searchRequest);
         request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

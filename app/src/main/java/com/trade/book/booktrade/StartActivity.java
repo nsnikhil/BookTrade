@@ -1,7 +1,5 @@
 package com.trade.book.booktrade;
 
-
-import android.*;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -9,15 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
@@ -29,40 +22,30 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
-
 import com.claudiodegio.msv.MaterialSearchView;
 import com.claudiodegio.msv.OnSearchViewListener;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
-import com.mikhaellopez.circularimageview.CircularImageView;
-import com.squareup.leakcanary.LeakCanary;
 import com.trade.book.booktrade.fragments.*;
 import com.trade.book.booktrade.interfaces.RequestListScrollChange;
-
 import java.lang.reflect.Field;
-import java.util.Locale;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
 public class StartActivity extends AppCompatActivity implements RequestListScrollChange {
 
-    //BottomNavigationView mBottomNaviagtionView;
-    Toolbar mBottomToolbar;
-    FloatingActionButton mFabAddBook;
-    MaterialSearchView mBottomSearchView;
+    @BindView(R.id.bottomToolbar) Toolbar mBottomToolbar;
+    @BindView(R.id.bottomFabAdd) FloatingActionButton mFabAddBook;
+    @BindView(R.id.bottomSearchView) MaterialSearchView mBottomSearchView;
     private static final String[] colorArray = {"#5D4037", "#FFA000", "#455A64", "#388E3C"};
     private static final String[] colorArrayDark = {"#3E2723", "#FF6F00", "#263238", "#1B5E20"};
     BookPagerFragment mFragmentBookPager;
@@ -71,9 +54,10 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
     MoreFragment mMoreFragment;
     MyCartFragment myCartFragment;
     @BindView(R.id.mainBottomNaviagtion) BottomNavigationView mBottomNaviagtionView;
-    RelativeLayout mBottomConatainer,mEntireContainer;
+    @BindView(R.id.bottomMainContainer) RelativeLayout mBottomConatainer;
+    @BindView(R.id.entireContainer) RelativeLayout mEntireContainer;
     int mAddBookRequestCode = 1080;
-    ImageView errorImage;
+    @BindView(R.id.bottomErrorImage) ImageView errorImage;
     private static final int MY_WRITE_EXTERNAL_STORAGE_CODE = 556;
 
     @Override
@@ -82,10 +66,10 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
             setTheme(R.style.tranparentNavBar);
         }
         super.onCreate(savedInstanceState);
-        if (LeakCanary.isInAnalyzerProcess(this)) {
+        /*if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
         }
-        LeakCanary.install(getApplication());
+        LeakCanary.install(getApplication());*/
         setContentView(R.layout.activity_start);
         ButterKnife.bind(this);
         initialize(savedInstanceState);
@@ -158,25 +142,11 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-        }
-        return false;
-    }
 
     private void initialize(Bundle savedInstanceState) {
-        //mBottomNaviagtionView = (BottomNavigationView) findViewById(R.id.mainBottomNaviagtion);
         disableShiftMode(mBottomNaviagtionView);
-        mBottomToolbar = (Toolbar) findViewById(R.id.bottomToolbar);
         setSupportActionBar(mBottomToolbar);
         getSupportActionBar().setElevation(0);
-        mBottomSearchView = (MaterialSearchView) findViewById(R.id.bottomSearchView);
-        mFabAddBook = (FloatingActionButton) findViewById(R.id.bottomFabAdd);
-        mBottomConatainer = (RelativeLayout) findViewById(R.id.bottomMainContainer);
-        mEntireContainer = (RelativeLayout) findViewById(R.id.entireContainer);
-        errorImage = (ImageView) findViewById(R.id.bottomErrorImage);
         addOnConnection(savedInstanceState);
     }
 
@@ -203,8 +173,7 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
                 item.setShiftingMode(false);
                 item.setChecked(item.getItemData().isChecked());
             }
-        } catch (NoSuchFieldException e) {
-        } catch (IllegalAccessException e) {
+        } catch (NoSuchFieldException | IllegalAccessException ignored) {
         }
     }
 

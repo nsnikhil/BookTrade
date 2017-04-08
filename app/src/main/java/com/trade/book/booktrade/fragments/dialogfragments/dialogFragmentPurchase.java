@@ -8,15 +8,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -26,35 +23,35 @@ import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.StartActivity;
 import com.trade.book.booktrade.cartData.CartTables;
-
 import java.util.Calendar;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class dialogFragmentPurchase extends DialogFragment {
 
-    TextView title, actualPrice, extraPrice, totalPrice;
-    Button buy;
+    @BindView(R.id.dialogPurchaseHead) TextView title;
+    @BindView(R.id.dialogPurchasePrice) TextView actualPrice;
+    @BindView(R.id.dialogPurchaseExtra) TextView extraPrice;
+    @BindView(R.id.dialogPurchaseTotal) TextView totalPrice;
+    @BindView(R.id.dialogPurchaseBuy) Button buy;
     private static final String mNullValue = "N/A";
 
     public dialogFragmentPurchase() {
 
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dialog_fragment_purchase, container, false);
-        initilize(v);
+        ButterKnife.bind(this,v);
+        initilize();
         setVal();
         return v;
     }
 
-    private void initilize(View v) {
-        title = (TextView) v.findViewById(R.id.dialogPurchaseHead);
-        actualPrice = (TextView) v.findViewById(R.id.dialogPurchasePrice);
-        extraPrice = (TextView) v.findViewById(R.id.dialogPurchaseExtra);
-        totalPrice = (TextView) v.findViewById(R.id.dialogPurchaseTotal);
-        buy = (Button) v.findViewById(R.id.dialogPurchaseBuy);
+    private void initilize() {
         buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

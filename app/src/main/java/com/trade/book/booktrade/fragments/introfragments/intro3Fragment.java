@@ -26,13 +26,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class intro3Fragment extends Fragment implements ISlidePolicy {
 
     boolean hasExtra = false;
-    EditText phone,address;
+    @BindView(R.id.intro3Phoneno) EditText phone;
+    @BindView(R.id.intro3Address) EditText address;
     private static final String mNullValue = "N/A";
 
     public intro3Fragment() {
@@ -43,7 +47,7 @@ public class intro3Fragment extends Fragment implements ISlidePolicy {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_intro3, container, false);
-        initilize(v);
+        ButterKnife.bind(this,v);
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
         if(!spf.getString(getResources().getString(R.string.prefAccountId),mNullValue).equalsIgnoreCase(mNullValue)){
             preFetchValues();
@@ -51,10 +55,6 @@ public class intro3Fragment extends Fragment implements ISlidePolicy {
         return v;
     }
 
-    private void initilize(View v) {
-        phone = (EditText)v.findViewById(R.id.intro3Phoneno);
-        address = (EditText)v.findViewById(R.id.intro3Address);
-    }
 
     private String  buildSetUri(){
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());

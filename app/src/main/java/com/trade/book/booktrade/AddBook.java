@@ -1,43 +1,33 @@
 package com.trade.book.booktrade;
 
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Environment;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.FileProvider;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
@@ -51,24 +41,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.squareup.leakcanary.LeakCanary;
-import com.trade.book.booktrade.adapters.*;
+import com.trade.book.booktrade.adapters.adapterImage;
 import com.trade.book.booktrade.objects.BookObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class AddBook extends AppCompatActivity implements View.OnClickListener {
 
@@ -76,12 +63,24 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     private static final int CAMERA_REQUEST_CODE = 154;
     private static final int GALLERY_REQUEST_CODE = 155;
     static int imageCount = 0;
-    Toolbar toolbarAddBook;
-    FloatingActionButton addBookDone;
-    EditText name, publisher, costPrice, sellingPrice, edition, comment;
-    Spinner condition, cateogory;
-    ImageView emptyState, newImage;
-    RecyclerView imageContainer;
+
+    @BindView(R.id.toolbarAddBook) Toolbar toolbarAddBook;
+    @BindView(R.id.addBookDone) FloatingActionButton addBookDone;
+
+    @BindView(R.id.addBookName) TextInputEditText name;
+    @BindView(R.id.addBookPublisher) TextInputEditText publisher;
+    @BindView(R.id.addBookCostPrice) TextInputEditText costPrice;
+    @BindView(R.id.addBookSellingPrice) TextInputEditText sellingPrice;
+    @BindView(R.id.addBookEdition) TextInputEditText edition;
+    @BindView(R.id.addBookComments) TextInputEditText comment;
+
+    @BindView(R.id.addBookCondition) Spinner condition;
+    @BindView(R.id.addBookCateogory) Spinner  cateogory;
+
+    @BindView(R.id.addBookImageEmptyState) ImageView emptyState;
+    @BindView(R.id.addBookNewImage) ImageView newImage;
+    @BindView(R.id.addBookView) RecyclerView imageContainer;
+
     ArrayList<Bitmap> imageList;
     ArrayList<String> imageUrls;
     adapterImage imageAdapter;
@@ -94,11 +93,12 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (LeakCanary.isInAnalyzerProcess(this)) {
+        /*if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
         }
-        LeakCanary.install(getApplication());
+        LeakCanary.install(getApplication());*/
         setContentView(R.layout.activity_add_book);
+        ButterKnife.bind(this);
         if(!checkConnection()){
             AlertDialog.Builder noInternet = new AlertDialog.Builder(AddBook.this);
             noInternet.setMessage("No Internet").setCancelable(false).create().show();
@@ -118,15 +118,13 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     private boolean checkConnection() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        return isConnected;
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
     private Dialog uploadigDialog() {
         AlertDialog.Builder uploading = new AlertDialog.Builder(AddBook.this);
         uploading.setMessage("Processing...").setCancelable(false);
-        Dialog d = uploading.create();
-        return d;
+        return uploading.create();
     }
 
     private void setTwoVal() {
@@ -207,7 +205,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
 
     private void addBitmap(String s) {
         URL u = null;
-        Bitmap img = null;
+        Bitmap img ;
         HttpURLConnection htcp = null;
         InputStream is = null;
         try {
@@ -246,19 +244,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void initilize() {
-        toolbarAddBook = (Toolbar) findViewById(R.id.toolbarAddBook);
         setSupportActionBar(toolbarAddBook);
-        name = (EditText) findViewById(R.id.addBookName);
-        publisher = (EditText) findViewById(R.id.addBookPublisher);
-        costPrice = (EditText) findViewById(R.id.addBookCostPrice);
-        sellingPrice = (EditText) findViewById(R.id.addBookSellingPrice);
-        edition = (EditText) findViewById(R.id.addBookEdition);
-        comment = (EditText) findViewById(R.id.addBookComments);
-        addBookDone = (FloatingActionButton) findViewById(R.id.addBookDone);
-        condition = (Spinner) findViewById(R.id.addBookCondition);
-        cateogory = (Spinner) findViewById(R.id.addBookCateogory);
-        emptyState = (ImageView) findViewById(R.id.addBookImageEmptyState);
-        newImage = (ImageView) findViewById(R.id.addBookNewImage);
 
         imageContainer = (RecyclerView) findViewById(R.id.addBookView);
         imageContainer.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
@@ -294,10 +280,8 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         String commentValue = comment.getText().toString().trim();
         String conditiontQuery = "cd";
         String conditionValue = condition.getSelectedItem().toString().trim();
-        ;
         String cateogoryQuery = "ct";
         String cateogoryValue = cateogory.getSelectedItem().toString().trim();
-        ;
         String userIdQuery = "uid";
 
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -584,15 +568,6 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GALLERY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                /*InputStream is = null;
-                try {
-                    is = getContentResolver().openInputStream(data.getData());
-                    Bitmap b = BitmapFactory.decodeStream(is);
-                    imageList.add(getResizedBitmap(b,700));
-                    imageContainer.swapAdapter(imageAdapter, true);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }*/
                 InputStream is = null;
                 if (data != null) {
                     try {
@@ -668,15 +643,10 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     }
 
     private CognitoCachingCredentialsProvider getCredentials() {
-        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
-                getApplicationContext(),
-                "ap-northeast-1:b3d1bc05-d6f7-4fc7-bcdb-dbb9b7fd1d4c",
-                Regions.AP_NORTHEAST_1 //
-        );
-        return credentialsProvider;
+        return new CognitoCachingCredentialsProvider(getApplicationContext(), "ap-northeast-1:b3d1bc05-d6f7-4fc7-bcdb-dbb9b7fd1d4c", Regions.AP_NORTHEAST_1);
     }
 
-    public class downloadImages extends AsyncTask<String, Void, Void> {
+    private class downloadImages extends AsyncTask<String, Void, Void> {
 
         @Override
         protected Void doInBackground(String... params) {
@@ -691,7 +661,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-    public class uploadAsync extends AsyncTask<Void, Void, Void> {
+    private class uploadAsync extends AsyncTask<Void, Void, Void> {
 
         File f;
         String fn;

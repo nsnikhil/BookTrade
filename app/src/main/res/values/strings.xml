@@ -78,7 +78,6 @@
     <!-- -->
 
 
-
     <!-- NavigationMenu-->
     <string name="navBookList">Book List</string>
     <string name="navMyCart">My Cart</string>
@@ -203,5 +202,6 @@
     <string name="aboutLibraries" translatable="false">3rd Party Libraries Used</string>
     <string name="aboutTerms" translatable="false">Terms and Condition</string>
     <string name="aboutLicense" translatable="false">License Agreement</string>
+    <string name="aboutVersion">Version</string>
     <!-- -->
 </resources>

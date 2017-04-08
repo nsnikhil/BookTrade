@@ -27,11 +27,6 @@
             android:label="Add Book" />
 
         <provider
-            android:name=".data.TableProvider"
-            android:authorities="com.trade.book.booktrade"
-            android:enabled="true"
-            android:exported="false" />
-        <provider
             android:name=".cartData.CartProvider"
             android:authorities="com.trade.book.booktrade.cart"
             android:enabled="true"

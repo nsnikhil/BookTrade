@@ -62,7 +62,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <EditText
+                        <android.support.design.widget.TextInputEditText
                             android:id="@+id/addBookName"
                             style="@style/addBookText"
                             android:hint="@string/bookName"
@@ -89,7 +89,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <EditText
+                        <android.support.design.widget.TextInputEditText
                             android:id="@+id/addBookPublisher"
                             style="@style/addBookText"
                             android:hint="@string/bookPublisher"
@@ -115,7 +115,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <EditText
+                        <android.support.design.widget.TextInputEditText
                             android:id="@+id/addBookCostPrice"
                             style="@style/addBookText"
                             android:hint="@string/bookCp"
@@ -141,7 +141,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <EditText
+                        <android.support.design.widget.TextInputEditText
                             android:id="@+id/addBookSellingPrice"
                             style="@style/addBookText"
                             android:hint="@string/bookSp"
@@ -167,7 +167,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <EditText
+                        <android.support.design.widget.TextInputEditText
                             android:id="@+id/addBookEdition"
                             style="@style/addBookText"
                             android:hint="@string/bookEdition"
@@ -193,7 +193,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <EditText
+                        <android.support.design.widget.TextInputEditText
                             android:id="@+id/addBookComments"
                             style="@style/addBookText"
                             android:hint="@string/bookDescription"

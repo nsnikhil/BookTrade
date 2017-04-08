@@ -1,8 +1,6 @@
 package com.trade.book.booktrade.fragments;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -14,14 +12,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -30,54 +25,41 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.AddBook;
 import com.trade.book.booktrade.R;
-import com.trade.book.booktrade.StartActivity;
 import com.trade.book.booktrade.adapters.*;
 import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentRequest;
-import com.trade.book.booktrade.interfaces.RequestListScrollChange;
 import com.trade.book.booktrade.objects.RequestObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class RequestListFragment extends Fragment {
 
-    ListView requestList;
-    FloatingActionButton requestAdd;
+    @BindView(R.id.requestList) ListView requestList;
+    @BindView(R.id.requestAdd) FloatingActionButton requestAdd;
+    @BindView(R.id.requestListNoRequest) ImageView noRequest;
+    @BindView(R.id.requestListSwipeRefresh) SwipeRefreshLayout mSwipeRefresh;
     ArrayList<RequestObject> requestObjectList;
     adapterRequest adapter;
-    ImageView noRequest;
-    SwipeRefreshLayout mSwipeRefresh;
     View mainView = null;
-
-    RequestListScrollChange scrollChange;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mainView= LayoutInflater.from(getActivity()).inflate(R.layout.fragment_request_list,container,false);
+        ButterKnife.bind(this,mainView);
         intilize(mainView);
         mSwipeRefresh.setRefreshing(true);
         downloadList();
         return mainView;
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            scrollChange = (RequestListScrollChange) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
-        }
-    }
 
     private void intilize(View v) {
-        requestAdd = (FloatingActionButton) v.findViewById(R.id.requestAdd);
-        requestList = (ListView) v.findViewById(R.id.requestList);
-        noRequest = (ImageView)v.findViewById(R.id.requestListNoRequest);
-        mSwipeRefresh = (SwipeRefreshLayout)v.findViewById(R.id.requestListSwipeRefresh);
         requestObjectList = new ArrayList<>();
         requestAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,44 +102,6 @@ public class RequestListFragment extends Fragment {
             }
         }
         );
-        requestList.setOnScrollListener(new AbsListView.OnScrollListener() {
-            int prevVisibleItem;
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if(prevVisibleItem != firstVisibleItem){
-                    if(prevVisibleItem < firstVisibleItem){
-                        /*if (requestAdd.getVisibility() == View.VISIBLE) {
-                            requestAdd.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    requestAdd.setVisibility(View.GONE);
-                                }
-                            });
-                        }*/
-                        scrollChange.hideItems();
-                    }
-                    else{
-                        /*if (requestAdd.getVisibility() == View.GONE) {
-                            requestAdd.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    requestAdd.setVisibility(View.VISIBLE);
-                                }
-                            });
-                        }*/
-                        scrollChange.showItems();
-                    }
-                    prevVisibleItem = firstVisibleItem;
-                }
-            }
-        });
     }
 
     private void addToList(JSONArray array) throws JSONException {

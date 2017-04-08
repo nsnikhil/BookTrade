@@ -3,11 +3,9 @@ package com.trade.book.booktrade.fragments.dialogfragments;
 
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.nfc.NfcEvent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,30 +21,31 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class dialogFagmentAddress extends DialogFragment {
 
-    EditText address,phone;
-    Button save;
+    @BindView(R.id.dialogAddress) EditText address;
+    @BindView(R.id.dialogPhone) EditText phone;
+    @BindView(R.id.dialogSave) Button save;
     private static final String mNullValue = "N/A";
 
     public dialogFagmentAddress() {
 
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dialog_fagment_address, container, false);
-        initilize(v);
+        ButterKnife.bind(this,v);
+        initilize();
         setValue();
         return v;
     }
 
-    private void initilize(View v) {
-        address = (EditText)v.findViewById(R.id.dialogAddress);
-        phone = (EditText)v.findViewById(R.id.dialogPhone);
-        save = (Button) v.findViewById(R.id.dialogSave);
+    private void initilize() {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -10,23 +10,17 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.objects.RequestObject;
-
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * Created by Nikhil on 28-Mar-17.
- */
 
 public class adapterRequest extends BaseAdapter{
 
-    Context mContext;
-    ArrayList<RequestObject> mList;
-    Random r = new Random();
+    private Context mContext;
+    private ArrayList<RequestObject> mList;
+    private Random r = new Random();
     private static final String[] colorArray = {"#D32F2F","#C2185B","#7B1FA2","#512DA8","#303F9F","#1976D2","#0288D1",
             "#0097A7","#00796B","#388E3C","#689F38","#AFB42B","#FBC02D","#FFA000","#F57C00","#E64A19"};
 
@@ -52,7 +46,7 @@ public class adapterRequest extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        MyViewHolder myViewHolder = null;
+        MyViewHolder myViewHolder;
         if(convertView==null){
             convertView = LayoutInflater.from(mContext).inflate(R.layout.request_item_layout,parent,false);
             myViewHolder = new MyViewHolder(convertView);
@@ -75,7 +69,7 @@ public class adapterRequest extends BaseAdapter{
         return Color.parseColor(colorArray[color]);
     }
 
-    public ColorStateList stateList(){
+    private ColorStateList stateList(){
         int[][] states = new int[][] {
                 new int[] { android.R.attr.state_enabled},
                 new int[] {-android.R.attr.state_enabled},
@@ -87,7 +81,7 @@ public class adapterRequest extends BaseAdapter{
         return new ColorStateList(states, colors);
     }
 
-    public class MyViewHolder{
+    private class MyViewHolder{
         TextView heading,name,publisher;
         RelativeLayout headingContainer;
         MyViewHolder(View v){

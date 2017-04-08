@@ -28,18 +28,24 @@ import com.trade.book.booktrade.cartData.CartTables;
 
 import java.io.File;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class AccountFragment extends Fragment implements View.OnClickListener{
 
     private static final String mNullValue = "N/A";
-    Button signOut,purchase,uploads;
-    TextView name;
-    CircularImageView profile;
+    @BindView(R.id.accountSignOut) Button signOut;
+    @BindView(R.id.accountPurchase) Button purchase;
+    @BindView(R.id.accountUploads) Button uploads;
+    @BindView(R.id.accountName) TextView name;
+    @BindView(R.id.accountPicture) CircularImageView profile;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_account,container,false);
-        initilize(v);
+        ButterKnife.bind(this,v);
+        initialize();
         setVal();
         return v;
     }
@@ -53,24 +59,16 @@ public class AccountFragment extends Fragment implements View.OnClickListener{
     }
 
     private Bitmap getBitmap() {
-        Bitmap img = null;
         File folder = getActivity().getExternalCacheDir();
         File fi = new File(folder, "profile.jpg");
         String fpath = String.valueOf(fi);
-        img = BitmapFactory.decodeFile(fpath);
-        return img;
+        return BitmapFactory.decodeFile(fpath);
     }
 
-    private void initilize(View v) {
-        signOut = (Button)v.findViewById(R.id.accountSignOut);
-        purchase = (Button)v.findViewById(R.id.accountPurchase);
-        uploads = (Button)v.findViewById(R.id.accountUploads);
-        name = (TextView) v.findViewById(R.id.accountName);
-        profile = (CircularImageView) v.findViewById(R.id.accountPicture);
+    private void initialize() {
         signOut.setOnClickListener(this);
         purchase.setOnClickListener(this);
         uploads.setOnClickListener(this);
-
     }
 
 

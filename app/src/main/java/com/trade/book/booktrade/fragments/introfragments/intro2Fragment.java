@@ -49,36 +49,32 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 
-public class intro2Fragment extends Fragment implements ISlidePolicy,View.OnClickListener {
+public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnClickListener {
 
     GoogleSignInOptions gso;
     GoogleApiClient mGoogleApiClient;
     int RC_SIGN_IN = 540;
     LoginButton loginButton;
+    boolean signedIn = false;
+    SignInButton signInButton;
     private CallbackManager callbackManager;
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
-    boolean signedIn = false;
-    SignInButton signInButton;
 
     public intro2Fragment() {
 
     }
 
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v =  inflater.inflate(R.layout.fragment_intro2, container, false);
+        View v = inflater.inflate(R.layout.fragment_intro2, container, false);
         initilize(v);
         setGooglePlus();
         FacebookSdk.sdkInitialize(getActivity());
         setUpFblogin();
         return v;
     }
-
-
 
 
     private void initilize(View v) {
@@ -91,7 +87,7 @@ public class intro2Fragment extends Fragment implements ISlidePolicy,View.OnClic
         callbackManager = CallbackManager.Factory.create();
     }
 
-    private void setUpFblogin(){
+    private void setUpFblogin() {
         loginButton.setFragment(this);
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -103,7 +99,7 @@ public class intro2Fragment extends Fragment implements ISlidePolicy,View.OnClic
                                 try {
                                     String profilePicUrl = response.getJSONObject().getJSONObject("picture").getJSONObject("data").getString("url");
                                     SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                                    spf.edit().putString(getResources().getString(R.string.prefAccountId),String.valueOf(response.getJSONObject().getInt("id"))).apply();
+                                    spf.edit().putString(getResources().getString(R.string.prefAccountId), String.valueOf(response.getJSONObject().getInt("id"))).apply();
                                     spf.edit().putString(getResources().getString(R.string.prefAccountName), response.getJSONObject().getString("name")).apply();
                                     new DownloadImage().execute(profilePicUrl);
                                 } catch (JSONException e) {
@@ -129,7 +125,7 @@ public class intro2Fragment extends Fragment implements ISlidePolicy,View.OnClic
         });
     }
 
-    private void setGooglePlus(){
+    private void setGooglePlus() {
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestId().requestEmail().requestProfile().build();
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity()).enableAutoManage(getActivity(), new GoogleApiClient.OnConnectionFailedListener() {
             @Override
@@ -142,7 +138,7 @@ public class intro2Fragment extends Fragment implements ISlidePolicy,View.OnClic
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.sign_in_button:
                 signIn();
                 break;
@@ -172,36 +168,44 @@ public class intro2Fragment extends Fragment implements ISlidePolicy,View.OnClic
         if (result.isSuccess()) {
             SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
             GoogleSignInAccount acct = result.getSignInAccount();
-            spf.edit().putString(getResources().getString(R.string.prefAccountId),acct.getId()).apply();
+            spf.edit().putString(getResources().getString(R.string.prefAccountId), acct.getId()).apply();
             spf.edit().putString(getResources().getString(R.string.prefAccountName), acct.getDisplayName()).apply();
-            if(acct.getPhotoUrl()!=null){
+            if (acct.getPhotoUrl() != null) {
                 new DownloadImage().execute(acct.getPhotoUrl().toString());
-            }else {
+            } else {
                 signedIn = true;
-                Toast.makeText(getActivity(),"Signed In",Toast.LENGTH_SHORT).show();
-                Toast.makeText(getActivity(),"Swipe Left",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Signed In", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Swipe Left", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
 
-
-
     public void closeSingInActivity() {
         signedIn = true;
         signInButton.setEnabled(false);
-        Toast.makeText(getActivity(),"Signed In",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Signed In", Toast.LENGTH_SHORT).show();
     }
 
-    public class DownloadImage extends AsyncTask<String,Void,Void> {
+    @Override
+    public boolean isPolicyRespected() {
+        return signedIn;
+    }
+
+    @Override
+    public void onUserIllegallyRequestedNextPage() {
+        Toast.makeText(getActivity(), "Sign In using any one service to continue", Toast.LENGTH_SHORT).show();
+    }
+
+    private class DownloadImage extends AsyncTask<String, Void, Void> {
 
 
         @Override
         protected Void doInBackground(String... params) {
-            Bitmap poster = null;
+            Bitmap poster;
             try {
                 poster = getBitmap(new URL(params[0]));
-                saveImage("profile.jpg",poster);
+                saveImage("profile.jpg", poster);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -223,16 +227,17 @@ public class intro2Fragment extends Fragment implements ISlidePolicy,View.OnClic
                 htpc = (HttpURLConnection) imageUrl.openConnection();
                 htpc.setRequestMethod("GET");
                 htpc.connect();
-                if(htpc.getResponseCode()==200){
+                if (htpc.getResponseCode() == 200) {
                     ir = htpc.getInputStream();
                     pstr = BitmapFactory.decodeStream(ir);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
-                if(htpc!=null){
+                if (htpc != null) {
                     htpc.disconnect();
-                }if(ir!=null){
+                }
+                if (ir != null) {
                     try {
                         ir.close();
                     } catch (IOException e) {
@@ -244,9 +249,9 @@ public class intro2Fragment extends Fragment implements ISlidePolicy,View.OnClic
             return pstr;
         }
 
-        private  void saveImage(String s,Bitmap b) {
-            File folder  = getActivity().getExternalCacheDir();
-            File f = new File(folder,s);
+        private void saveImage(String s, Bitmap b) {
+            File folder = getActivity().getExternalCacheDir();
+            File f = new File(folder, s);
             FileOutputStream fos = null;
             try {
                 fos = new FileOutputStream(f);
@@ -260,24 +265,14 @@ public class intro2Fragment extends Fragment implements ISlidePolicy,View.OnClic
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } finally {
-               if(fos!=null){
-                   try {
-                       fos.close();
-                   } catch (IOException e) {
-                       e.printStackTrace();
-                   }
-               }
+                if (fos != null) {
+                    try {
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
-    }
-
-    @Override
-    public boolean isPolicyRespected() {
-        return signedIn;
-    }
-
-    @Override
-    public void onUserIllegallyRequestedNextPage() {
-        Toast.makeText(getActivity(),"Sign In using any one service to continue",Toast.LENGTH_SHORT).show();
     }
 }

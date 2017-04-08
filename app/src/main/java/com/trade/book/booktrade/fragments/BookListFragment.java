@@ -16,7 +16,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -35,16 +34,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class BookListFragment extends Fragment {
 
-
-    GridView bookListGrid;
+    @BindView(R.id.bookListGrid) GridView bookListGrid;
+    @BindView(R.id.bookListNoBook) ImageView noBooks;
+    @BindView(R.id.bookListSwipeRefresh) SwipeRefreshLayout mSwipeRefresh;
     ArrayList<BookObject> bookList = new ArrayList<>();
-    ImageView noBooks;
-    SwipeRefreshLayout mSwipeRefresh;
-
-    RequestListScrollChange scrollChange;
 
     public BookListFragment() {
     }
@@ -52,20 +51,11 @@ public class BookListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.fragment_book_list,container,false);
-        initilize(v);
+        ButterKnife.bind(this,v);
+        initilize();
         mSwipeRefresh.setRefreshing(true);
         getList();
         return v;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            scrollChange = (RequestListScrollChange) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
-        }
     }
 
     private void getList(){
@@ -128,10 +118,7 @@ public class BookListFragment extends Fragment {
         }
     }
 
-    private void initilize(View v) {
-        bookListGrid = (GridView)v.findViewById(R.id.bookListGrid);
-        noBooks = (ImageView)v.findViewById(R.id.bookListNoBook);
-        mSwipeRefresh = (SwipeRefreshLayout)v.findViewById(R.id.bookListSwipeRefresh);
+    private void initilize() {
         bookListGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -160,25 +147,6 @@ public class BookListFragment extends Fragment {
             }
         }
         );
-        bookListGrid.setOnScrollListener(new AbsListView.OnScrollListener() {
-            int prevVisibleItem;
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-            }
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if(prevVisibleItem != firstVisibleItem){
-                    if(prevVisibleItem < firstVisibleItem){
-                        scrollChange.hideItems();
-                    }
-                    else{
-                        scrollChange.showItems();
-                    }
-                    prevVisibleItem = firstVisibleItem;
-                }
-            }
-        });
     }
 
 }

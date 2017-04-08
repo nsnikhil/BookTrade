@@ -19,10 +19,6 @@ import com.trade.book.booktrade.cartData.CartTables;
 
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by Nikhil on 19-Mar-17.
- */
-
 public class adapterCart extends CursorAdapter{
 
     public adapterCart(Context context, Cursor c) {
@@ -60,7 +56,7 @@ public class adapterCart extends CursorAdapter{
         }
     }
 
-    public class setColor extends AsyncTask<Void,Void,Palette> {
+    private class setColor extends AsyncTask<Void,Void,Palette> {
 
         MyViewHolder myViewHolder;
         String url;
@@ -77,9 +73,7 @@ public class adapterCart extends CursorAdapter{
         protected Palette doInBackground(Void... params) {
             try {
                 return createPaletteAsync(mContext,url);
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
             return null;
@@ -92,12 +86,12 @@ public class adapterCart extends CursorAdapter{
         }
     }
 
-    public Palette createPaletteAsync(Context c,String url) throws ExecutionException, InterruptedException {
+    private Palette createPaletteAsync(Context c,String url) throws ExecutionException, InterruptedException {
         Bitmap b =  Glide.with(c).load(url).asBitmap().into(100, 100).get();
         return Palette.from(b).generate();
     }
 
-    public class MyViewHolder{
+    private class MyViewHolder{
         ImageView bookImage;
         TextView bookName,bookPublisher,bookPrice;
         LinearLayout bookTextConatiner;

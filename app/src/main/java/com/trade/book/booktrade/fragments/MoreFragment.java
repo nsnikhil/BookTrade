@@ -5,8 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -16,8 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import com.trade.book.booktrade.AddBook;
 import com.trade.book.booktrade.PrefActivity;
 import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.adapters.adapterList;
@@ -25,13 +21,13 @@ import com.trade.book.booktrade.fragments.dialogfragments.*;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class MoreFragment extends Fragment {
 
-    ListView moreList;
+    @BindView(R.id.cateogoryList) ListView moreList;
 
     public MoreFragment() {
 
@@ -41,13 +37,9 @@ public class MoreFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_cateogory, container, false);
-        initilize(v);
+        ButterKnife.bind(this,v);
         addList();
         return v;
-    }
-
-    private void initilize(View v) {
-        moreList = (ListView)v.findViewById(R.id.cateogoryList);
     }
 
     private void addList(){

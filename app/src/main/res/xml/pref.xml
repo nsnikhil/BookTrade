@@ -4,6 +4,7 @@
         <SwitchPreference
             android:key="@string/prefMultiKey"
             android:summary="off"
+            android:enabled="false"
             android:title="@string/prefMultiTitle" />
     </PreferenceCategory>
 </PreferenceScreen>

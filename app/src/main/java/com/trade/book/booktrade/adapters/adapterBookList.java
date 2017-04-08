@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -24,9 +23,9 @@ import java.util.concurrent.ExecutionException;
 public class adapterBookList extends BaseAdapter{
 
 
-    Context mContext;
-    ArrayList<BookObject> list;
-    int k;
+    private Context mContext;
+    private ArrayList<BookObject> list;
+    private int k;
 
     public adapterBookList(Context c, ArrayList<BookObject> bookObjects,int key){
         mContext = c;
@@ -52,7 +51,7 @@ public class adapterBookList extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        MyViewHolder myViewHolder = null;
+        MyViewHolder myViewHolder;
         if(convertView==null){
             convertView = LayoutInflater.from(mContext).inflate(R.layout.single_book,parent,false);
             myViewHolder = new MyViewHolder(convertView);
@@ -106,7 +105,7 @@ public class adapterBookList extends BaseAdapter{
         }
     }
 
-    public class setColor extends AsyncTask<Void,Void,Palette>{
+    private class setColor extends AsyncTask<Void,Void,Palette>{
 
         MyViewHolder myViewHolder;
         String url;
@@ -121,9 +120,7 @@ public class adapterBookList extends BaseAdapter{
         protected Palette doInBackground(Void... params) {
             try {
                 return createPaletteAsync(url);
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
             return null;
@@ -136,13 +133,13 @@ public class adapterBookList extends BaseAdapter{
         }
     }
 
-    public Palette createPaletteAsync(String url) throws ExecutionException, InterruptedException {
+    private Palette createPaletteAsync(String url) throws ExecutionException, InterruptedException {
         Bitmap b =  Glide.with(mContext).load(url).asBitmap().into(100, 100).get();
         return Palette.from(b).generate();
     }
 
 
-    public class MyViewHolder{
+    private class MyViewHolder{
         ImageView bookImage;
         TextView bookName,bookPublisher,bookPrice;
         LinearLayout bookTextConatiner;

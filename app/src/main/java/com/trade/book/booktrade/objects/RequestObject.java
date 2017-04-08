@@ -6,8 +6,8 @@ package com.trade.book.booktrade.objects;
 
 public class RequestObject {
 
-    String name,publisher,userId;
-    int requestId;
+    private String name,publisher,userId;
+    private int requestId;
 
     public RequestObject(String nm,String pb,String uid,int rid){
         name = nm;

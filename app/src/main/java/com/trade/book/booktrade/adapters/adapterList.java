@@ -5,21 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.trade.book.booktrade.R;
-
 import java.util.ArrayList;
 
-/**
- * Created by Nikhil on 19-Mar-17.
- */
+
 
 public class adapterList extends BaseAdapter{
 
-    Context mContext;
-    ArrayList<String> list;
+    private Context mContext;
+    private ArrayList<String> list;
 
     public adapterList(Context context, ArrayList<String> name){
         mContext = context;
@@ -55,7 +50,7 @@ public class adapterList extends BaseAdapter{
         return convertView;
     }
 
-    public class MyViewHolder{
+    private class MyViewHolder{
         TextView catName;
         MyViewHolder(View v){
             catName = (TextView)v.findViewById(R.id.catName);

@@ -1,8 +1,6 @@
 package com.trade.book.booktrade.fragments;
 
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -10,20 +8,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -51,16 +46,18 @@ import org.json.JSONObject;
 
 import java.util.Calendar;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class MyCartFragment extends Fragment implements View.OnClickListener, android.app.LoaderManager.LoaderCallbacks<Cursor> {
 
-    GridView bookCartGrid;
-    ImageView noItem;
-    FloatingActionButton checkOut;
+    @BindView(R.id.cartList) GridView bookCartGrid;
+    @BindView(R.id.cartEmpty) ImageView noItem;
+    @BindView(R.id.cartCheckOut) FloatingActionButton checkOut;
     private static final int mCartLoaderId = 2;
     adapterCart cartAdapter;
     private static final String mNullValue = "N/A";
-    RequestListScrollChange scrollChange;
     private int mCursorCount = 0;
 
     public MyCartFragment() {
@@ -71,20 +68,12 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_my_cart,container,false);
+        ButterKnife.bind(this,v);
         initilize(v);
         setEmpty();
         return v;
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            scrollChange = (RequestListScrollChange) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
-        }
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,11 +82,8 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     }
 
     private void initilize(View v) {
-        bookCartGrid = (GridView) v.findViewById(R.id.cartList);
-        noItem = (ImageView) v.findViewById(R.id.cartEmpty);
         cartAdapter = new adapterCart(getActivity(), null);
         bookCartGrid.setAdapter(cartAdapter);
-        checkOut = (FloatingActionButton) v.findViewById(R.id.cartCheckOut);
         checkOut.setOnClickListener(this);
         bookCartGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -130,44 +116,6 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
                     detail.putExtras(b);
                     detail.putExtra(getResources().getString(R.string.intenfromcart), true);
                     startActivity(detail);
-                }
-            }
-        });
-        bookCartGrid.setOnScrollListener(new AbsListView.OnScrollListener() {
-            int prevVisibleItem;
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if(prevVisibleItem != firstVisibleItem){
-                    if(prevVisibleItem < firstVisibleItem){
-                        /*if (checkOut.getVisibility() == View.VISIBLE) {
-                            checkOut.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    checkOut.setVisibility(View.GONE);
-                                }
-                            });
-                        }*/
-                        scrollChange.hideItems();
-                    }
-                    else{
-                        /*if (checkOut.getVisibility() == View.GONE) {
-                            checkOut.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    checkOut.setVisibility(View.VISIBLE);
-                                }
-                            });
-                        }*/
-                        scrollChange.showItems();
-                    }
-                    prevVisibleItem = firstVisibleItem;
                 }
             }
         });
@@ -263,8 +211,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     private Dialog uploadigDialog() {
         AlertDialog.Builder uploading = new AlertDialog.Builder(getActivity());
         uploading.setMessage("Processing...").setCancelable(false).create().show();
-        Dialog up = uploading.create();
-        return up;
+        return uploading.create();
     }
 
     private void checkOutFromCart() {
@@ -427,7 +374,10 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
         while (c.moveToNext()) {
             sp = sp + c.getInt(c.getColumnIndex(tablecart.mSellingPrice));
         }
-        buildCheckOutDialog("Total Price    : " + "र "+sp + "\n"
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        buildCheckOutDialog("All the books left in your cart will delivered to "+
+                spf.getString(getActivity().getResources().getString(R.string.prefAccountAddress), mNullValue) + " within one week\n\n"+
+                "Total Price    : " + "र "+sp + "\n"
                 + "\n"
                 + "Convenience Fee     : " + "र "+compute(sp) + "\n"
                 + "\n"

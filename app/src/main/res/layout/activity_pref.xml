@@ -20,6 +20,7 @@
         android:id="@+id/aboutContainer"
         style="@style/matchParent"
         android:visibility="visible"
+        android:background="@color/colorPrimaryDark"
         android:layout_below="@id/toolbarPref">
 
         <ScrollView style="@style/matchParent">
@@ -49,6 +50,15 @@
                         android:textColor="@color/colorAccent"
                         android:textSize="37sp" />
 
+                    <TextView
+                        android:id="@+id/aboutVersion"
+                        android:layout_width="match_parent"
+                        android:text="@string/aboutVersion"
+                        android:gravity="center_horizontal"
+                        android:textColor="@color/colorBackground"
+                        android:textSize="14sp"
+                        android:layout_height="wrap_content" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -61,6 +71,7 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:padding="@dimen/sixteen"
+                        android:textColor="@color/colorBackground"
                         android:text="@string/aboutUs"
                         android:textSize="16sp"
                         android:id="@+id/aboutButtonDevs"
@@ -71,6 +82,7 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:padding="@dimen/sixteen"
+                        android:textColor="@color/colorBackground"
                         android:id="@+id/aboutButtonTerms"
                         android:text="@string/aboutTerms"
                         android:textSize="16sp"
@@ -82,6 +94,7 @@
                         android:background="@android:color/transparent"
                         android:padding="@dimen/sixteen"
                         android:text="@string/aboutLicense"
+                        android:textColor="@color/colorBackground"
                         android:id="@+id/aboutButtonLicense"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -90,6 +103,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
+                        android:textColor="@color/colorBackground"
                         android:padding="@dimen/sixteen"
                         android:text="@string/aboutLibraries"
                         android:id="@+id/aboutButtonLibraries"
@@ -107,8 +121,8 @@
             android:layout_alignParentBottom="true"
             android:gravity="center"
             android:padding="@dimen/sixteen"
+            android:textColor="@color/white"
             android:text="@string/copyright"
-            android:textColor="@android:color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
 

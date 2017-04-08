@@ -1,7 +1,6 @@
 package com.trade.book.booktrade.fragments.dialogfragments;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -23,13 +21,16 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.StartActivity;
-import com.trade.book.booktrade.fragments.RequestListFragment;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class dialogFragmentRequest extends DialogFragment {
 
-    EditText name,publisher;
-    Button save;
+    @BindView(R.id.requestName) EditText name;
+    @BindView(R.id.requestPublisher) EditText publisher;
+    @BindView(R.id.requestSave) Button save;
     private static final String mNullValue = "N/A";
 
 
@@ -41,14 +42,12 @@ public class dialogFragmentRequest extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_dialog_fragment_request, container, false);
-        initilize(v);
+        ButterKnife.bind(this,v);
+        initilize();
         return v;
     }
 
-    private void initilize(View v) {
-        name = (EditText)v.findViewById(R.id.requestName);
-        publisher = (EditText)v.findViewById(R.id.requestPublisher);
-        save = (Button)v.findViewById(R.id.requestSave);
+    private void initilize() {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

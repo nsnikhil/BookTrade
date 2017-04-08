@@ -6,15 +6,18 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ImageActivity extends AppCompatActivity {
 
-    ImageView fullImage;
+    @BindView(R.id.imageFullScreen) ImageView fullImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
-        fullImage = (ImageView)findViewById(R.id.imageFullScreen);
+        ButterKnife.bind(this);
         if(getIntent().getExtras()!=null){
             String url = getIntent().getExtras().getString(getResources().getString(R.string.intentImageUrl));
             Glide.with(getApplicationContext())

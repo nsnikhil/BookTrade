@@ -7,6 +7,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.trade.book.booktrade.cartData.CartTables.tablecart;
 
@@ -33,9 +34,9 @@ public class CartProvider extends ContentProvider{
 
     @Nullable
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteDatabase sdb = cartHelper.getReadableDatabase();
-        Cursor c = null;
+        Cursor c;
         switch (sUriMatcher.match(uri)){
             case uFullCart:
                 c = sdb.query(CartTables.mTableName,projection,selection,selectionArgs,null,null,sortOrder);
@@ -54,13 +55,13 @@ public class CartProvider extends ContentProvider{
 
     @Nullable
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         return null;
     }
 
     @Nullable
     @Override
-    public Uri insert(Uri uri, ContentValues contentValues) {
+    public Uri insert(@NonNull Uri uri, ContentValues contentValues) {
         switch (sUriMatcher.match(uri)){
             case uFullCart:
                 return insertVal(uri,contentValues);
@@ -81,7 +82,7 @@ public class CartProvider extends ContentProvider{
     }
 
     @Override
-    public int delete(Uri uri, String s, String[] strings) {
+    public int delete(@NonNull Uri uri, String s, String[] strings) {
         switch (sUriMatcher.match(uri)){
             case uFullCart:
                 return deleteVal(uri,s,strings);
@@ -106,7 +107,7 @@ public class CartProvider extends ContentProvider{
     }
 
     @Override
-    public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
+    public int update(@NonNull Uri uri, ContentValues contentValues, String s, String[] strings) {
         return 0;
     }
 }
