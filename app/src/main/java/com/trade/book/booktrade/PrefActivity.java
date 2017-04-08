@@ -27,6 +27,7 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
     LinearLayout prefContainer;
     Button devs, terms, license, libraries;
     ShimmerTextView mShimmerTextView;
+    Shimmer shimmer = new Shimmer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +59,7 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
         aboutContainer = (RelativeLayout) findViewById(R.id.aboutContainer);
         prefContainer = (LinearLayout) findViewById(R.id.prefContainer);
         mShimmerTextView = (ShimmerTextView)findViewById(R.id.aboutText);
-        Shimmer shimmer = new Shimmer();
         shimmer.setDuration(6000).setDirection(Shimmer.ANIMATION_DIRECTION_LTR);
-        shimmer.start(mShimmerTextView);
         devs = (Button) findViewById(R.id.aboutButtonDevs);
         terms = (Button) findViewById(R.id.aboutButtonTerms);
         license = (Button) findViewById(R.id.aboutButtonLicense);
@@ -84,7 +83,19 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
                 aboutDialog(getResources().getString(R.string.copyright));
                 break;
             case R.id.aboutButtonLibraries:
-                aboutDialog("Will show all the 3rd party libraries used");
+                aboutDialog("Clans-FloatingActionButton" +
+                        "\n\nlopspower-CircularImageView" +
+                        "\n\napl-devs-AppIntro" +
+                        "\n\nlapism-SearchView"+
+                        "\n\nFacebook SDK for Android" +
+                        "\n\nAWS Mobile SDK for Android" +
+                        "\n\nbumptech-glide" +
+                        "\n\nclaudiodegio-MsvSearch" +
+                        "\n\nRomainPiel-Shimmer-android" +
+                        "\n\nwasabeef-Blurry" +
+                        "\n\nKeepSafe-TapTargetView" +
+                        "\n\nsquare-leakcanary" +
+                        "\n\nJakeWharton-butterknife");
                 break;
         }
     }
@@ -95,6 +106,18 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
         Dialog d = abt.create();
         abt.show();
         return d;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        shimmer.cancel();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        shimmer.start(mShimmerTextView);
     }
 
     public static class prefFragment extends PreferenceFragment {

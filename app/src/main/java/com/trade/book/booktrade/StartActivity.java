@@ -9,7 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -49,11 +51,15 @@ import com.trade.book.booktrade.fragments.*;
 import com.trade.book.booktrade.interfaces.RequestListScrollChange;
 
 import java.lang.reflect.Field;
+import java.util.Locale;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class StartActivity extends AppCompatActivity implements RequestListScrollChange {
 
-    BottomNavigationView mBottomNaviagtionView;
+    //BottomNavigationView mBottomNaviagtionView;
     Toolbar mBottomToolbar;
     FloatingActionButton mFabAddBook;
     MaterialSearchView mBottomSearchView;
@@ -64,6 +70,7 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
     AccountFragment mAccountFragment;
     MoreFragment mMoreFragment;
     MyCartFragment myCartFragment;
+    @BindView(R.id.mainBottomNaviagtion) BottomNavigationView mBottomNaviagtionView;
     RelativeLayout mBottomConatainer,mEntireContainer;
     int mAddBookRequestCode = 1080;
     ImageView errorImage;
@@ -80,6 +87,7 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
         }
         LeakCanary.install(getApplication());
         setContentView(R.layout.activity_start);
+        ButterKnife.bind(this);
         initialize(savedInstanceState);
         setClickListeners();
     }
@@ -159,7 +167,7 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
     }
 
     private void initialize(Bundle savedInstanceState) {
-        mBottomNaviagtionView = (BottomNavigationView) findViewById(R.id.mainBottomNaviagtion);
+        //mBottomNaviagtionView = (BottomNavigationView) findViewById(R.id.mainBottomNaviagtion);
         disableShiftMode(mBottomNaviagtionView);
         mBottomToolbar = (Toolbar) findViewById(R.id.bottomToolbar);
         setSupportActionBar(mBottomToolbar);
