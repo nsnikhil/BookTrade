@@ -10,7 +10,7 @@
         android:layout_height="wrap_content">
 
 
-        <EditText
+        <android.support.design.widget.TextInputEditText
             android:id="@+id/dialogPhone"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content">
 
 
-        <EditText
+        <android.support.design.widget.TextInputEditText
             android:id="@+id/dialogAddress"
             android:layout_width="250dp"
             android:layout_height="wrap_content"

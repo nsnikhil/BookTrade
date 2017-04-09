@@ -2,6 +2,7 @@ package com.trade.book.booktrade.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.support.v7.graphics.Palette;
 import android.util.Log;
@@ -79,9 +80,11 @@ public class adapterBookList extends BaseAdapter{
 
     private void setSellingPrice(MyViewHolder myViewHolder,BookObject bookObject){
         if(k==0){
+            myViewHolder.bookCostPrice.setVisibility(View.VISIBLE);
+            myViewHolder.bookCostPrice.setText("र "+bookObject.getCostPrice());
             myViewHolder.bookPrice.setText("र "+bookObject.getSellingPrice());
         }else {
-
+            myViewHolder.bookCostPrice.setVisibility(View.GONE);
             myViewHolder.bookPrice.setText("र "+ (bookObject.getSellingPrice()+compute(bookObject.getSellingPrice())));
         }
     }
@@ -141,11 +144,13 @@ public class adapterBookList extends BaseAdapter{
 
     private class MyViewHolder{
         ImageView bookImage;
-        TextView bookName,bookPublisher,bookPrice;
+        TextView bookName,bookPublisher,bookPrice,bookCostPrice;
         LinearLayout bookTextConatiner;
         MyViewHolder(View v){
             bookName = (TextView)v.findViewById(R.id.singleBookName);
             bookPrice = (TextView)v.findViewById(R.id.singleBookPrice);
+            bookCostPrice = (TextView)v.findViewById(R.id.singleBookCostPrice);
+            bookCostPrice.setPaintFlags(bookCostPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             bookPublisher = (TextView)v.findViewById(R.id.singleBookPublisher);
             bookImage = (ImageView)v.findViewById(R.id.singleBookPicture);
             bookTextConatiner = (LinearLayout)v.findViewById(R.id.singleBookTextContainer);

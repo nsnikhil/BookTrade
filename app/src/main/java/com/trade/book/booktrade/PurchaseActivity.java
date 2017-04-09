@@ -40,14 +40,22 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class PurchaseActivity extends AppCompatActivity implements View.OnClickListener{
 
-    TextView name,publisher,edition,description,cateogory,condition,purchaseError;
-    Button buyNow,addToCart;
-    LinearLayout buttonConatiner;
-    RecyclerView imageHolder;
+    @BindView(R.id.purchaseName) TextView name;
+    @BindView(R.id.purchasePublisher) TextView publisher;
+    @BindView(R.id.purchaseEdition) TextView edition;
+    @BindView(R.id.purchaseDescription) TextView description;
+    @BindView(R.id.purchaseCategory) TextView cateogory;
+    @BindView(R.id.purchaseCondition) TextView condition;
+    @BindView(R.id.purchaseErrorText) TextView purchaseError;
+    @BindView(R.id.purchaseBuy) Button buyNow;
+    @BindView(R.id.purchaseAddTocart) Button addToCart;
+    @BindView(R.id.purchaseButtonContainer) LinearLayout buttonConatiner;
+    @BindView(R.id.purchaseBookView) RecyclerView imageHolder;
     BookObject bObject = null;
     adapterPurchaseImage imageAdapter;
     ArrayList<String> urls;
@@ -96,22 +104,9 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void initilize() {
-        name = (TextView)findViewById(R.id.purchaseName);
-        publisher = (TextView)findViewById(R.id.purchasePublisher);
-        edition = (TextView)findViewById(R.id.purchaseEdition);
-        description = (TextView)findViewById(R.id.purchaseDescription);
-        cateogory = (TextView)findViewById(R.id.purchaseCategory);
-        condition = (TextView)findViewById(R.id.purchaseCondition);
-        buyNow = (Button)findViewById(R.id.purchaseBuy);
-
-        imageHolder = (RecyclerView)findViewById(R.id.purchaseBookView);
         imageHolder.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
-
-        addToCart = (Button)findViewById(R.id.purchaseAddTocart);
         addToCart.setOnClickListener(this);
         buyNow.setOnClickListener(this);
-        buttonConatiner = (LinearLayout)findViewById(R.id.purchaseButtonContainer);
-        purchaseError = (TextView)findViewById(R.id.purchaseErrorText);
         if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
             buyNow.setTextColor(getResources().getColor(R.color.cardview_dark_background));
             addToCart.setTextColor(getResources().getColor(R.color.cardview_dark_background));
@@ -153,7 +148,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         } if(!bObject.getPhoto7().equalsIgnoreCase("null")&&bObject.getPhoto7()!=null){
             urls.add(baseUrl+"/"+bObject.getPhoto7());
         }
-        imageAdapter = new adapterPurchaseImage(getApplicationContext(),urls,0);
+        imageAdapter = new adapterPurchaseImage(PurchaseActivity.this,urls,0);
         imageHolder.setAdapter(imageAdapter);
     }
 

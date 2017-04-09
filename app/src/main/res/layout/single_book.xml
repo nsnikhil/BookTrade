@@ -33,29 +33,41 @@
                 android:layout_marginBottom="@dimen/eight"
                 android:layout_marginStart="@dimen/eight"
                 android:layout_marginTop="@dimen/eight"
-                android:fontFamily="sans-serif-light"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/singleBookPublisher"
                 style="@style/crdvText"
                 android:transitionName="transitionBookPublisher"
                 android:layout_marginBottom="@dimen/eight"
-                android:layout_marginStart="@dimen/eight"
-                android:fontFamily="sans-serif-light"
-                android:textStyle="bold" />
+                android:layout_marginStart="@dimen/eight" />
+
+            <LinearLayout
+                style="@style/wrapContent"
+                android:layout_gravity="end|bottom"
+                android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/singleBookCostPrice"
+                style="@style/crdvPrice"
+                android:layout_marginBottom="@dimen/eight"
+                android:layout_marginEnd="@dimen/eight"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:textColor="@color/colorBackground"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/singleBookPrice"
                 style="@style/crdvPrice"
-                android:layout_gravity="end|bottom"
                 android:layout_marginBottom="@dimen/eight"
                 android:layout_marginEnd="@dimen/eight"
-                android:fontFamily="sans-serif-light"
+                android:layout_gravity="end"
+                android:gravity="end"
                 android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="14sp" />
+
+            </LinearLayout>
 
 
         </LinearLayout>

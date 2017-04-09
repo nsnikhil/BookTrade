@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -35,7 +36,6 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
     @BindView(R.id.prefContainer) LinearLayout prefContainer;
     @BindView(R.id.aboutButtonDevs) Button devs;
     @BindView(R.id.aboutButtonTerms) Button terms;
-    @BindView(R.id.aboutButtonLicense) Button license;
     @BindView(R.id.aboutButtonLibraries) Button libraries;
     @BindView(R.id.aboutText) ShimmerTextView mShimmerTextView;
     @BindView(R.id.aboutVersion) TextView mVersionText;
@@ -70,6 +70,7 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
                 aboutContainer.setVisibility(View.VISIBLE);
                 prefContainer.setVisibility(View.GONE);
                 prefToolbar.setVisibility(View.GONE);
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             }
         }
     }
@@ -88,7 +89,6 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
 
         devs.setOnClickListener(this);
         terms.setOnClickListener(this);
-        license.setOnClickListener(this);
         libraries.setOnClickListener(this);
     }
 
@@ -96,13 +96,10 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.aboutButtonDevs:
-                aboutDialog("Akash Surana \n\nAyush Lodha \n\nNikhil Soni");
+                aboutDialog("Shelf Bee");
                 break;
             case R.id.aboutButtonTerms:
                 aboutDialog(getResources().getString(R.string.condition));
-                break;
-            case R.id.aboutButtonLicense:
-                aboutDialog(getResources().getString(R.string.copyright));
                 break;
             case R.id.aboutButtonLibraries:
                 showLibrariesList();

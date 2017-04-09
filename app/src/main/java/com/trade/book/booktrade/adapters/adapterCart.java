@@ -38,7 +38,7 @@ public class adapterCart extends CursorAdapter{
         MyViewHolder myViewHolder = (MyViewHolder) view.getTag();
         myViewHolder.bookName.setText(cursor.getString(cursor.getColumnIndex(CartTables.tablecart.mName)));
         myViewHolder.bookPublisher.setText(cursor.getString(cursor.getColumnIndex(CartTables.tablecart.mPublisher)));
-        myViewHolder.bookPrice.setText(""+cursor.getInt(cursor.getColumnIndex(CartTables.tablecart.mSellingPrice)));
+        myViewHolder.bookPrice.setText("र "+cursor.getInt(cursor.getColumnIndex(CartTables.tablecart.mSellingPrice)));
         String url = context.getResources().getString(R.string.urlBucetHost)+context.getResources().getString(R.string.urlBucketName)+"/"+cursor.getString(cursor.getColumnIndex(CartTables.tablecart.mPhoto0));
         Glide.with(context)
                 .load(url)
@@ -93,11 +93,13 @@ public class adapterCart extends CursorAdapter{
 
     private class MyViewHolder{
         ImageView bookImage;
-        TextView bookName,bookPublisher,bookPrice;
+        TextView bookName,bookPublisher,bookPrice,bookCostPrice;
         LinearLayout bookTextConatiner;
         MyViewHolder(View v){
             bookName = (TextView)v.findViewById(R.id.singleBookName);
             bookPrice = (TextView)v.findViewById(R.id.singleBookPrice);
+            bookCostPrice = (TextView)v.findViewById(R.id.singleBookCostPrice);
+            bookCostPrice.setVisibility(View.GONE);
             bookPublisher = (TextView)v.findViewById(R.id.singleBookPublisher);
             bookImage = (ImageView)v.findViewById(R.id.singleBookPicture);
             bookTextConatiner = (LinearLayout)v.findViewById(R.id.singleBookTextContainer);

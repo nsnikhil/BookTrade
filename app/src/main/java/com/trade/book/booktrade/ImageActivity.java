@@ -2,6 +2,7 @@ package com.trade.book.booktrade;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -18,6 +19,7 @@ public class ImageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
         ButterKnife.bind(this);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         if(getIntent().getExtras()!=null){
             String url = getIntent().getExtras().getString(getResources().getString(R.string.intentImageUrl));
             Glide.with(getApplicationContext())

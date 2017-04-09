@@ -20,12 +20,9 @@
         android:id="@+id/aboutContainer"
         style="@style/matchParent"
         android:visibility="visible"
-        android:background="@color/colorPrimaryDark"
+        android:gravity="center"
+        android:background="@color/colorBackground"
         android:layout_below="@id/toolbarPref">
-
-        <ScrollView style="@style/matchParent">
-
-            <RelativeLayout style="@style/matchParent">
 
                 <LinearLayout
                     android:id="@+id/aboutLogoContainer"
@@ -55,7 +52,7 @@
                         android:layout_width="match_parent"
                         android:text="@string/aboutVersion"
                         android:gravity="center_horizontal"
-                        android:textColor="@color/colorBackground"
+                        android:textColor="@color/cardview_dark_background"
                         android:textSize="14sp"
                         android:layout_height="wrap_content" />
 
@@ -71,7 +68,7 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:padding="@dimen/sixteen"
-                        android:textColor="@color/colorBackground"
+                        android:textColor="@color/colorAccent"
                         android:text="@string/aboutUs"
                         android:textSize="16sp"
                         android:id="@+id/aboutButtonDevs"
@@ -82,7 +79,7 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:padding="@dimen/sixteen"
-                        android:textColor="@color/colorBackground"
+                        android:textColor="@color/colorAccent"
                         android:id="@+id/aboutButtonTerms"
                         android:text="@string/aboutTerms"
                         android:textSize="16sp"
@@ -92,18 +89,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
-                        android:padding="@dimen/sixteen"
-                        android:text="@string/aboutLicense"
-                        android:textColor="@color/colorBackground"
-                        android:id="@+id/aboutButtonLicense"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:textColor="@color/colorBackground"
+                        android:textColor="@color/colorAccent"
                         android:padding="@dimen/sixteen"
                         android:text="@string/aboutLibraries"
                         android:id="@+id/aboutButtonLibraries"
@@ -111,21 +97,6 @@
                         android:textStyle="bold" />
 
                 </LinearLayout>
-
-            </RelativeLayout>
-        </ScrollView>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:gravity="center"
-            android:padding="@dimen/sixteen"
-            android:textColor="@color/white"
-            android:text="@string/copyright"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
 
     </RelativeLayout>
 

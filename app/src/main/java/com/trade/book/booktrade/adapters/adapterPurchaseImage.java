@@ -1,7 +1,11 @@
 package com.trade.book.booktrade.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,10 +76,15 @@ public class adapterPurchaseImage extends RecyclerView.Adapter<adapterPurchaseIm
             img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent img = new Intent(mContext, ImageActivity.class);
-                    img.putExtra(mContext.getResources().getString(R.string.intentImageUrl),url.get(getPosition()));
-                    img.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContext.startActivity(img);
+                    Intent fullScreen = new Intent(mContext, ImageActivity.class);
+                    fullScreen.putExtra(mContext.getResources().getString(R.string.intentImageUrl),url.get(getPosition()));
+                    fullScreen.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext,img,"transitionBookImage");
+                        mContext.startActivity(fullScreen,options.toBundle());
+                    }else {
+                        mContext.startActivity(fullScreen);
+                    }
                 }
             });
         }

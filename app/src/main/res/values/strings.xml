@@ -198,7 +198,7 @@
     <!-- -->
 
     <!-- About-->
-    <string name="aboutUs" translatable="false">About Developers</string>
+    <string name="aboutUs" translatable="false">About Us</string>
     <string name="aboutLibraries" translatable="false">3rd Party Libraries Used</string>
     <string name="aboutTerms" translatable="false">Terms and Condition</string>
     <string name="aboutLicense" translatable="false">License Agreement</string>

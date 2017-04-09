@@ -3,8 +3,10 @@ package com.trade.book.booktrade.fragments.dialogfragments;
 
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +29,8 @@ import butterknife.ButterKnife;
 
 public class dialogFagmentAddress extends DialogFragment {
 
-    @BindView(R.id.dialogAddress) EditText address;
-    @BindView(R.id.dialogPhone) EditText phone;
+    @BindView(R.id.dialogAddress) TextInputEditText address;
+    @BindView(R.id.dialogPhone) TextInputEditText phone;
     @BindView(R.id.dialogSave) Button save;
     private static final String mNullValue = "N/A";
 
@@ -55,6 +57,9 @@ public class dialogFagmentAddress extends DialogFragment {
                 upadteValues();
             }
         });
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            save.setTextColor(getResources().getColor(R.color.cardview_dark_background));
+        }
     }
 
     private void setValue(){

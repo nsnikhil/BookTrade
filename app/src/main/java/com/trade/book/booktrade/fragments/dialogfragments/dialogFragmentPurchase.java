@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
@@ -59,6 +60,9 @@ public class dialogFragmentPurchase extends DialogFragment {
                 shift();
             }
         });
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            buy.setTextColor(getResources().getColor(R.color.cardview_dark_background));
+        }
     }
 
     private void setVal() {
@@ -70,6 +74,7 @@ public class dialogFragmentPurchase extends DialogFragment {
         title.setText(name.toUpperCase() + " by " + publisher + " will be delivered to " + spf.getString(getActivity().getResources().getString(R.string.prefAccountAddress), mNullValue) + " within one week");
         actualPrice.setText("र "+(double) price );
         double taxPrice = Double.parseDouble(String.format("%.2f", compute(price)));
+        taxPrice = Math.round(taxPrice);
         extraPrice.setText("र "+taxPrice);
         totalPrice.setText("र "+(price + taxPrice ));
     }

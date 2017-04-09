@@ -4,8 +4,10 @@ package com.trade.book.booktrade.fragments.dialogfragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +30,8 @@ import butterknife.ButterKnife;
 
 public class dialogFragmentRequest extends DialogFragment {
 
-    @BindView(R.id.requestName) EditText name;
-    @BindView(R.id.requestPublisher) EditText publisher;
+    @BindView(R.id.requestName) TextInputEditText name;
+    @BindView(R.id.requestPublisher) TextInputEditText publisher;
     @BindView(R.id.requestSave) Button save;
     private static final String mNullValue = "N/A";
 
@@ -56,6 +58,9 @@ public class dialogFragmentRequest extends DialogFragment {
                 }
             }
         });
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            save.setTextColor(getResources().getColor(R.color.cardview_dark_background));
+        }
     }
 
     private String buildRequestUri(){

@@ -263,6 +263,7 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
                 switch (item.getItemId()) {
                     case R.id.bottomMenuBooks:
                         if (mFragmentBookPager.isHidden()) {
+                            ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                             ft.show(mFragmentBookPager);
                             ft.hide(mRequestListFragment);
                             ft.hide(mAccountFragment);
@@ -273,6 +274,7 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
                         break;
                     case R.id.bottomMenuCart:
                         if (myCartFragment.isHidden()) {
+                            ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                             ft.hide(mFragmentBookPager);
                             ft.hide(mRequestListFragment);
                             ft.hide(mAccountFragment);
@@ -283,6 +285,7 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
                         break;
                     case R.id.bottomMenuRequest:
                         if (mRequestListFragment.isHidden()) {
+                            ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                             ft.hide(mFragmentBookPager);
                             ft.show(mRequestListFragment);
                             ft.hide(mAccountFragment);
@@ -293,6 +296,7 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
                         break;
                     case R.id.bottomMenuAccount:
                         if (mAccountFragment.isHidden()) {
+                            ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                             ft.hide(mFragmentBookPager);
                             ft.hide(mRequestListFragment);
                             ft.show(mAccountFragment);
@@ -303,6 +307,7 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
                         break;
                     case R.id.bottomMenuMore:
                         if (mMoreFragment.isHidden()) {
+                            ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                             ft.hide(mFragmentBookPager);
                             ft.hide(mRequestListFragment);
                             ft.hide(mAccountFragment);

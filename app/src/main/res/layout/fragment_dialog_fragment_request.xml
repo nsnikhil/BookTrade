@@ -1,31 +1,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-   style="@style/verticalLinearLayout"
+    style="@style/verticalLinearLayout"
     android:layout_width="250dp"
     android:padding="@dimen/sixteen"
     tools:context="com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentRequest">
 
     <TextView
         style="@style/addBookText"
-        android:textSize="20sp"
-        android:textColor="@color/colorAccent"
-        android:fontFamily="sans-serif-light"
-        android:textStyle="bold"
         android:layout_width="250dp"
-        android:text="@string/dialogAddRequest" />
+        android:fontFamily="sans-serif-light"
+        android:text="@string/dialogAddRequest"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
 
-    <EditText
-        android:id="@+id/requestName"
-        style="@style/addBookText"
-        android:padding="@dimen/eight"
-        android:layout_width="250dp"
-        android:hint="@string/bookName"
-        android:singleLine="true" />
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/requestName"
+            style="@style/addBookText"
+            android:layout_width="250dp"
+            android:hint="@string/bookName"
+            android:padding="@dimen/eight"
+            android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -34,23 +34,23 @@
         android:layout_height="wrap_content">
 
 
-    <EditText
-        android:id="@+id/requestPublisher"
-        style="@style/addBookText"
-        android:padding="@dimen/eight"
-        android:layout_width="250dp"
-        android:hint="@string/bookPublisher"
-        android:inputType="textMultiLine" />
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/requestPublisher"
+            style="@style/addBookText"
+            android:layout_width="250dp"
+            android:hint="@string/bookPublisher"
+            android:inputType="textMultiLine"
+            android:padding="@dimen/eight" />
 
     </android.support.design.widget.TextInputLayout>
 
     <Button
+        android:id="@+id/requestSave"
         style="@style/wrapContent"
+        android:layout_gravity="end"
         android:layout_marginTop="@dimen/eight"
         android:text="@string/dialogSave"
-        android:id="@+id/requestSave"
-        android:theme="@style/buttonClr"
         android:textColor="@color/white"
-        android:layout_gravity="end" />
+        android:theme="@style/buttonClr" />
 
 </LinearLayout>

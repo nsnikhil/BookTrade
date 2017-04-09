@@ -375,13 +375,15 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
             sp = sp + c.getInt(c.getColumnIndex(tablecart.mSellingPrice));
         }
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        double taxPrice = Double.parseDouble(String.format("%.2f", compute(sp)));
+        taxPrice = Math.round(taxPrice);
         buildCheckOutDialog("All the books left in your cart will delivered to "+
                 spf.getString(getActivity().getResources().getString(R.string.prefAccountAddress), mNullValue) + " within one week\n\n"+
-                "Total Price    : " + "र "+sp + "\n"
+                "Total Price    : " + "र "+(double)sp + "\n"
                 + "\n"
-                + "Convenience Fee     : " + "र "+compute(sp) + "\n"
+                + "Convenience Fee     : " + "र "+taxPrice + "\n"
                 + "\n"
-                + "Final Amount   : " + "र "+(sp + compute(sp)));
+                + "Final Amount   : " + "र "+(sp + taxPrice));
     }
 
     private void shift(Cursor cursor) {
