@@ -199,6 +199,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
 
     private void getImages() {
         for (int i = 0; i < imageUrls.size(); i++) {
+            Toast.makeText(getApplicationContext(),"Please wait while the your image is being downloaded",Toast.LENGTH_SHORT).show();
             new downloadImages().execute(imageUrls.get(i));
         }
     }
