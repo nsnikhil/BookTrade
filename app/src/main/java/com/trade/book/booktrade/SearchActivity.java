@@ -3,10 +3,12 @@ package com.trade.book.booktrade;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -66,8 +68,20 @@ public class SearchActivity extends AppCompatActivity {
             AlertDialog.Builder noInternet = new AlertDialog.Builder(SearchActivity.this);
             noInternet.setMessage("No Internet").setCancelable(false).create().show();
         }
+        checkFirst();
         initilize();
         search();
+    }
+
+    private void checkFirst() {
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean id = spf.getBoolean(getResources().getString(R.string.prefAccountIndicator), false);
+        if (!id) {
+            finish();
+            Intent intro = new Intent(SearchActivity.this, IntroActivity.class);
+            intro.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intro);
+        }
     }
 
     private boolean checkConnection() {

@@ -1,33 +1,42 @@
 {
   "project_info": {
-    "project_number": "855366082263",
-    "project_id": "firebase-book-trade"
+    "project_number": "791654171975",
+    "firebase_url": "https://shelf-bee-164215.firebaseio.com",
+    "project_id": "shelf-bee-164215",
+    "storage_bucket": "shelf-bee-164215.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:855366082263:android:5b30328420ce6772",
+        "mobilesdk_app_id": "1:791654171975:android:5b30328420ce6772",
         "android_client_info": {
           "package_name": "com.trade.book.booktrade"
         }
       },
       "oauth_client": [
         {
-          "client_id": "855366082263-sgm2hm87ge957ko22g6oeek80k7732r1.apps.googleusercontent.com",
+          "client_id": "791654171975-02hdosueo66sc73dnuj684r88ncbb0oc.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "791654171975-gkkbfdqanp7p74n8o5fksl216j2klj1r.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "791654171975-irbjhi8a9n96psr8jqnbhaugs0ah047o.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.trade.book.booktrade",
-            "certificate_hash": "b2983479124e74777fe374c165983420aaceccc8"
+            "certificate_hash": "2d5bc02d91aa2195b62366051083a3ee7aa166dc"
           }
-        },
-        {
-          "client_id": "855366082263-fqndejdq0jl4ld6qr2sik705tqeedd0t.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAhZD8JKpJ9TDtVCI8_3kz9q5bIA9bxv-8"
+          "current_key": "AIzaSyCduKHf3X3eYyWt4UPDQkbI_5xMERLo5ok"
+        },
+        {
+          "current_key": "AIzaSyBQ52Ee_ddKGzCOzFD5RKtgwYRjd0I5Hxs"
         }
       ],
       "services": {
@@ -35,11 +44,16 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "791654171975-02hdosueo66sc73dnuj684r88ncbb0oc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

@@ -103,6 +103,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
             AlertDialog.Builder noInternet = new AlertDialog.Builder(AddBook.this);
             noInternet.setMessage("No Internet").setCancelable(false).create().show();
         }
+        checkFirst();
         initilize();
         setClickListener();
         if (getIntent().getExtras() != null) {
@@ -112,6 +113,17 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                 bookEditObject = (BookObject) getIntent().getExtras().getSerializable(getResources().getString(R.string.intentEditObject));
                 setValue(bookEditObject);
             }
+        }
+    }
+
+    private void checkFirst() {
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean id = spf.getBoolean(getResources().getString(R.string.prefAccountIndicator), false);
+        if (!id) {
+            finish();
+            Intent intro = new Intent(AddBook.this, IntroActivity.class);
+            intro.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intro);
         }
     }
 

@@ -88,6 +88,12 @@
     <string name="navfeedback">Send Feedback</string>
     <!-- -->
 
+    <!-- AdMob ad unit IDs -->
+    <string name="banner_home_footer">ca-app-pub-5579030690922565/1038904732</string>
+    <string name="interstitial_full_screen">ca-app-pub-5579030690922565~8562171532</string>
+    <string name="banner_ad_unit_id">ca-app-pub-5579030690922565/1038904732</string>
+
+
     <!-- addBookFields-->
     <string name="bookName">Name</string>
     <string name="bookPublisher">Publisher</string>
