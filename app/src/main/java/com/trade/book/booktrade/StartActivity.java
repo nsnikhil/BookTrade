@@ -137,7 +137,6 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
                 super.onTargetDismissed(view, userInitiated);
             }
         });
-
     }
 
     @Override

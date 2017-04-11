@@ -18,7 +18,7 @@
     <!-- IntroText-->
     <string name="introSignin">Sign In</string>
     <string name="introExtraDetails">Just few more Details</string>
-    <string name="introTermsHeading">Terms and Condition</string>
+    <string name="introTermsHeading">By continuing  you  agree to all the <a href='https://docs.google.com/document/d/1a67czBVEUSpL0u8DCByhEbEG1cTVyB8mvC9eLo3Jt6M/pub' > Terms and Conditions</a></string>
     <string name="introLocate">Let us locate you</string>
     <!-- -->
 
@@ -73,9 +73,23 @@
 
     <!-- Prefrences-->
     <string name="prefCategory1">General</string>
-    <string name="prefMultiTitle">Multi-Color Mode</string>
-    <string name="prefMultiKey">prefmulclrky</string>
+    <string name="prefCategory2">Ui</string>
+    <string name="prefThemeTitle">Theme</string>
+    <string name="prefThemeKey">prefthky</string>
+    <string name="prefThemeDefaultValue">Default</string>
     <!-- -->
+
+    <array name="prefThemeEntries">
+        <item>Default</item>
+        <item>Multi-Color</item>
+        <item>Dark</item>
+    </array>
+
+    <array name="prefThemeValues">
+        <item>Default</item>
+        <item>Multi-Color</item>
+        <item>Dark</item>
+    </array>
 
 
     <!-- NavigationMenu-->
@@ -192,11 +206,11 @@
     <string name="prefAccountPhone" translatable="false">prefaccountph</string>
     <string name="prefAccountAddress" translatable="false">prefaccountadr</string>
     <string name="prefFirstOpen" translatable="false">prefFrstOpn</string>
+    <string name="prefFirstOpenAddd" translatable="false">prefFrstOpnAdd</string>
     <!-- -->
 
     <!-- TermsAndCondition-->
-    <string name="condition" formatted="false">We charge convenience fee to run our servers and provide you this service for each book being sold for less than Rs300 we charge
-    8% fee from both buyer and seller for range between 300 to 999 we charge a fee of 6% and for any book with selling price of Rs1000 and above a fee of 4% is being charged</string>
+    <string name="condition" formatted="false">We charge convenience fee to run our servers and provide you this service for each book being sold for less than Rs100 we charge Rs7 from both buyer and seller for range between 100 to 299 we charge 8% fee for range between 300 to 999 we charge a fee of 6% and for any book with selling price of Rs1000 and above a fee of 4% is being charged</string>
     <!-- -->
 
     <!-- CopyRight-->

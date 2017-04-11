@@ -9,19 +9,26 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import com.github.paolorotolo.appintro.ISlidePolicy;
 import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.StartActivity;
 
 import java.io.File;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class intro4Fragment extends Fragment implements ISlidePolicy {
 
 
     boolean agreed = false;
+    @BindView(R.id.intro4heading) TextView terms;
     private static final String mNullValue = "N/A";
 
     public intro4Fragment() {
@@ -30,7 +37,10 @@ public class intro4Fragment extends Fragment implements ISlidePolicy {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_intro4, container, false);
+        View v =  inflater.inflate(R.layout.fragment_intro4, container, false);
+        ButterKnife.bind(this,v);
+        terms.setMovementMethod(LinkMovementMethod.getInstance());
+        return v;
     }
 
     @Override

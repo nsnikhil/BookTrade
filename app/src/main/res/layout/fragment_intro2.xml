@@ -1,8 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/verticalLinearLayout"
-    android:background="@color/colorBackground"
     tools:context="com.trade.book.booktrade.fragments.introfragments.intro2Fragment">
+
+    <include layout="@layout/background"/>
 
     <LinearLayout
         style="@style/wrapContent"

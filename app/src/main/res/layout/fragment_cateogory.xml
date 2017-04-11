@@ -1,7 +1,6 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/verticalLinearLayout"
-    android:background="@color/colorBackground"
+    style="@style/matchParent"
     tools:context="com.trade.book.booktrade.fragments.CategoryFragment">
 
     <ListView
@@ -9,4 +8,10 @@
         android:divider="@null"
         android:id="@+id/cateogoryList"/>
 
-</LinearLayout>
+    <GridView
+        style="@style/matchParent"
+        android:visibility="gone"
+        android:id="@+id/cateogoryGridList"
+        android:numColumns="2"/>
+
+</RelativeLayout>

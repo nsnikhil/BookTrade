@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    style="@style/matchParent">
+
+    <android.support.v7.widget.CardView
+        style="@style/crdv"
+        android:layout_height="180dp"
+        card_view:cardCornerRadius="1dp"
+        card_view:cardElevation="2dp"
+        card_view:cardMaxElevation="4dp"
+        card_view:cardUseCompatPadding="true">
+
+
+        <ImageView
+            android:id="@+id/singleCategoryPicture"
+            android:scaleType="centerCrop"
+            style="@style/crdvImage" />
+
+
+        <TextView
+            android:id="@+id/singleCategoryName"
+            style="@style/crdvText"
+            android:layout_width="match_parent"
+            android:padding="@dimen/sixteen"
+            android:layout_gravity="bottom"
+            android:textSize="14sp" />
+
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

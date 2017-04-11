@@ -2,6 +2,7 @@ package com.trade.book.booktrade;
 
 
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import com.github.paolorotolo.appintro.AppIntro;
 import com.trade.book.booktrade.fragments.introfragments.intro1Fragment;
@@ -19,6 +20,7 @@ public class IntroActivity extends AppIntro {
             return;
         }
         LeakCanary.install(getApplication());*/
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         addSlide(new intro1Fragment());
         addSlide(new intro2Fragment());
         addSlide(new intro5Fragment());

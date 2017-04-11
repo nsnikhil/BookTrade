@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.preference.PreferenceFragment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
     @BindView(R.id.aboutText) ShimmerTextView mShimmerTextView;
     @BindView(R.id.aboutVersion) TextView mVersionText;
     Shimmer shimmer = new Shimmer();
+    private static final String termsUrl  ="https://docs.google.com/document/d/1a67czBVEUSpL0u8DCByhEbEG1cTVyB8mvC9eLo3Jt6M/pub";
 
     String[] libraryName = { "Clans-FloatingActionButton","lopspower-CircularImageView","apl-devs-AppIntro","lapism-SearchView","Facebook SDK for Android","AWS Mobile SDK for Android",
             "bumptech-glide","claudiodegio-MsvSearch","RomainPiel-Shimmer-android","wasabeef-Blurry","KeepSafe-TapTargetView","square-leakcanary","JakeWharton-butterknife"};
@@ -99,7 +101,9 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
                 aboutDialog("Shelf Bee");
                 break;
             case R.id.aboutButtonTerms:
-                aboutDialog(getResources().getString(R.string.condition));
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                CustomTabsIntent customTabsIntent = builder.build();
+                customTabsIntent.launchUrl(this, Uri.parse(termsUrl));
                 break;
             case R.id.aboutButtonLibraries:
                 showLibrariesList();

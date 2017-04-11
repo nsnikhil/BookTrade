@@ -68,30 +68,20 @@ public class MoreFragment extends Fragment {
                 address.show(getFragmentManager(),"dialog");
                 break;
             case 1:
-                Toast.makeText(getActivity(),"Will share the app once on play store",Toast.LENGTH_SHORT).show();
+                Intent share = new Intent(android.content.Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                share.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.trade.book.booktrade");
+                startActivity(Intent.createChooser(share, "Share link!"));
                 break;
             case 2:
                 chooseHelpDialog();
                 break;
             case 3:
-                Intent email = new Intent(Intent.ACTION_SENDTO);
-                email.putExtra(Intent.EXTRA_EMAIL, new String[]{ "shelf.bee.corp@gmail.com"});
-                email.setData(Uri.parse("mailto:"));
-                if(email.resolveActivity(getActivity().getPackageManager())!=null){
-                    startActivity(email);
-                }else {
-                    Toast.makeText(getActivity(),"No email app found",Toast.LENGTH_SHORT).show();
-                }
+               emailIntent();
                 break;
             case 4:
-                Intent feedback = new Intent(Intent.ACTION_SENDTO);
-                feedback.putExtra(Intent.EXTRA_EMAIL, new String[]{ "shelf.bee.corp@gmail.com"});
-                feedback.setData(Uri.parse("mailto:"));
-                if(feedback.resolveActivity(getActivity().getPackageManager())!=null){
-                    startActivity(feedback);
-                }else {
-                    Toast.makeText(getActivity(),"No email app found",Toast.LENGTH_SHORT).show();
-                }
+                emailIntent();
                 break;
             case 5:
                 Intent settings = new Intent(getActivity(),PrefActivity.class);
@@ -118,11 +108,21 @@ public class MoreFragment extends Fragment {
                     Toast.makeText(getActivity(),"Will show how to use",Toast.LENGTH_SHORT).show();
                 }
                 if (position == 1) {
-                    Toast.makeText(getActivity(),"Payment issue",Toast.LENGTH_SHORT).show();
+                    emailIntent();
                 }
             }
         });
         choosePath.create().show();
     }
 
+    private void emailIntent(){
+        Intent feedback = new Intent(Intent.ACTION_SENDTO);
+        feedback.putExtra(Intent.EXTRA_EMAIL, new String[]{ "shelf.bee.corp@gmail.com"});
+        feedback.setData(Uri.parse("mailto:"));
+        if(feedback.resolveActivity(getActivity().getPackageManager())!=null){
+            startActivity(feedback);
+        }else {
+            Toast.makeText(getActivity(),"No email app found",Toast.LENGTH_SHORT).show();
+        }
+    }
 }

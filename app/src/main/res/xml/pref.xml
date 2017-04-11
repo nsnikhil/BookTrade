@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/prefCategory1">
-        <SwitchPreference
-            android:key="@string/prefMultiKey"
-            android:summary="off"
+    <PreferenceCategory android:title="@string/prefCategory2">
+        <ListPreference
+            android:key="@string/prefThemeKey"
+            android:summary="@string/prefThemeDefaultValue"
             android:enabled="false"
-            android:title="@string/prefMultiTitle" />
+            android:defaultValue="@string/prefThemeDefaultValue"
+            android:entries="@array/prefThemeEntries"
+            android:entryValues="@array/prefThemeEntries"
+            android:title="@string/prefThemeTitle" />
     </PreferenceCategory>
 </PreferenceScreen>

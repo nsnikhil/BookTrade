@@ -43,7 +43,7 @@ public class adapterCart extends CursorAdapter{
         Glide.with(context)
                 .load(url)
                 .centerCrop()
-                .placeholder(R.drawable.back)
+                .placeholder(R.color.colorPrimaryDark)
                 .crossFade()
                 .into(myViewHolder.bookImage);
         setColor color = new setColor(context,myViewHolder,url);

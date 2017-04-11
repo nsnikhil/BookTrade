@@ -87,7 +87,7 @@
     <style name="crdvImage">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:src">@drawable/back</item>
+        <item name="android:src">@color/colorAccent</item>
         <item name="android:scaleType">centerCrop</item>
     </style>
 

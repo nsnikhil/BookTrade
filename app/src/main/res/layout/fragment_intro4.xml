@@ -1,34 +1,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/verticalLinearLayout"
-    android:background="@color/colorBackground"
     tools:context="com.trade.book.booktrade.fragments.introfragments.intro4Fragment">
+
+    <include layout="@layout/background"/>
 
     <TextView
         style="@style/wrapContent"
         android:layout_gravity="center"
         android:layout_margin="@dimen/sixteen"
         android:fontFamily="sans-serif-light"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
         android:textSize="28sp"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
         android:id="@+id/intro4heading"
         android:text="@string/introTermsHeading"/>
 
-    <ScrollView style="@style/matchParent"
-        android:layout_below="@id/intro4heading"
-        android:id="@+id/intro4terms">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="@string/condition"
-            android:textColor="#000000"
-            android:padding="@dimen/sixteen"
-            android:textSize="24sp" />
-    </ScrollView>
 
 
 </RelativeLayout>

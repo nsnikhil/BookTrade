@@ -5,4 +5,6 @@
     android:layout_height="match_parent"
     tools:context="com.trade.book.booktrade.IntroActivity">
 
+    <include layout="@layout/background"/>
+
 </android.support.constraint.ConstraintLayout>

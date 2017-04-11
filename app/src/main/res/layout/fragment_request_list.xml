@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/matchParent"
-    android:background="@drawable/background"
     tools:context="com.trade.book.booktrade.fragments.RequestListFragment">
+
+    <include layout="@layout/background"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/requestListSwipeRefresh"

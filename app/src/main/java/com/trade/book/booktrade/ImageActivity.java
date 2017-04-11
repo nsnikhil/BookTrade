@@ -24,7 +24,7 @@ public class ImageActivity extends AppCompatActivity {
             String url = getIntent().getExtras().getString(getResources().getString(R.string.intentImageUrl));
             Glide.with(getApplicationContext())
                     .load(url)
-                    .placeholder(R.drawable.back)
+                    .placeholder(R.color.colorPrimaryDark)
                     .crossFade()
                     .into(fullImage);
         }

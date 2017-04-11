@@ -6,6 +6,8 @@
     <include layout="@layout/toolbar"
         android:id="@+id/toolbarContainer"/>
 
+    <include layout="@layout/background"/>
+
     <LinearLayout
         style="@style/verticalLinearLayout"
         android:id="@+id/container" />

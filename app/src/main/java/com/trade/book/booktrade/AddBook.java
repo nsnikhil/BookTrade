@@ -41,6 +41,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.trade.book.booktrade.adapters.adapterImage;
 import com.trade.book.booktrade.objects.BookObject;
 
@@ -64,22 +66,35 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     private static final int GALLERY_REQUEST_CODE = 155;
     static int imageCount = 0;
 
-    @BindView(R.id.toolbarAddBook) Toolbar toolbarAddBook;
-    @BindView(R.id.addBookDone) FloatingActionButton addBookDone;
+    @BindView(R.id.toolbarAddBook)
+    Toolbar toolbarAddBook;
+    @BindView(R.id.addBookDone)
+    FloatingActionButton addBookDone;
 
-    @BindView(R.id.addBookName) TextInputEditText name;
-    @BindView(R.id.addBookPublisher) TextInputEditText publisher;
-    @BindView(R.id.addBookCostPrice) TextInputEditText costPrice;
-    @BindView(R.id.addBookSellingPrice) TextInputEditText sellingPrice;
-    @BindView(R.id.addBookEdition) TextInputEditText edition;
-    @BindView(R.id.addBookComments) TextInputEditText comment;
+    @BindView(R.id.addBookName)
+    TextInputEditText name;
+    @BindView(R.id.addBookPublisher)
+    TextInputEditText publisher;
+    @BindView(R.id.addBookCostPrice)
+    TextInputEditText costPrice;
+    @BindView(R.id.addBookSellingPrice)
+    TextInputEditText sellingPrice;
+    @BindView(R.id.addBookEdition)
+    TextInputEditText edition;
+    @BindView(R.id.addBookComments)
+    TextInputEditText comment;
 
-    @BindView(R.id.addBookCondition) Spinner condition;
-    @BindView(R.id.addBookCateogory) Spinner  cateogory;
+    @BindView(R.id.addBookCondition)
+    Spinner condition;
+    @BindView(R.id.addBookCateogory)
+    Spinner cateogory;
 
-    @BindView(R.id.addBookImageEmptyState) ImageView emptyState;
-    @BindView(R.id.addBookNewImage) ImageView newImage;
-    @BindView(R.id.addBookView) RecyclerView imageContainer;
+    @BindView(R.id.addBookImageEmptyState)
+    ImageView emptyState;
+    @BindView(R.id.addBookNewImage)
+    ImageView newImage;
+    @BindView(R.id.addBookView)
+    RecyclerView imageContainer;
 
     ArrayList<Bitmap> imageList;
     ArrayList<String> imageUrls;
@@ -89,6 +104,9 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     File[] fileArray;
     BookObject bookEditObject = null;
     private int mRequestCode = 2147483646;
+    private int mCountIfDone = 0;
+    AlertDialog.Builder mWait;
+    Dialog mWt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +117,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         LeakCanary.install(getApplication());*/
         setContentView(R.layout.activity_add_book);
         ButterKnife.bind(this);
-        if(!checkConnection()){
+        if (!checkConnection()) {
             AlertDialog.Builder noInternet = new AlertDialog.Builder(AddBook.this);
             noInternet.setMessage("No Internet").setCancelable(false).create().show();
         }
@@ -125,6 +143,41 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
             intro.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intro);
         }
+    }
+
+    private void buildTapTarget() {
+        TapTargetView.showFor(this, TapTarget.forView(findViewById(R.id.addBookNewImage), "Click here to add a images", "")
+                        .icon(getResources().getDrawable(R.drawable.camera))
+                        .targetCircleColor(R.color.colorAccent),
+                new TapTargetView.Listener() {
+                    SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    @Override
+                    public void onTargetClick(TapTargetView view) {
+                        super.onTargetClick(view);
+                        view.dismiss(false);
+                        chooseImageAction();
+                    }
+
+                    @Override
+                    public void onTargetCancel(TapTargetView view) {
+                        super.onTargetCancel(view);
+                        view.dismiss(false);
+                    }
+
+                    @Override
+                    public void onOuterCircleClick(TapTargetView view) {
+                        super.onOuterCircleClick(view);
+                        view.dismiss(false);
+                    }
+
+                    @Override
+                    public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
+                        spf.edit().putInt(getResources().getString(R.string.prefFirstOpenAddd), 1).apply();
+                        view.dismiss(false);
+                        super.onTargetDismissed(view, userInitiated);
+                    }
+                });
+
     }
 
     private boolean checkConnection() {
@@ -210,15 +263,19 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void getImages() {
+        mWait = new AlertDialog.Builder(AddBook.this);
+        mWait.setMessage("Please wait while the book data is being fetched");
+        mWt = mWait.create();
+        mWt.setCancelable(false);
+        mWt.show();
         for (int i = 0; i < imageUrls.size(); i++) {
-            Toast.makeText(getApplicationContext(),"Please wait while the your image is being downloaded",Toast.LENGTH_SHORT).show();
             new downloadImages().execute(imageUrls.get(i));
         }
     }
 
     private void addBitmap(String s) {
         URL u = null;
-        Bitmap img ;
+        Bitmap img;
         HttpURLConnection htcp = null;
         InputStream is = null;
         try {
@@ -234,6 +291,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                 is = htcp.getInputStream();
                 img = BitmapFactory.decodeStream(is);
                 imageList.add(img);
+                mCountIfDone++;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -248,6 +306,10 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                     e.printStackTrace();
                 }
             }
+        }
+        if(imageUrls.size()==mCountIfDone){
+            mWt.dismiss();
+            mCountIfDone=0;
         }
     }
 
@@ -273,6 +335,10 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         ArrayAdapter<CharSequence> spinnerCateogorynAdapter = ArrayAdapter.createFromResource(this, R.array.bookCateogories, android.R.layout.simple_spinner_dropdown_item);
         spinnerConditionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cateogory.setAdapter(spinnerCateogorynAdapter);
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if(spf.getInt(getResources().getString(R.string.prefFirstOpenAddd),0)==0){
+            buildTapTarget();
+        }
     }
 
     private String buildUrl() {

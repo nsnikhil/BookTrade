@@ -71,7 +71,7 @@ public class adapterBookList extends BaseAdapter{
         Glide.with(mContext)
                 .load(url)
                 .centerCrop()
-                .placeholder(R.drawable.back)
+                .placeholder(R.color.colorPrimaryDark)
                 .crossFade()
                 .into(myViewHolder.bookImage);
         setColor color = new setColor(myViewHolder,url);
@@ -106,6 +106,7 @@ public class adapterBookList extends BaseAdapter{
     private void setColor(Palette p,MyViewHolder myViewHolder){
         if(p!=null){
             myViewHolder.bookTextConatiner.setBackgroundColor(p.getDarkMutedColor(mContext.getResources().getColor(R.color.colorPrimary)));
+            //myViewHolder.bookCostPrice.setTextColor(p.getLightVibrantColor(mContext.getResources().getColor(R.color.white)));
         }
     }
 

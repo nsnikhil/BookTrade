@@ -3,12 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
     android:fitsSystemWindows="true"
     tools:context="com.trade.book.booktrade.CategoryViewActivity">
 
     <include layout="@layout/toolbar"
         android:id="@+id/toolbarCategory"/>
+
+    <include layout="@layout/background"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/catListSwipeRefresh"

@@ -2,29 +2,30 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/matchParent"
-    android:background="@color/colorBackground"
+
     android:clipToPadding="false"
     tools:context="com.trade.book.booktrade.fragments.AccountFragment">
 
 
     <ImageView
+        style="@style/matchParent"
         android:contentDescription="@string/ImageDescriptionBackground"
-       style="@style/matchParent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background"/>
+        android:scaleType="centerCrop" />
+
+    <include layout="@layout/background" />
 
     <LinearLayout
+        android:id="@+id/accountImageContainer"
         style="@style/verticalLinearLayout"
         android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:id="@+id/accountImageContainer"
-        android:layout_margin="@dimen/sixteen">
+        android:layout_margin="@dimen/sixteen"
+        android:clipToPadding="false">
 
         <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/accountPicture"
             android:layout_width="180dp"
             android:layout_height="180dp"
             android:layout_gravity="center"
-            android:id="@+id/accountPicture"
             android:src="@drawable/profile" />
 
         <TextView
@@ -32,56 +33,56 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/sixteen"
-            android:gravity="center_horizontal"
             android:fontFamily="sans-serif-thin"
-            android:textAllCaps="true"
-            android:textStyle="bold"
+            android:gravity="center_horizontal"
             android:text="@string/app_name"
+            android:textAllCaps="true"
             android:textColor="@color/colorAccent"
-            android:textSize="36sp" />
+            android:textSize="36sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
 
     <LinearLayout
-        style="@style/horizontalLinearLayout"
-        android:layout_centerInParent="true"
-        android:layout_below="@id/accountImageContainer"
         android:id="@+id/accountActivitiyLayout"
+        style="@style/horizontalLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/accountImageContainer"
+        android:layout_centerInParent="true"
         android:orientation="vertical">
 
         <LinearLayout
             style="@style/horizontalLinearLayout"
-            android:padding="@dimen/eight"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="@dimen/eight">
 
 
-        <Button
-            android:id="@+id/accountPurchase"
-            style="@style/accountButtons"
-            android:text="@string/accoutPurchase" />
+            <Button
+                android:id="@+id/accountPurchase"
+                style="@style/accountButtons"
+                android:text="@string/accoutPurchase" />
 
-        <Button
-            android:id="@+id/accountUploads"
-            style="@style/accountButtons"
-            android:text="@string/accoutUpload" />
+            <Button
+                android:id="@+id/accountUploads"
+                style="@style/accountButtons"
+                android:text="@string/accoutUpload" />
 
         </LinearLayout>
 
         <Button
             android:id="@+id/accountSignOut"
-            android:textStyle="bold"
             android:layout_width="match_parent"
-            android:textSize="14sp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:padding="@dimen/sixteen"
-            android:background="@drawable/roundbutton"
             android:layout_margin="@dimen/sixteen"
+            android:background="@drawable/roundbutton"
+            android:padding="@dimen/sixteen"
+            android:text="@string/accoutSignOut"
             android:textColor="@color/colorBackground"
-            android:text="@string/accoutSignOut" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

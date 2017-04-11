@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,8 +36,8 @@ import butterknife.ButterKnife;
 public class intro3Fragment extends Fragment implements ISlidePolicy {
 
     boolean hasExtra = false;
-    @BindView(R.id.intro3Phoneno) EditText phone;
-    @BindView(R.id.intro3Address) EditText address;
+    @BindView(R.id.intro3Phoneno) TextInputEditText phone;
+    @BindView(R.id.intro3Address) TextInputEditText address;
     private static final String mNullValue = "N/A";
 
     public intro3Fragment() {

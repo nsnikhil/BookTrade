@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/matchParent"
-    android:background="@drawable/background"
     tools:context="com.trade.book.booktrade.SearchActivity">
 
+    <include layout="@layout/background"/>
 
     <com.lapism.searchview.SearchView
         android:id="@+id/sSearchView"

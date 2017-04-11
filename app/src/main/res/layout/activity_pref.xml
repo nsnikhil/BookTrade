@@ -2,12 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/verticalLinearLayout"
-    android:background="@color/colorBackground"
     tools:context="com.trade.book.booktrade.PrefActivity">
 
     <include
         android:id="@+id/toolbarPref"
         layout="@layout/toolbar" />
+
 
     <LinearLayout
         android:id="@+id/prefContainer"
@@ -23,6 +23,7 @@
         android:gravity="center"
         android:background="@color/colorBackground"
         android:layout_below="@id/toolbarPref">
+
 
                 <LinearLayout
                     android:id="@+id/aboutLogoContainer"
