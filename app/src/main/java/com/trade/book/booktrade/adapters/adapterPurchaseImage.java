@@ -16,6 +16,9 @@ import com.trade.book.booktrade.ImageActivity;
 import com.trade.book.booktrade.R;
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class adapterPurchaseImage extends RecyclerView.Adapter<adapterPurchaseImage.MyViewHolder> {
 
@@ -54,13 +57,12 @@ public class adapterPurchaseImage extends RecyclerView.Adapter<adapterPurchaseIm
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageView img;
-        ImageView remove;
+        @BindView(R.id.singleImage) ImageView img;
+        @BindView(R.id.seingleImageRemove) ImageView remove;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            img = (ImageView) itemView.findViewById(R.id.singleImage);
-            remove = (ImageView) itemView.findViewById(R.id.seingleImageRemove);
+            ButterKnife.bind(this,itemView);
             if(key==0){
                 remove.setVisibility(View.GONE);
             }else {

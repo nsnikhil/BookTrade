@@ -36,6 +36,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public class BookListFragment extends Fragment {
@@ -44,6 +45,7 @@ public class BookListFragment extends Fragment {
     @BindView(R.id.bookListNoBook) ImageView noBooks;
     @BindView(R.id.bookListSwipeRefresh) SwipeRefreshLayout mSwipeRefresh;
     ArrayList<BookObject> bookList = new ArrayList<>();
+    private Unbinder mUnbinder;
 
     public BookListFragment() {
     }
@@ -51,7 +53,7 @@ public class BookListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.fragment_book_list,container,false);
-        ButterKnife.bind(this,v);
+        mUnbinder = ButterKnife.bind(this,v);
         initilize();
         mSwipeRefresh.setRefreshing(true);
         getList();
@@ -147,6 +149,11 @@ public class BookListFragment extends Fragment {
             }
         }
         );
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 
 }

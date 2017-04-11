@@ -25,6 +25,7 @@ import com.trade.book.booktrade.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public class dialogFagmentAddress extends DialogFragment {
@@ -33,6 +34,7 @@ public class dialogFagmentAddress extends DialogFragment {
     @BindView(R.id.dialogPhone) TextInputEditText phone;
     @BindView(R.id.dialogSave) Button save;
     private static final String mNullValue = "N/A";
+    private Unbinder mUnbinder;
 
     public dialogFagmentAddress() {
 
@@ -41,7 +43,7 @@ public class dialogFagmentAddress extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dialog_fagment_address, container, false);
-        ButterKnife.bind(this,v);
+        mUnbinder =  ButterKnife.bind(this,v);
         initilize();
         setValue();
         return v;
@@ -105,4 +107,8 @@ public class dialogFagmentAddress extends DialogFragment {
         requestQueue.add(stringRequest);
     }
 
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
+    }
 }

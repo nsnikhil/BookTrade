@@ -48,6 +48,7 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public class MyCartFragment extends Fragment implements View.OnClickListener, android.app.LoaderManager.LoaderCallbacks<Cursor> {
@@ -59,6 +60,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     adapterCart cartAdapter;
     private static final String mNullValue = "N/A";
     private int mCursorCount = 0;
+    private Unbinder mUnbinder;
 
     public MyCartFragment() {
 
@@ -68,7 +70,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_my_cart,container,false);
-        ButterKnife.bind(this,v);
+        mUnbinder = ButterKnife.bind(this,v);
         initilize();
         setEmpty();
         return v;
@@ -403,5 +405,10 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
             }
         });
         requestQueue.add(stringRequest);
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 }

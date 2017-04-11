@@ -23,11 +23,13 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public class MoreFragment extends Fragment {
 
     @BindView(R.id.cateogoryList) ListView moreList;
+    private Unbinder mUnbinder;
 
     public MoreFragment() {
 
@@ -37,7 +39,7 @@ public class MoreFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_cateogory, container, false);
-        ButterKnife.bind(this,v);
+        mUnbinder = ButterKnife.bind(this,v);
         addList();
         return v;
     }
@@ -124,5 +126,10 @@ public class MoreFragment extends Fragment {
         }else {
             Toast.makeText(getActivity(),"No email app found",Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 }

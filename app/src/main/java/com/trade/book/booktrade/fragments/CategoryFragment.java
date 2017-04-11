@@ -20,11 +20,13 @@ import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class CategoryFragment extends Fragment {
 
     @BindView(R.id.cateogoryList) ListView catList;
     @BindView(R.id.cateogoryGridList) GridView catGridList;
+    private Unbinder mUnbinder;
 
     public CategoryFragment() {
     }
@@ -33,7 +35,7 @@ public class CategoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_cateogory, container, false);
-        ButterKnife.bind(this,v);
+        mUnbinder = ButterKnife.bind(this,v);
         initilize();
         addList();
         return v;
@@ -95,6 +97,11 @@ public class CategoryFragment extends Fragment {
         catObjList.add(new CategoryObject (stringList.get(18),getResources().getDrawable(R.drawable.s)));
         adapterCategory adptr = new adapterCategory(getActivity(),catObjList);
         catGridList.setAdapter(adptr);
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 
 }

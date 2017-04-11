@@ -23,6 +23,7 @@ import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class intro4Fragment extends Fragment implements ISlidePolicy {
 
@@ -30,6 +31,7 @@ public class intro4Fragment extends Fragment implements ISlidePolicy {
     boolean agreed = false;
     @BindView(R.id.intro4heading) TextView terms;
     private static final String mNullValue = "N/A";
+    private Unbinder mUnbinder;
 
     public intro4Fragment() {
     }
@@ -38,7 +40,7 @@ public class intro4Fragment extends Fragment implements ISlidePolicy {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_intro4, container, false);
-        ButterKnife.bind(this,v);
+        mUnbinder = ButterKnife.bind(this,v);
         terms.setMovementMethod(LinkMovementMethod.getInstance());
         return v;
     }
@@ -92,5 +94,10 @@ public class intro4Fragment extends Fragment implements ISlidePolicy {
         if(f.exists()){
             f.delete();
         }
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 }

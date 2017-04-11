@@ -36,6 +36,7 @@ import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public class intro5Fragment extends Fragment implements ISlidePolicy/*, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener*/ {
@@ -49,6 +50,7 @@ public class intro5Fragment extends Fragment implements ISlidePolicy/*, GoogleAp
     private static final int mPermissionCode = 58;
     boolean location = false;
     int mCount = 1;
+    private Unbinder mUnbinder;
 
     public intro5Fragment() {
 
@@ -58,7 +60,7 @@ public class intro5Fragment extends Fragment implements ISlidePolicy/*, GoogleAp
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_intro5, container, false);
-        ButterKnife.bind(this,v);
+        mUnbinder = ButterKnife.bind(this,v);
         //askPermission();
         //initilize();
         grant.setOnClickListener(new View.OnClickListener() {
@@ -186,4 +188,9 @@ public class intro5Fragment extends Fragment implements ISlidePolicy/*, GoogleAp
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }*/
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
+    }
 }

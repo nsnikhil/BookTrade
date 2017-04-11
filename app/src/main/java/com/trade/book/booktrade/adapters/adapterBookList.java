@@ -22,6 +22,9 @@ import com.trade.book.booktrade.R;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class adapterBookList extends BaseAdapter{
 
 
@@ -144,19 +147,16 @@ public class adapterBookList extends BaseAdapter{
     }
 
 
-    private class MyViewHolder{
-        ImageView bookImage;
-        TextView bookName,bookPublisher,bookPrice,bookCostPrice;
-        LinearLayout bookTextConatiner;
+     static class MyViewHolder{
+        @BindView(R.id.singleBookPicture) ImageView bookImage;
+        @BindView(R.id.singleBookName) TextView bookName;
+        @BindView(R.id.singleBookPublisher) TextView bookPublisher;
+        @BindView(R.id.singleBookPrice) TextView bookPrice;
+        @BindView(R.id.singleBookCostPrice) TextView bookCostPrice;
+        @BindView(R.id.singleBookTextContainer) LinearLayout bookTextConatiner;
         MyViewHolder(View v){
-            bookName = (TextView)v.findViewById(R.id.singleBookName);
-            bookPrice = (TextView)v.findViewById(R.id.singleBookPrice);
-            bookCostPrice = (TextView)v.findViewById(R.id.singleBookCostPrice);
+            ButterKnife.bind(this,v);
             bookCostPrice.setPaintFlags(bookCostPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            bookPublisher = (TextView)v.findViewById(R.id.singleBookPublisher);
-            bookImage = (ImageView)v.findViewById(R.id.singleBookPicture);
-            bookTextConatiner = (LinearLayout)v.findViewById(R.id.singleBookTextContainer);
-            //bookTextConatiner = (LinearLayout)v.findViewById(R.id.singleBookTextContainer);
         }
     }
 }

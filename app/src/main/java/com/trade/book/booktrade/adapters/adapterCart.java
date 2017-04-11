@@ -19,6 +19,9 @@ import com.trade.book.booktrade.cartData.CartTables;
 
 import java.util.concurrent.ExecutionException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class adapterCart extends CursorAdapter{
 
     public adapterCart(Context context, Cursor c) {
@@ -91,18 +94,16 @@ public class adapterCart extends CursorAdapter{
         return Palette.from(b).generate();
     }
 
-    private class MyViewHolder{
-        ImageView bookImage;
-        TextView bookName,bookPublisher,bookPrice,bookCostPrice;
-        LinearLayout bookTextConatiner;
+    static class MyViewHolder{
+        @BindView(R.id.singleBookPicture) ImageView bookImage;
+        @BindView(R.id.singleBookName) TextView bookName;
+        @BindView(R.id.singleBookPublisher) TextView bookPublisher;
+        @BindView(R.id.singleBookPrice) TextView bookPrice;
+        @BindView(R.id.singleBookCostPrice) TextView bookCostPrice;
+        @BindView(R.id.singleBookTextContainer) LinearLayout bookTextConatiner;
         MyViewHolder(View v){
-            bookName = (TextView)v.findViewById(R.id.singleBookName);
-            bookPrice = (TextView)v.findViewById(R.id.singleBookPrice);
-            bookCostPrice = (TextView)v.findViewById(R.id.singleBookCostPrice);
+            ButterKnife.bind(this,v);
             bookCostPrice.setVisibility(View.GONE);
-            bookPublisher = (TextView)v.findViewById(R.id.singleBookPublisher);
-            bookImage = (ImageView)v.findViewById(R.id.singleBookPicture);
-            bookTextConatiner = (LinearLayout)v.findViewById(R.id.singleBookTextContainer);
         }
     }
 }

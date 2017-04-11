@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,6 +40,7 @@ public class intro3Fragment extends Fragment implements ISlidePolicy {
     @BindView(R.id.intro3Phoneno) TextInputEditText phone;
     @BindView(R.id.intro3Address) TextInputEditText address;
     private static final String mNullValue = "N/A";
+    private Unbinder mUnbinder;
 
     public intro3Fragment() {
 
@@ -48,7 +50,7 @@ public class intro3Fragment extends Fragment implements ISlidePolicy {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_intro3, container, false);
-        ButterKnife.bind(this,v);
+        mUnbinder = ButterKnife.bind(this,v);
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
         if(!spf.getString(getResources().getString(R.string.prefAccountId),mNullValue).equalsIgnoreCase(mNullValue)){
             preFetchValues();
@@ -232,5 +234,10 @@ public class intro3Fragment extends Fragment implements ISlidePolicy {
         if(verify()){
             saveValues();
         }
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 }

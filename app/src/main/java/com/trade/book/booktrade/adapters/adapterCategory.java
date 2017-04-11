@@ -23,6 +23,9 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class adapterCategory extends BaseAdapter{
 
@@ -65,12 +68,11 @@ public class adapterCategory extends BaseAdapter{
         return convertView;
     }
 
-    private class MyViewHolder{
-        ImageView banner;
-        TextView name;
+    static class MyViewHolder{
+        @BindView(R.id.singleCategoryPicture) ImageView banner;
+        @BindView(R.id.singleCategoryName) TextView name;
         MyViewHolder(View v){
-            banner = (ImageView) v.findViewById(R.id.singleCategoryPicture);
-            name = (TextView)v.findViewById(R.id.singleCategoryName);
+            ButterKnife.bind(this,v);
         }
     }
 }

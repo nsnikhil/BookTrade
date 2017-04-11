@@ -26,6 +26,7 @@ import com.trade.book.booktrade.StartActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public class dialogFragmentRequest extends DialogFragment {
@@ -34,7 +35,7 @@ public class dialogFragmentRequest extends DialogFragment {
     @BindView(R.id.requestPublisher) TextInputEditText publisher;
     @BindView(R.id.requestSave) Button save;
     private static final String mNullValue = "N/A";
-
+    private Unbinder mUnbinder;
 
 
     public dialogFragmentRequest() {
@@ -44,7 +45,7 @@ public class dialogFragmentRequest extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_dialog_fragment_request, container, false);
-        ButterKnife.bind(this,v);
+        mUnbinder = ButterKnife.bind(this,v);
         initilize();
         return v;
     }
@@ -112,6 +113,11 @@ public class dialogFragmentRequest extends DialogFragment {
             return false;
         }
         return true;
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 
 }

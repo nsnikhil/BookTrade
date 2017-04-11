@@ -15,6 +15,9 @@ import com.trade.book.booktrade.objects.RequestObject;
 import java.util.ArrayList;
 import java.util.Random;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class adapterRequest extends BaseAdapter{
 
@@ -81,14 +84,13 @@ public class adapterRequest extends BaseAdapter{
         return new ColorStateList(states, colors);
     }
 
-    private class MyViewHolder{
-        TextView heading,name,publisher;
-        RelativeLayout headingContainer;
+    static class MyViewHolder{
+        @BindView(R.id.requestHeading) TextView heading;
+        @BindView(R.id.requestName)TextView name;
+        @BindView(R.id.requestPublisher)TextView publisher;
+        @BindView(R.id.requestHeadingContainer)RelativeLayout headingContainer;
         MyViewHolder(View v){
-            heading = (TextView)v.findViewById(R.id.requestHeading);
-            name = (TextView)v.findViewById(R.id.requestName);
-            publisher = (TextView)v.findViewById(R.id.requestPublisher);
-            headingContainer = (RelativeLayout)v.findViewById(R.id.requestHeadingContainer);
+            ButterKnife.bind(this,v);
         }
     }
 }

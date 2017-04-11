@@ -28,6 +28,7 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public class dialogFragmentPurchase extends DialogFragment {
@@ -38,6 +39,7 @@ public class dialogFragmentPurchase extends DialogFragment {
     @BindView(R.id.dialogPurchaseTotal) TextView totalPrice;
     @BindView(R.id.dialogPurchaseBuy) Button buy;
     private static final String mNullValue = "N/A";
+    private Unbinder mUnbinder;
 
     public dialogFragmentPurchase() {
 
@@ -46,7 +48,7 @@ public class dialogFragmentPurchase extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dialog_fragment_purchase, container, false);
-        ButterKnife.bind(this,v);
+        mUnbinder = ButterKnife.bind(this,v);
         initilize();
         setVal();
         return v;
@@ -196,5 +198,10 @@ public class dialogFragmentPurchase extends DialogFragment {
                 return;
             }
         }
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 }

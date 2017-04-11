@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.trade.book.booktrade.R;
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class adapterList extends BaseAdapter{
@@ -50,10 +52,10 @@ public class adapterList extends BaseAdapter{
         return convertView;
     }
 
-    private class MyViewHolder{
-        TextView catName;
+    static class MyViewHolder{
+        @BindView(R.id.catName) TextView catName;
         MyViewHolder(View v){
-            catName = (TextView)v.findViewById(R.id.catName);
+            ButterKnife.bind(this,v);
         }
     }
 }

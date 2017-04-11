@@ -30,6 +30,7 @@ import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class AccountFragment extends Fragment implements View.OnClickListener{
 
@@ -39,12 +40,13 @@ public class AccountFragment extends Fragment implements View.OnClickListener{
     @BindView(R.id.accountUploads) Button uploads;
     @BindView(R.id.accountName) TextView name;
     @BindView(R.id.accountPicture) CircularImageView profile;
+    private Unbinder mUnbinder;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_account,container,false);
-        ButterKnife.bind(this,v);
+        mUnbinder = ButterKnife.bind(this,v);
         initialize();
         setVal();
         return v;
@@ -156,4 +158,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener{
             f.delete();
         }
     }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
+    }
+
 }

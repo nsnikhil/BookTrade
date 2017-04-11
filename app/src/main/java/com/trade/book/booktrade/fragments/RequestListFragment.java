@@ -35,6 +35,7 @@ import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class RequestListFragment extends Fragment {
 
@@ -45,13 +46,14 @@ public class RequestListFragment extends Fragment {
     ArrayList<RequestObject> requestObjectList;
     adapterRequest adapter;
     View mainView = null;
+    private Unbinder mUnbinder;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mainView= LayoutInflater.from(getActivity()).inflate(R.layout.fragment_request_list,container,false);
-        ButterKnife.bind(this,mainView);
+        mUnbinder = ButterKnife.bind(this,mainView);
         intilize(mainView);
         mSwipeRefresh.setRefreshing(true);
         downloadList();
@@ -145,5 +147,10 @@ public class RequestListFragment extends Fragment {
             }
         });
         requestQueue.add(jsonArrayRequest);
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 }
