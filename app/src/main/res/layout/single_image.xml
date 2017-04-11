@@ -14,7 +14,7 @@
         style="@style/wrapContent"
         android:id="@+id/seingleImageRemove"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_close_white_48dp"
+        android:src="@drawable/removeimage"
         android:layout_margin="@dimen/eight" />
 
 </RelativeLayout>

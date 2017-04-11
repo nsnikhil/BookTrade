@@ -94,6 +94,7 @@ public class dialogFagmentAddress extends DialogFragment {
             @Override
             public void onResponse(String response) {
                 Toast.makeText(getActivity(),"Values Updated",Toast.LENGTH_SHORT).show();
+                dismiss();
             }
         }, new Response.ErrorListener() {
             @Override

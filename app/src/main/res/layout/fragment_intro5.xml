@@ -17,6 +17,18 @@
         android:textAlignment="center"
         android:layout_above="@id/intro3DetailsConatiner"
         android:textColor="@color/colorAccent"
-        android:text="@string/introLocate"/>
+        android:text="@string/introPermission"/>
+
+    <Button
+        style="@style/wrapContent"
+        android:id="@+id/intro5GrantText"
+        android:text="@string/grantpermission"
+        android:layout_below="@id/intro5LocateText"
+        android:layout_centerHorizontal="true"
+        android:theme="@style/buttonClr"
+        android:textColor="@color/colorBackground"
+        android:padding="@dimen/sixteen"
+        android:layout_margin="@dimen/sixteen"
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>

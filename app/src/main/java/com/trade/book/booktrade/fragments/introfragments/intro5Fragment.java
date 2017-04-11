@@ -4,6 +4,7 @@ package com.trade.book.booktrade.fragments.introfragments;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,14 +34,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-public class intro5Fragment extends Fragment implements ISlidePolicy, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    TextView locate;
-    GoogleApiClient mGoogleApiClient;
-    Location mLastLocation;
+public class intro5Fragment extends Fragment implements ISlidePolicy/*, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener*/ {
+
+    @BindView(R.id.intro5LocateText) TextView locate;
+    @BindView(R.id.intro5GrantText) Button grant;
+    //GoogleApiClient mGoogleApiClient;
+    //Location mLastLocation;
     private static final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 56;
+    private static final int MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE_CODE = 57;
+    private static final int mPermissionCode = 58;
     boolean location = false;
+    int mCount = 1;
 
     public intro5Fragment() {
 
@@ -49,10 +58,29 @@ public class intro5Fragment extends Fragment implements ISlidePolicy, GoogleApiC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_intro5, container, false);
-        locate = (TextView) v.findViewById(R.id.intro5LocateText);
-        askPermission();
-        initilize();
+        ButterKnife.bind(this,v);
+        //askPermission();
+        //initilize();
+        grant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkPermission();
+            }
+        });
         return v;
+    }
+
+    private void checkPermission(){
+        if ((ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED)||
+                (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE}, mPermissionCode);
+        }
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            location=true;
+        }
     }
 
     private void askPermission() {
@@ -62,16 +90,7 @@ public class intro5Fragment extends Fragment implements ISlidePolicy, GoogleApiC
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == MY_PERMISSIONS_ACCESS_COARSE_LOCATION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                initilize();
-            }
-        }
-    }
-
-    @Override
+    /*@Override
     public void onStart() {
         mGoogleApiClient.connect();
         super.onStart();
@@ -91,7 +110,7 @@ public class intro5Fragment extends Fragment implements ISlidePolicy, GoogleApiC
                     .addApi(LocationServices.API)
                     .build();
         }
-    }
+    }*/
 
     @Override
     public boolean isPolicyRespected() {
@@ -100,13 +119,14 @@ public class intro5Fragment extends Fragment implements ISlidePolicy, GoogleApiC
 
     @Override
     public void onUserIllegallyRequestedNextPage() {
-        Toast.makeText(getActivity(), "Wait while we locate you...", Toast.LENGTH_SHORT).show();
-        askPermission();
-        initilize();
-        doOnConnection();
+        checkPermission();
+        //Toast.makeText(getActivity(), "Wait while we locate you...", Toast.LENGTH_SHORT).show();
+        //askPermission();
+        //initilize();
+        //doOnConnection();
     }
 
-    private void doOnConnection(){
+    /*private void doOnConnection(){
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             locate.setText("Swipe left to locate");
@@ -165,5 +185,5 @@ public class intro5Fragment extends Fragment implements ISlidePolicy, GoogleApiC
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-    }
+    }*/
 }

@@ -69,7 +69,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_my_cart,container,false);
         ButterKnife.bind(this,v);
-        initilize(v);
+        initilize();
         setEmpty();
         return v;
     }
@@ -81,8 +81,9 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
         getActivity().getLoaderManager().initLoader(mCartLoaderId, null, this);
     }
 
-    private void initilize(View v) {
+    private void initilize() {
         cartAdapter = new adapterCart(getActivity(), null);
+        checkOut.setEnabled(false);
         bookCartGrid.setAdapter(cartAdapter);
         checkOut.setOnClickListener(this);
         bookCartGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -123,9 +124,11 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
 
     private void setEmpty() {
         if (getActivity().getContentResolver().query(CartTables.mCartContentUri, null, null, null, null).getCount() <= 0) {
+            checkOut.setEnabled(false);
             noItem.setVisibility(View.VISIBLE);
         } else {
             noItem.setVisibility(View.GONE);
+            checkOut.setEnabled(true);
         }
     }
 

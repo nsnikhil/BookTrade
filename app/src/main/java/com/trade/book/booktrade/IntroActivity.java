@@ -1,7 +1,9 @@
 package com.trade.book.booktrade;
 
 
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
 
 import com.github.paolorotolo.appintro.AppIntro;
@@ -23,7 +25,9 @@ public class IntroActivity extends AppIntro {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         addSlide(new intro1Fragment());
         addSlide(new intro2Fragment());
-        addSlide(new intro5Fragment());
+        if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            addSlide(new intro5Fragment());
+        }
         addSlide(new intro3Fragment());
         addSlide(new intro4Fragment());
         showSkipButton(false);
