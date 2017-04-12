@@ -5,6 +5,12 @@
 
     <include layout="@layout/background"/>
 
+    <ImageView
+        android:contentDescription="@string/ImageDescriptionError"
+        style="@style/errorImage"
+        android:id="@+id/bookListNoBook"
+        android:src="@drawable/noobook" />
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/bookListSwipeRefresh"
         android:layout_width="match_parent"
@@ -17,10 +23,5 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <ImageView
-        android:contentDescription="@string/ImageDescriptionError"
-        style="@style/errorImage"
-        android:id="@+id/bookListNoBook"
-        android:src="@drawable/noobook" />
 
 </RelativeLayout>

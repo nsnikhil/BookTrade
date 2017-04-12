@@ -7,6 +7,12 @@
 
     <include layout="@layout/background"/>
 
+    <ImageView
+        android:contentDescription="@string/ImageDescriptionError"
+        android:id="@+id/requestListNoRequest"
+        style="@style/errorImage"
+        android:src="@drawable/norequest" />
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/requestListSwipeRefresh"
         style="@style/matchParent">
@@ -23,11 +29,5 @@
         style="@style/fab"
         android:src="@drawable/ic_playlist_add_white_48dp"
         app:fabSize="normal" />
-
-    <ImageView
-        android:contentDescription="@string/ImageDescriptionError"
-        android:id="@+id/requestListNoRequest"
-        style="@style/errorImage"
-        android:src="@drawable/norequest" />
 
 </RelativeLayout>

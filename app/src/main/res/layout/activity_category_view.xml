@@ -11,6 +11,12 @@
 
     <include layout="@layout/background"/>
 
+    <ImageView
+        android:contentDescription="@string/ImageDescriptionError"
+        style="@style/errorImage"
+        android:id="@+id/categoryEmpty"
+        android:src="@drawable/nodata" />
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/catListSwipeRefresh"
         android:layout_below="@id/toolbarCategory"
@@ -22,13 +28,6 @@
         android:numColumns="2"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
-
-
-    <ImageView
-        android:contentDescription="@string/ImageDescriptionError"
-        style="@style/errorImage"
-        android:id="@+id/categoryEmpty"
-        android:src="@drawable/nodata" />
 
 
 </RelativeLayout>
