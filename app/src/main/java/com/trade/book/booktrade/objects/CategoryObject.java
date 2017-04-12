@@ -8,19 +8,18 @@ import android.graphics.drawable.Drawable;
 
 public class CategoryObject {
 
-    private String mName;
-    private Drawable mImage;
+    private String mName,mImageUrl;
 
-    public CategoryObject(String nm,Drawable img){
+    public CategoryObject(String nm,String img){
         mName = nm;
-        mImage = img;
+        mImageUrl = img;
     }
 
     public String getmName() {
         return mName;
     }
 
-    public Drawable getmImage() {
-        return mImage;
+    public String getmImageUrl() {
+        return mImageUrl;
     }
 }

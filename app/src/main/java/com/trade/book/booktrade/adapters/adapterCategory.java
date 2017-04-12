@@ -64,7 +64,12 @@ public class adapterCategory extends BaseAdapter{
         }
         CategoryObject object = mList.get(position);
         myViewHolder.name.setText(object.getmName());
-        myViewHolder.banner.setImageDrawable(object.getmImage());
+        Glide.with(mContext)
+                .load(object.getmImageUrl())
+                .centerCrop()
+                .placeholder(R.color.colorAccent)
+                .crossFade()
+                .into(myViewHolder.banner);
         return convertView;
     }
 

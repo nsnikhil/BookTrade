@@ -39,12 +39,17 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.trade.book.booktrade.adapters.adapterImage;
 import com.trade.book.booktrade.objects.BookObject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -98,6 +103,8 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
 
     ArrayList<Bitmap> imageList;
     ArrayList<String> imageUrls;
+    ArrayList<String> mCategoryList;
+    ArrayList<String> mConditionList;
     adapterImage imageAdapter;
     String tempImageFolder = "tempImage";
     String[] fileArrayNames = {null, null, null, null, null, null, null, null};
@@ -105,6 +112,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     BookObject bookEditObject = null;
     private int mRequestCode = 2147483646;
     private int mCountIfDone = 0;
+    private int mFakeVariable = 0;
     AlertDialog.Builder mWait;
     Dialog mWt;
 
@@ -129,6 +137,8 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                 setTwoVal();
             } else {
                 bookEditObject = (BookObject) getIntent().getExtras().getSerializable(getResources().getString(R.string.intentEditObject));
+                getSupportActionBar().setTitle("Edit Book");
+                mFakeVariable = 1;
                 setValue(bookEditObject);
             }
         }
@@ -207,13 +217,11 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         if (!bookEditObject.getDescription().isEmpty() || bookEditObject.getDescription().length() != 0) {
             comment.setText(bookEditObject.getDescription());
         }
-        setCondition();
-        setCategory();
         buildImageUrl();
     }
 
     private void setCondition() {
-        String[] cdt = getResources().getStringArray(R.array.bookConditionEntry);
+        String[] cdt = mConditionList.toArray(new String[mConditionList.size()]);
         for (int i = 0; i < cdt.length; i++) {
             if (cdt[i].equalsIgnoreCase(bookEditObject.getCondition())) {
                 condition.setSelection(i);
@@ -223,7 +231,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void setCategory() {
-        String[] cat = getResources().getStringArray(R.array.bookCateogories);
+        String[] cat = mCategoryList.toArray(new String[mCategoryList.size()]);
         for (int i = 0; i < cat.length; i++) {
             if (cat[i].equalsIgnoreCase(bookEditObject.getCateogory())) {
                 cateogory.setSelection(i);
@@ -324,22 +332,94 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         imageContainer = (RecyclerView) findViewById(R.id.addBookView);
         imageContainer.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
         imageList = new ArrayList<>();
+        mCategoryList = new ArrayList<>();
+        mConditionList = new ArrayList<>();
         imageAdapter = new adapterImage(getApplicationContext(), imageList, imageCount);
         imageContainer.setAdapter(imageAdapter);
         fileArray = new File[fileArrayNames.length];
 
-        ArrayAdapter<CharSequence> spinnerConditionAdapter = ArrayAdapter.createFromResource(this, R.array.bookConditionEntry, android.R.layout.simple_spinner_dropdown_item);
-        spinnerConditionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        condition.setAdapter(spinnerConditionAdapter);
+        buildCategoryListUri();
+        buildConditionListUri();
 
-        ArrayAdapter<CharSequence> spinnerCateogorynAdapter = ArrayAdapter.createFromResource(this, R.array.bookCateogories, android.R.layout.simple_spinner_dropdown_item);
-        spinnerConditionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cateogory.setAdapter(spinnerCateogorynAdapter);
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if(spf.getInt(getResources().getString(R.string.prefFirstOpenAddd),0)==0){
             buildTapTarget();
         }
     }
+
+    private void buildCategoryListUri(){
+        String host = getResources().getString(R.string.urlServer);
+        String queryFilename = getResources().getString(R.string.urlCategoryList);
+        String url = host+queryFilename;
+        RequestQueue requestQueue = Volley.newRequestQueue(AddBook.this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    cateogory.setAdapter(new ArrayAdapter<>(getApplicationContext(),android.R.layout.simple_spinner_dropdown_item, makeCategoryList(response)));
+                    if(mFakeVariable==1){
+                        setCategory();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    private ArrayList<String> makeCategoryList(JSONArray array) throws JSONException {
+        if(array.length()>0){
+            for(int i=0;i<array.length();i++){
+                JSONObject object = array.getJSONObject(i);
+                mCategoryList.add(object.getString("name"));
+            }
+        }
+        return mCategoryList;
+    }
+
+    private void buildConditionListUri(){
+        String host = getResources().getString(R.string.urlServer);
+        String queryFilename = getResources().getString(R.string.urlCondtnList);
+        String url = host+queryFilename;
+        RequestQueue requestQueue = Volley.newRequestQueue(AddBook.this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    condition.setAdapter(new ArrayAdapter<>(getApplicationContext(),android.R.layout.simple_spinner_dropdown_item, makeConditionList(response)));
+                    if(mFakeVariable==1){
+                        setCondition();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    private ArrayList<String> makeConditionList(JSONArray array) throws JSONException {
+        if(array.length()>0){
+            for(int i=0;i<array.length();i++){
+                JSONObject object = array.getJSONObject(i);
+                mConditionList.add(object.getString("cndtn"));
+            }
+        }
+        return  mConditionList;
+    }
+
+
 
     private String buildUrl() {
         String host = getResources().getString(R.string.urlServer);

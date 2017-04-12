@@ -69,7 +69,8 @@ public class CategoryViewActivity extends AppCompatActivity {
     private void initilize() {
         setSupportActionBar(catToolbar);
         if (mUploadIndicator == 0) {
-            getSupportActionBar().setTitle(getResources().getStringArray(R.array.bookCateogories)[getIntent().getExtras().getInt(getResources().getString(R.string.intencateuripos))]);
+           // getSupportActionBar().setTitle(getResources().getStringArray(R.array.bookCateogories)[getIntent().getExtras().getInt(getResources().getString(R.string.intencateuripos))]);
+            getSupportActionBar().setTitle(getIntent().getExtras().getString(getResources().getString(R.string.intencateuripos)));
         } else if (mUploadIndicator == 123) {
             getSupportActionBar().setTitle("My Purchases");
         } else {

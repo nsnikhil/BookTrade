@@ -8,12 +8,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import com.trade.book.booktrade.AddBook;
 import com.trade.book.booktrade.CategoryViewActivity;
 import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.adapters.adapterCategory;
 import com.trade.book.booktrade.objects.CategoryObject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +41,9 @@ public class CategoryFragment extends Fragment {
     @BindView(R.id.cateogoryList) ListView catList;
     @BindView(R.id.cateogoryGridList) GridView catGridList;
     private Unbinder mUnbinder;
+    private ArrayList<String> mCategoryList;
+    private static final String mBaseFileUri = "https://s3-ap-northeast-1.amazonaws.com/shelfbeecategory/";
+    private static final int mStartingIndex = 97;
 
     public CategoryFragment() {
     }
@@ -37,13 +54,14 @@ public class CategoryFragment extends Fragment {
         View v =  inflater.inflate(R.layout.fragment_cateogory, container, false);
         mUnbinder = ButterKnife.bind(this,v);
         initilize();
-        addList();
+        buildCategoryListUri();
         return v;
     }
 
     private void initilize() {
         catList.setVisibility(View.GONE);
         catGridList.setVisibility(View.VISIBLE);
+        mCategoryList = new ArrayList<>();
         catGridList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -55,7 +73,8 @@ public class CategoryFragment extends Fragment {
                 String su = buildUri(s);
                 Intent cat = new Intent(getActivity(),CategoryViewActivity.class);
                 cat.putExtra(getActivity().getResources().getString(R.string.intencateuri),su);
-                cat.putExtra(getActivity().getResources().getString(R.string.intencateuripos),position);
+                //cat.putExtra(getActivity().getResources().getString(R.string.intencateuripos),position);
+                cat.putExtra(getActivity().getResources().getString(R.string.intencateuripos),object.getmName());
                 startActivity(cat);
             }
         });
@@ -72,29 +91,48 @@ public class CategoryFragment extends Fragment {
                 .toString();
     }
 
+    private void buildCategoryListUri(){
+        String host = getResources().getString(R.string.urlServer);
+        String queryFilename = getResources().getString(R.string.urlCategoryList);
+        String url = host+queryFilename;
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    makeCategoryList(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getActivity(),"Error",Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    private void makeCategoryList(JSONArray array) throws JSONException {
+        if(array.length()>0){
+            for(int i=0;i<array.length();i++){
+                JSONObject object = array.getJSONObject(i);
+                mCategoryList.add(object.getString("name"));
+            }
+            addList();
+        }
+    }
+
     private void addList(){
-        String[] arr = getResources().getStringArray(R.array.bookCateogories);
-        ArrayList<String> stringList = new ArrayList<>(Arrays.asList(arr));
+        int start = 97;
         ArrayList<CategoryObject> catObjList = new ArrayList<>();
-        catObjList.add(new CategoryObject (stringList.get(0),getResources().getDrawable(R.drawable.a)));
-        catObjList.add(new CategoryObject (stringList.get(1),getResources().getDrawable(R.drawable.b)));
-        catObjList.add(new CategoryObject (stringList.get(2),getResources().getDrawable(R.drawable.c)));
-        catObjList.add(new CategoryObject (stringList.get(3),getResources().getDrawable(R.drawable.d)));
-        catObjList.add(new CategoryObject (stringList.get(4),getResources().getDrawable(R.drawable.e)));
-        catObjList.add(new CategoryObject (stringList.get(5),getResources().getDrawable(R.drawable.f)));
-        catObjList.add(new CategoryObject (stringList.get(6),getResources().getDrawable(R.drawable.g)));
-        catObjList.add(new CategoryObject (stringList.get(7),getResources().getDrawable(R.drawable.h)));
-        catObjList.add(new CategoryObject (stringList.get(8),getResources().getDrawable(R.drawable.i)));
-        catObjList.add(new CategoryObject (stringList.get(9),getResources().getDrawable(R.drawable.j)));
-        catObjList.add(new CategoryObject (stringList.get(10),getResources().getDrawable(R.drawable.k)));
-        catObjList.add(new CategoryObject (stringList.get(11),getResources().getDrawable(R.drawable.l)));
-        catObjList.add(new CategoryObject (stringList.get(12),getResources().getDrawable(R.drawable.m)));
-        catObjList.add(new CategoryObject (stringList.get(13),getResources().getDrawable(R.drawable.n)));
-        catObjList.add(new CategoryObject (stringList.get(14),getResources().getDrawable(R.drawable.o)));
-        catObjList.add(new CategoryObject (stringList.get(15),getResources().getDrawable(R.drawable.p)));
-        catObjList.add(new CategoryObject (stringList.get(16),getResources().getDrawable(R.drawable.q)));
-        catObjList.add(new CategoryObject (stringList.get(17),getResources().getDrawable(R.drawable.r)));
-        catObjList.add(new CategoryObject (stringList.get(18),getResources().getDrawable(R.drawable.s)));
+        for(int i=0;i<mCategoryList.size();i++){
+            int num = start+i;
+            String url = mBaseFileUri+Character.toString ((char) num)+".jpg";
+            catObjList.add(new CategoryObject(mCategoryList.get(i),url));
+        }
+
         adapterCategory adptr = new adapterCategory(getActivity(),catObjList);
         catGridList.setAdapter(adptr);
     }

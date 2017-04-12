@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/matchParent"
@@ -14,23 +13,19 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/purchaseBookView"
                 style="@style/matchParent"
-                android:transitionName="transitionBookImage"
-                android:layout_height="300dp" />
+                android:layout_height="300dp"
+                android:transitionName="transitionBookImage" />
 
-            <RelativeLayout
-                style="@style/wrapContent"
-                android:layout_width="match_parent">
 
-                <android.support.v7.widget.CardView
-                    style="@style/crdv"
-                    android:layout_height="wrap_content"
-                    card_view:cardCornerRadius="3dp"
-                    card_view:cardElevation="4dp"
-                    card_view:cardMaxElevation="8dp"
-                    card_view:cardUseCompatPadding="true">
+            <android.support.v7.widget.CardView
+                style="@style/crdv"
+                android:layout_height="wrap_content"
+                card_view:cardCornerRadius="1dp"
+                card_view:cardElevation="2dp"
+                card_view:cardMaxElevation="4dp"
+                card_view:cardUseCompatPadding="true">
 
-                    <LinearLayout
-                        style="@style/verticalLinearLayout">
+                <LinearLayout style="@style/verticalLinearLayout">
 
 
                     <TextView
@@ -39,25 +34,28 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/eight"
                         android:fontFamily="sans-serif-light"
-                        android:transitionName="transitionBookName"
+                        android:paddingStart="@dimen/eight"
                         android:text="@string/bookName"
                         android:textAllCaps="true"
                         android:textSize="28sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:transitionName="transitionBookName" />
 
                     <TextView
                         android:id="@+id/purchasePublisher"
                         android:layout_width="wrap_content"
-                        android:transitionName="transitionBookPublisher"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/eight"
                         android:fontFamily="sans-serif-light"
+                        android:paddingStart="@dimen/eight"
                         android:text="@string/bookPublisher"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:transitionName="transitionBookPublisher" />
 
                     <LinearLayout
-                        style="@style/horizontalLinearLayout"
                         android:id="@+id/purchaseButtonContainer"
+                        style="@style/horizontalLinearLayout"
                         android:padding="@dimen/eight">
 
                         <Button
@@ -82,29 +80,28 @@
 
                     </LinearLayout>
 
-                        <TextView
-                            style="@style/wrapContent"
-                            android:layout_width="match_parent"
-                            android:textSize="18sp"
-                            android:id="@+id/purchaseErrorText"
-                            android:visibility="gone"
-                            android:textStyle="bold"
-                            android:padding="@dimen/sixteen"
-                            android:fontFamily="sans-serif-light"
-                            android:text="@string/app_name"/>
+                    <TextView
+                        android:id="@+id/purchaseErrorText"
+                        style="@style/wrapContent"
+                        android:layout_width="match_parent"
+                        android:fontFamily="sans-serif-light"
+                        android:padding="@dimen/sixteen"
+                        android:text="@string/app_name"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
-                    </LinearLayout>
+                </LinearLayout>
 
-                </android.support.v7.widget.CardView>
+            </android.support.v7.widget.CardView>
 
-            </RelativeLayout>
 
             <android.support.v7.widget.CardView
                 style="@style/crdv"
                 android:layout_height="wrap_content"
-                card_view:cardCornerRadius="3dp"
-                card_view:cardElevation="4dp"
-                card_view:cardMaxElevation="8dp"
+                card_view:cardCornerRadius="1dp"
+                card_view:cardElevation="2dp"
+                card_view:cardMaxElevation="4dp"
                 card_view:cardUseCompatPadding="true">
 
                 <LinearLayout style="@style/verticalLinearLayout">
