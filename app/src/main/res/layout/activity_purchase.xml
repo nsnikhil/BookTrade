@@ -2,13 +2,63 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/matchParent"
+    style="@style/wrapContent"
     android:background="@color/colorBackground"
     tools:context="com.trade.book.booktrade.PurchaseActivity">
 
-    <ScrollView style="@style/matchParent">
+    <RelativeLayout
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorAccent"
+        android:id="@+id/purchaseBottomButtonContainer"
+        style="@style/wrapContent">
 
-        <LinearLayout style="@style/verticalLinearLayout">
+        <TextView
+            android:id="@+id/purchaseErrorText"
+            style="@style/wrapContent"
+            android:layout_width="match_parent"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:padding="@dimen/sixteen"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="visible"/>
+
+        <LinearLayout
+            style="@style/wrapContent"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:id="@+id/purchaseButtonContainer">
+
+            <Button
+                android:id="@+id/purchaseAddTocart"
+                style="@style/wrapContent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:text="@string/purchaseAddToCart"
+                android:textColor="@color/white"
+                android:background="@color/colorAccentLight" />
+
+            <Button
+                android:id="@+id/purchaseBuy"
+                style="@style/wrapContent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:text="@string/purchaseBuyNow"
+                android:textColor="@color/white"
+                android:background="@color/colorAccent" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <ScrollView style="@style/wrapContent"
+        android:layout_above="@id/purchaseBottomButtonContainer">
+
+        <RelativeLayout
+            style="@style/wrapContent">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/purchaseBookView"
@@ -16,9 +66,11 @@
                 android:layout_height="300dp"
                 android:transitionName="transitionBookImage" />
 
-
             <android.support.v7.widget.CardView
                 style="@style/crdv"
+                android:layout_marginTop="250dp"
+                android:layout_marginLeft="@dimen/eight"
+                android:layout_marginRight="@dimen/eight"
                 android:layout_height="wrap_content"
                 card_view:cardCornerRadius="1dp"
                 card_view:cardElevation="2dp"
@@ -53,59 +105,6 @@
                         android:textStyle="bold"
                         android:transitionName="transitionBookPublisher" />
 
-                    <LinearLayout
-                        android:id="@+id/purchaseButtonContainer"
-                        style="@style/horizontalLinearLayout"
-                        android:padding="@dimen/eight">
-
-                        <Button
-                            android:id="@+id/purchaseBuy"
-                            style="@style/wrapContent"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:padding="@dimen/eight"
-                            android:text="@string/purchaseBuyNow"
-                            android:textColor="@color/white"
-                            android:theme="@style/buttonClr" />
-
-                        <Button
-                            android:id="@+id/purchaseAddTocart"
-                            style="@style/wrapContent"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:padding="@dimen/eight"
-                            android:text="@string/purchaseAddToCart"
-                            android:textColor="@color/white"
-                            android:theme="@style/buttonClr" />
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/purchaseErrorText"
-                        style="@style/wrapContent"
-                        android:layout_width="match_parent"
-                        android:fontFamily="sans-serif-light"
-                        android:padding="@dimen/sixteen"
-                        android:text="@string/app_name"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:visibility="gone" />
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-
-            <android.support.v7.widget.CardView
-                style="@style/crdv"
-                android:layout_height="wrap_content"
-                card_view:cardCornerRadius="1dp"
-                card_view:cardElevation="2dp"
-                card_view:cardMaxElevation="4dp"
-                card_view:cardUseCompatPadding="true">
-
-                <LinearLayout style="@style/verticalLinearLayout">
-
                     <TextView
                         android:id="@+id/purchaseEdition"
                         style="@style/purchaseTextView"
@@ -126,12 +125,13 @@
                         style="@style/purchaseTextView"
                         android:text="@string/bookCondition" />
 
+
+
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
-
-        </LinearLayout>
+        </RelativeLayout>
 
     </ScrollView>
 

@@ -2,6 +2,7 @@ package com.trade.book.booktrade.fragments.introfragments;
 
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.trade.book.booktrade.AddBook;
 import com.trade.book.booktrade.R;
 
 import org.json.JSONException;
@@ -60,6 +63,9 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
     private CallbackManager callbackManager;
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
+    AlertDialog.Builder mWait;
+    Dialog mWt;
+
 
     public intro2Fragment() {
 
@@ -149,6 +155,7 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
     }
 
     private void signIn() {
+        signInButton.setEnabled(false);
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         signInIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -183,7 +190,6 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
 
     public void closeSingInActivity() {
         signedIn = true;
-        signInButton.setEnabled(false);
         Toast.makeText(getActivity(), "Signed In", Toast.LENGTH_SHORT).show();
     }
 
