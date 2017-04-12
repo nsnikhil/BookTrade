@@ -267,58 +267,68 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 switch (item.getItemId()) {
                     case R.id.bottomMenuBooks:
-                        if (mFragmentBookPager.isHidden()) {
-                            ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                            ft.show(mFragmentBookPager);
-                            ft.hide(mRequestListFragment);
-                            ft.hide(mAccountFragment);
-                            ft.hide(mMoreFragment);
-                            ft.hide(myCartFragment);
-                            bottomSelection(0);
+                        if(mFragmentBookPager!=null) {
+                            if (mFragmentBookPager.isHidden()) {
+                                ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                                ft.show(mFragmentBookPager);
+                                ft.hide(mRequestListFragment);
+                                ft.hide(mAccountFragment);
+                                ft.hide(mMoreFragment);
+                                ft.hide(myCartFragment);
+                                bottomSelection(0);
+                            }
                         }
                         break;
                     case R.id.bottomMenuCart:
-                        if (myCartFragment.isHidden()) {
-                            ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                            ft.hide(mFragmentBookPager);
-                            ft.hide(mRequestListFragment);
-                            ft.hide(mAccountFragment);
-                            ft.hide(mMoreFragment);
-                            ft.show(myCartFragment);
-                            bottomSelection(2);
+                        if(myCartFragment!=null) {
+                            if (myCartFragment.isHidden()) {
+                                ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                                ft.hide(mFragmentBookPager);
+                                ft.hide(mRequestListFragment);
+                                ft.hide(mAccountFragment);
+                                ft.hide(mMoreFragment);
+                                ft.show(myCartFragment);
+                                bottomSelection(2);
+                            }
                         }
                         break;
                     case R.id.bottomMenuRequest:
-                        if (mRequestListFragment.isHidden()) {
-                            ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                            ft.hide(mFragmentBookPager);
-                            ft.show(mRequestListFragment);
-                            ft.hide(mAccountFragment);
-                            ft.hide(mMoreFragment);
-                            ft.hide(myCartFragment);
-                            bottomSelection(1);
+                        if(mRequestListFragment!=null) {
+                            if (mRequestListFragment.isHidden()) {
+                                ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                                ft.hide(mFragmentBookPager);
+                                ft.show(mRequestListFragment);
+                                ft.hide(mAccountFragment);
+                                ft.hide(mMoreFragment);
+                                ft.hide(myCartFragment);
+                                bottomSelection(1);
+                            }
                         }
                         break;
                     case R.id.bottomMenuAccount:
-                        if (mAccountFragment.isHidden()) {
-                            ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                            ft.hide(mFragmentBookPager);
-                            ft.hide(mRequestListFragment);
-                            ft.show(mAccountFragment);
-                            ft.hide(mMoreFragment);
-                            ft.hide(myCartFragment);
-                            bottomSelection(3);
+                        if(mAccountFragment!=null) {
+                            if (mAccountFragment.isHidden()) {
+                                ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                                ft.hide(mFragmentBookPager);
+                                ft.hide(mRequestListFragment);
+                                ft.show(mAccountFragment);
+                                ft.hide(mMoreFragment);
+                                ft.hide(myCartFragment);
+                                bottomSelection(3);
+                            }
                         }
                         break;
                     case R.id.bottomMenuMore:
-                        if (mMoreFragment.isHidden()) {
-                            ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                            ft.hide(mFragmentBookPager);
-                            ft.hide(mRequestListFragment);
-                            ft.hide(mAccountFragment);
-                            ft.show(mMoreFragment);
-                            ft.hide(myCartFragment);
-                            bottomSelection(4);
+                        if(mMoreFragment!=null) {
+                            if (mMoreFragment.isHidden()) {
+                                ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                                ft.hide(mFragmentBookPager);
+                                ft.hide(mRequestListFragment);
+                                ft.hide(mAccountFragment);
+                                ft.show(mMoreFragment);
+                                ft.hide(myCartFragment);
+                                bottomSelection(4);
+                            }
                         }
                         break;
                 }

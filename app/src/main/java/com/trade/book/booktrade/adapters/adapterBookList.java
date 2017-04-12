@@ -3,6 +3,7 @@ package com.trade.book.booktrade.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.support.v7.graphics.Palette;
 import android.util.Log;
@@ -12,10 +13,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.trade.book.booktrade.objects.BookObject;
 import com.trade.book.booktrade.R;
 
@@ -56,7 +61,7 @@ public class adapterBookList extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        MyViewHolder myViewHolder;
+        final MyViewHolder myViewHolder;
         if(convertView==null){
             convertView = LayoutInflater.from(mContext).inflate(R.layout.single_book,parent,false);
             myViewHolder = new MyViewHolder(convertView);
@@ -69,10 +74,23 @@ public class adapterBookList extends BaseAdapter{
         myViewHolder.bookName.setAllCaps(true);
         setSellingPrice(myViewHolder,bookObject);
         myViewHolder.bookPublisher.setText(bookObject.getPublisher());
+        myViewHolder.bookProgress.getIndeterminateDrawable().setColorFilter(mContext.getResources().getColor(R.color.white), PorterDuff.Mode.MULTIPLY);
         String url = mContext.getResources().getString(R.string.urlBucetHost)+mContext.getResources().getString(R.string.urlBucketName)+"/"+bookObject.getPhoto0();
         Log.d("",url);
         Glide.with(mContext)
                 .load(url)
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        myViewHolder.bookProgress.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
                 .centerCrop()
                 .placeholder(R.color.colorPrimaryDark)
                 .crossFade()
@@ -154,6 +172,7 @@ public class adapterBookList extends BaseAdapter{
         @BindView(R.id.singleBookPrice) TextView bookPrice;
         @BindView(R.id.singleBookCostPrice) TextView bookCostPrice;
         @BindView(R.id.singleBookTextContainer) LinearLayout bookTextConatiner;
+         @BindView(R.id.singleBookProgress)ProgressBar bookProgress;
         MyViewHolder(View v){
             ButterKnife.bind(this,v);
             bookCostPrice.setPaintFlags(bookCostPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);

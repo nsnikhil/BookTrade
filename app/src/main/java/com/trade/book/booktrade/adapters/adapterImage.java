@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+
 import com.trade.book.booktrade.R;
 
 import java.util.ArrayList;
@@ -49,9 +51,11 @@ public class adapterImage extends RecyclerView.Adapter<adapterImage.MyViewHolder
     public class MyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.singleImage) ImageView img;
         @BindView(R.id.seingleImageRemove) ImageView remove;
+        @BindView(R.id.singleImageProgress) ProgressBar progress;
         public MyViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+            progress.setVisibility(View.GONE);
             remove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

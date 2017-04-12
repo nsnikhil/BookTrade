@@ -11,6 +11,12 @@
         card_view:cardMaxElevation="8dp"
         card_view:cardUseCompatPadding="true">
 
+        <ProgressBar
+            android:visibility="visible"
+            android:id="@+id/singleBookProgress"
+            android:layout_gravity="center"
+            style="@style/progressbar" />
+
 
         <ImageView
             android:id="@+id/singleBookPicture"

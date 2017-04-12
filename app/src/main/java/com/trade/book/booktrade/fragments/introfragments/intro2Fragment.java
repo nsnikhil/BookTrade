@@ -63,8 +63,6 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
     private CallbackManager callbackManager;
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
-    AlertDialog.Builder mWait;
-    Dialog mWt;
 
 
     public intro2Fragment() {
@@ -155,7 +153,6 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
     }
 
     private void signIn() {
-        signInButton.setEnabled(false);
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         signInIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -190,6 +187,7 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
 
     public void closeSingInActivity() {
         signedIn = true;
+        signInButton.setVisibility(View.GONE);
         Toast.makeText(getActivity(), "Signed In", Toast.LENGTH_SHORT).show();
     }
 

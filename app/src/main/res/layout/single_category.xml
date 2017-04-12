@@ -26,7 +26,14 @@
             android:layout_gravity="bottom"
             android:textSize="14sp" />
 
+        <ProgressBar
+            android:visibility="visible"
+            android:id="@+id/singleCategoryProgress"
+            android:layout_gravity="center"
+            style="@style/progressbar" />
 
     </android.support.v7.widget.CardView>
+
+
 
 </RelativeLayout>

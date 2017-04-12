@@ -54,7 +54,7 @@
 
     </RelativeLayout>
 
-    <ScrollView style="@style/wrapContent"
+    <ScrollView style="@style/matchParent"
         android:layout_above="@id/purchaseBottomButtonContainer">
 
         <RelativeLayout

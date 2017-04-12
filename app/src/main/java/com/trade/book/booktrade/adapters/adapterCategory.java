@@ -3,6 +3,7 @@ package com.trade.book.booktrade.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -12,10 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.objects.CategoryObject;
 
@@ -54,7 +59,7 @@ public class adapterCategory extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        MyViewHolder myViewHolder;
+        final MyViewHolder myViewHolder;
         if(convertView==null){
             convertView = LayoutInflater.from(mContext).inflate(R.layout.single_category,parent,false);
             myViewHolder = new MyViewHolder(convertView);
@@ -64,8 +69,21 @@ public class adapterCategory extends BaseAdapter{
         }
         CategoryObject object = mList.get(position);
         myViewHolder.name.setText(object.getmName());
+        myViewHolder.catProgress.getIndeterminateDrawable().setColorFilter(mContext.getResources().getColor(R.color.white), PorterDuff.Mode.MULTIPLY);
         Glide.with(mContext)
                 .load(object.getmImageUrl())
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        myViewHolder.catProgress.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
                 .centerCrop()
                 .placeholder(R.color.colorAccentLight)
                 .crossFade()
@@ -76,6 +94,7 @@ public class adapterCategory extends BaseAdapter{
     static class MyViewHolder{
         @BindView(R.id.singleCategoryPicture) ImageView banner;
         @BindView(R.id.singleCategoryName) TextView name;
+        @BindView(R.id.singleCategoryProgress)ProgressBar catProgress;
         MyViewHolder(View v){
             ButterKnife.bind(this,v);
         }

@@ -17,4 +17,9 @@
         android:src="@drawable/removeimage"
         android:layout_margin="@dimen/eight" />
 
+    <ProgressBar
+        android:id="@+id/singleImageProgress"
+        android:layout_gravity="center"
+        style="@style/progressbar" />
+
 </RelativeLayout>
