@@ -67,7 +67,7 @@ public class adapterCategory extends BaseAdapter{
         Glide.with(mContext)
                 .load(object.getmImageUrl())
                 .centerCrop()
-                .placeholder(R.color.colorAccent)
+                .placeholder(R.color.colorAccentLight)
                 .crossFade()
                 .into(myViewHolder.banner);
         return convertView;

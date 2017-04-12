@@ -156,7 +156,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void buildTapTarget() {
-        TapTargetView.showFor(this, TapTarget.forView(findViewById(R.id.addBookNewImage), "Click here to add an images", "")
+        TapTargetView.showFor(this, TapTarget.forView(findViewById(R.id.addBookNewImage), "Click here to add images", "")
                         .icon(getResources().getDrawable(R.drawable.camera))
                         .targetCircleColor(R.color.colorAccent),
                 new TapTargetView.Listener() {
