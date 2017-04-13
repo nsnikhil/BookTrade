@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/verticalLinearLayout"
     tools:context="com.trade.book.booktrade.ImageActivity">
+
+    <ProgressBar
+        android:visibility="visible"
+        android:id="@+id/imageFullScreenProgress"
+        android:layout_gravity="center"
+        style="@style/progressbar" />
 
     <ImageView
         android:contentDescription="@string/ImageDescriptionBackground"
@@ -11,4 +17,4 @@
         style="@style/matchParent"
         android:background="#000000" />
 
-</LinearLayout>
+</RelativeLayout>

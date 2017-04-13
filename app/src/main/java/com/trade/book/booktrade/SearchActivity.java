@@ -64,6 +64,7 @@ public class SearchActivity extends AppCompatActivity {
         LeakCanary.install(getApplication());*/
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
+        searchProgress.setVisibility(View.GONE);
         if(!checkConnection()){
             AlertDialog.Builder noInternet = new AlertDialog.Builder(SearchActivity.this);
             noInternet.setMessage("No Internet").setCancelable(false).create().show();

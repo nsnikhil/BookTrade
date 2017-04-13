@@ -13,10 +13,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -59,7 +61,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -107,6 +111,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     ArrayList<String> mConditionList;
     adapterImage imageAdapter;
     String tempImageFolder = "tempImage";
+    private String mCurrentPhotoPath;
     String[] fileArrayNames = {null, null, null, null, null, null, null, null};
     File[] fileArray;
     BookObject bookEditObject = null;
@@ -115,6 +120,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     private int mFakeVariable = 0;
     AlertDialog.Builder mWait;
     Dialog mWt;
+    LinearLayoutManager mLinearLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -330,7 +336,8 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         setSupportActionBar(toolbarAddBook);
 
         imageContainer = (RecyclerView) findViewById(R.id.addBookView);
-        imageContainer.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
+        mLinearLayoutManager  = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
+        imageContainer.setLayoutManager(mLinearLayoutManager);
         imageList = new ArrayList<>();
         mCategoryList = new ArrayList<>();
         mConditionList = new ArrayList<>();
@@ -694,6 +701,15 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         remove.add(stringRequest);
     }
 
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
     private void chooseImageAction() {
         Toast.makeText(getApplicationContext(), "Its is preferred to use add images via gallery as we are still working on improving the camera uploads", Toast.LENGTH_LONG).show();
         AlertDialog.Builder choosePath = new AlertDialog.Builder(AddBook.this);
@@ -704,9 +720,23 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialog, int position) {
                 if (position == 0) {
-                    Intent intentcam = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    /*Intent intentcam = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     if (intentcam.resolveActivity(getPackageManager()) != null) {
                         startActivityForResult(intentcam, CAMERA_REQUEST_CODE);
+                    }*/
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                        File photoFile = null;
+                        try {
+                            photoFile = createImageFile();
+                        } catch (IOException ex) {
+
+                        }
+                        if (photoFile != null) {
+                            Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), "com.trade.book.booktrade.fileprovider", photoFile);
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                            startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
+                        }
                     }
                 }
                 if (position == 1) {
@@ -715,6 +745,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                     startActivityForResult(intent, GALLERY_REQUEST_CODE);*/
                     Intent intent = new Intent();
                     intent.setType("image/*");
+                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
                     intent.setAction(Intent.ACTION_GET_CONTENT);
                     startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_REQUEST_CODE);
                 }
@@ -727,28 +758,45 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GALLERY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                InputStream is = null;
-                if (data != null) {
-                    try {
-                        is = getContentResolver().openInputStream(data.getData());
-                        Bitmap b = BitmapFactory.decodeStream(is);
+                if (resultCode == RESULT_OK) {
+                    InputStream is = null;
+                    if (data != null) {
+                        try {
+                            is = getContentResolver().openInputStream(data.getData());
+                            Bitmap b = BitmapFactory.decodeStream(is);
+                            imageList.add(getResizedBitmap(b, 700));
+                            imageContainer.swapAdapter(imageAdapter, true);
+
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Bitmap b = BitmapFactory.decodeFile(data.getData().getPath());
                         imageList.add(getResizedBitmap(b, 700));
                         imageContainer.swapAdapter(imageAdapter, true);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
                     }
-                } else {
-                    Bitmap b = BitmapFactory.decodeFile(data.getData().getPath());
-                    imageList.add(getResizedBitmap(b, 700));
-                    imageContainer.swapAdapter(imageAdapter, true);
                 }
             }
         }
         if (requestCode == CAMERA_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Bundle extras = data.getExtras();
+                /*Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 imageList.add(imageBitmap);
+                imageContainer.swapAdapter(imageAdapter, true);*/
+                int targetW = imageContainer.getWidth();
+                int targetH = imageContainer.getHeight();
+                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                bmOptions.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+                int photoW = bmOptions.outWidth;
+                int photoH = bmOptions.outHeight;
+                int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+                bmOptions.inJustDecodeBounds = false;
+                bmOptions.inSampleSize = scaleFactor;
+                bmOptions.inPurgeable = true;
+                Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+                imageList.add(getResizedBitmap(bitmap, 700));
                 imageContainer.swapAdapter(imageAdapter, true);
             }
         }

@@ -16,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessTokenTracker;
@@ -51,18 +52,26 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 
 public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnClickListener {
 
     GoogleSignInOptions gso;
     GoogleApiClient mGoogleApiClient;
     int RC_SIGN_IN = 540;
-    LoginButton loginButton;
+
     boolean signedIn = false;
-    SignInButton signInButton;
+
     private CallbackManager callbackManager;
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
+    @BindView(R.id.intro2Text) TextView mSignInText;
+    @BindView(R.id.sign_in_button) SignInButton signInButton;
+    @BindView(R.id.login_button) LoginButton loginButton;
+    private Unbinder mUnbinder;
 
 
     public intro2Fragment() {
@@ -73,6 +82,7 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_intro2, container, false);
+        mUnbinder = ButterKnife.bind(this,v);
         initilize(v);
         setGooglePlus();
         FacebookSdk.sdkInitialize(getActivity());
@@ -82,10 +92,8 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
 
 
     private void initilize(View v) {
-        signInButton = (SignInButton) v.findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_WIDE);
         signInButton.setOnClickListener(this);
-        loginButton = (LoginButton) v.findViewById(R.id.login_button);
         loginButton.setReadPermissions("public_profile");
         loginButton.setReadPermissions();
         callbackManager = CallbackManager.Factory.create();
@@ -187,6 +195,7 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
 
     public void closeSingInActivity() {
         signedIn = true;
+        mSignInText.setText("Signed In");
         signInButton.setVisibility(View.GONE);
         Toast.makeText(getActivity(), "Signed In", Toast.LENGTH_SHORT).show();
     }
@@ -278,5 +287,10 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
                 }
             }
         }
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 }

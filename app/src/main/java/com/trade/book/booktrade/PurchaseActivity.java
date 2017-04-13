@@ -104,7 +104,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void initilize() {
-        imageHolder.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
+        imageHolder.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         addToCart.setOnClickListener(this);
         buyNow.setOnClickListener(this);
         if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {

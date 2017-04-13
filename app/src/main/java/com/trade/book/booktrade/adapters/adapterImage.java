@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.trade.book.booktrade.R;
 
@@ -50,7 +51,7 @@ public class adapterImage extends RecyclerView.Adapter<adapterImage.MyViewHolder
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.singleImage) ImageView img;
-        @BindView(R.id.seingleImageRemove) ImageView remove;
+        @BindView(R.id.seingleImageRemove) ImageView remove;;
         @BindView(R.id.singleImageProgress) ProgressBar progress;
         public MyViewHolder(View itemView) {
             super(itemView);
