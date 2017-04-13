@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.trade.book.booktrade.R;
-import com.trade.book.booktrade.adapters.*;
+import com.trade.book.booktrade.adapters.adapterBookPager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,8 +18,10 @@ import butterknife.Unbinder;
 
 public class BookPagerFragment extends Fragment {
 
-    @BindView(R.id.mainBookPager) ViewPager bookPager;
-    @BindView(R.id.mainPagerTabs) TabLayout bookTabs;
+    @BindView(R.id.mainBookPager)
+    ViewPager bookPager;
+    @BindView(R.id.mainPagerTabs)
+    TabLayout bookTabs;
     private Unbinder mUnbinder;
 
     public BookPagerFragment() {
@@ -28,19 +30,20 @@ public class BookPagerFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v =  inflater.inflate(R.layout.fragment_book_pager, container, false);
-        mUnbinder = ButterKnife.bind(this,v);
-        initialize(v);
+        View v = inflater.inflate(R.layout.fragment_book_pager, container, false);
+        mUnbinder = ButterKnife.bind(this, v);
+        initialize();
         return v;
     }
 
-    private void initialize(View v) {
+    private void initialize() {
         adapterBookPager bookPagerAdapter = new adapterBookPager(getActivity().getSupportFragmentManager());
         bookPager.setAdapter(bookPagerAdapter);
         bookTabs.setupWithViewPager(bookPager);
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
     }

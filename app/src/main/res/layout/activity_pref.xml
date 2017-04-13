@@ -24,6 +24,12 @@
         android:background="@color/colorBackground"
         android:layout_below="@id/toolbarPref">
 
+        <ScrollView
+            style="@style/wrapContent">
+
+        <RelativeLayout
+            style="@style/matchParent">
+
 
                 <LinearLayout
                     android:id="@+id/aboutLogoContainer"
@@ -65,39 +71,25 @@
                     android:layout_below="@id/aboutLogoContainer">
 
                     <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:padding="@dimen/sixteen"
-                        android:textColor="@color/colorAccent"
+                        style="@style/aboutButtons"
                         android:text="@string/aboutUs"
-                        android:textSize="16sp"
-                        android:id="@+id/aboutButtonDevs"
-                        android:textStyle="bold" />
+                        android:id="@+id/aboutButtonDevs" />
 
                     <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:padding="@dimen/sixteen"
-                        android:textColor="@color/colorAccent"
+                        style="@style/aboutButtons"
                         android:id="@+id/aboutButtonTerms"
-                        android:text="@string/aboutTerms"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:text="@string/aboutTerms" />
 
                     <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:textColor="@color/colorAccent"
-                        android:padding="@dimen/sixteen"
+                        style="@style/aboutButtons"
                         android:text="@string/aboutLibraries"
-                        android:id="@+id/aboutButtonLibraries"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:id="@+id/aboutButtonLibraries" />
 
                 </LinearLayout>
+
+        </RelativeLayout>
+
+        </ScrollView>
 
     </RelativeLayout>
 

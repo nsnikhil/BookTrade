@@ -6,11 +6,11 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,21 +32,26 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class AccountFragment extends Fragment implements View.OnClickListener{
+public class AccountFragment extends Fragment implements View.OnClickListener {
 
     private static final String mNullValue = "N/A";
-    @BindView(R.id.accountSignOut) Button signOut;
-    @BindView(R.id.accountPurchase) Button purchase;
-    @BindView(R.id.accountUploads) Button uploads;
-    @BindView(R.id.accountName) TextView name;
-    @BindView(R.id.accountPicture) CircularImageView profile;
+    @BindView(R.id.accountSignOut)
+    Button signOut;
+    @BindView(R.id.accountPurchase)
+    Button purchase;
+    @BindView(R.id.accountUploads)
+    Button uploads;
+    @BindView(R.id.accountName)
+    TextView name;
+    @BindView(R.id.accountPicture)
+    CircularImageView profile;
     private Unbinder mUnbinder;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_account,container,false);
-        mUnbinder = ButterKnife.bind(this,v);
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_account, container, false);
+        mUnbinder = ButterKnife.bind(this, v);
         initialize();
         setVal();
         return v;
@@ -54,8 +59,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener{
 
     private void setVal() {
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        name.setText(spf.getString(getResources().getString(R.string.prefAccountName),mNullValue));
-        if(getBitmap()!=null){
+        name.setText(spf.getString(getResources().getString(R.string.prefAccountName), mNullValue));
+        if (getBitmap() != null) {
             profile.setImageBitmap(getBitmap());
         }
     }
@@ -76,20 +81,20 @@ public class AccountFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.accountUploads:
-                Intent act = new Intent(getActivity(),CategoryViewActivity.class);
-                act.putExtra(getResources().getString(R.string.intencateuri),buildUri());
-                act.putExtra(getResources().getString(R.string.intenupind),121);
+                Intent act = new Intent(getActivity(), CategoryViewActivity.class);
+                act.putExtra(getResources().getString(R.string.intencateuri), buildUri());
+                act.putExtra(getResources().getString(R.string.intenupind), 121);
                 startActivity(act);
                 break;
             case R.id.accountSignOut:
                 makeDialog();
                 break;
             case R.id.accountPurchase:
-                Intent pur = new Intent(getActivity(),CategoryViewActivity.class);
-                pur.putExtra(getResources().getString(R.string.intencateuri),buildPurchaseUri());
-                pur.putExtra(getResources().getString(R.string.intenupind),123);
+                Intent pur = new Intent(getActivity(), CategoryViewActivity.class);
+                pur.putExtra(getResources().getString(R.string.intencateuri), buildPurchaseUri());
+                pur.putExtra(getResources().getString(R.string.intenupind), 123);
                 startActivity(pur);
                 break;
         }
@@ -101,20 +106,20 @@ public class AccountFragment extends Fragment implements View.OnClickListener{
         String searchFileName = getResources().getString(R.string.urlTransactionQueryYour);
         String url = host + searchFileName;
         String uidQuery = "uid";
-        String uidValue  = spf.getString(getResources().getString(R.string.prefAccountId),mNullValue);
+        String uidValue = spf.getString(getResources().getString(R.string.prefAccountId), mNullValue);
         return Uri.parse(url).buildUpon()
                 .appendQueryParameter(uidQuery, uidValue)
                 .build()
                 .toString();
     }
 
-    private String buildUri(){
+    private String buildUri() {
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String host = getResources().getString(R.string.urlServer);
         String searchFileName = getResources().getString(R.string.urlUserUploads);
         String url = host + searchFileName;
         String uidQuery = "uid";
-        String uidValue  = spf.getString(getResources().getString(R.string.prefAccountId),mNullValue);
+        String uidValue = spf.getString(getResources().getString(R.string.prefAccountId), mNullValue);
         return Uri.parse(url).buildUpon()
                 .appendQueryParameter(uidQuery, uidValue)
                 .build()
@@ -134,32 +139,33 @@ public class AccountFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 AccessToken accessToken = AccessToken.getCurrentAccessToken();
-                if(accessToken!=null){
+                if (accessToken != null) {
                     FacebookSdk.sdkInitialize(getActivity());
                     LoginManager.getInstance().logOut();
                 }
                 SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                spf.edit().putBoolean(getResources().getString(R.string.prefAccountIndicator),false).apply();
-                spf.edit().putString(getResources().getString(R.string.prefAccountId),mNullValue).apply();
+                spf.edit().putBoolean(getResources().getString(R.string.prefAccountIndicator), false).apply();
+                spf.edit().putString(getResources().getString(R.string.prefAccountId), mNullValue).apply();
                 spf.edit().putString(getResources().getString(R.string.prefAccountName), mNullValue).apply();
                 deleteFile();
                 getActivity().setResult(getActivity().RESULT_OK, null);
-                getActivity().getContentResolver().delete(CartTables.mCartContentUri,null,null);
+                getActivity().getContentResolver().delete(CartTables.mCartContentUri, null, null);
                 getActivity().finish();
-                startActivity(new Intent(getActivity(),StartActivity.class));
+                startActivity(new Intent(getActivity(), StartActivity.class));
             }
         }).create().show();
     }
 
-    private void deleteFile(){
-        File folder  = getActivity().getExternalCacheDir();
-        File f = new File(folder,"profile.jpg");
-        if(f.exists()){
+    private void deleteFile() {
+        File folder = getActivity().getExternalCacheDir();
+        File f = new File(folder, "profile.jpg");
+        if (f.exists()) {
             f.delete();
         }
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
     }

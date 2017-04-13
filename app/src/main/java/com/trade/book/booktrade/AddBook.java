@@ -11,7 +11,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -26,7 +25,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -38,15 +36,14 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.trade.book.booktrade.adapters.adapterImage;
+import com.trade.book.booktrade.network.VolleySingleton;
 import com.trade.book.booktrade.objects.BookObject;
 
 import org.json.JSONArray;
@@ -111,16 +108,16 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     ArrayList<String> mConditionList;
     adapterImage imageAdapter;
     String tempImageFolder = "tempImage";
-    private String mCurrentPhotoPath;
     String[] fileArrayNames = {null, null, null, null, null, null, null, null};
     File[] fileArray;
     BookObject bookEditObject = null;
-    private int mRequestCode = 2147483646;
-    private int mCountIfDone = 0;
-    private int mFakeVariable = 0;
     AlertDialog.Builder mWait;
     Dialog mWt;
     LinearLayoutManager mLinearLayoutManager;
+    private String mCurrentPhotoPath;
+    private int mRequestCode = 2147483646;
+    private int mCountIfDone = 0;
+    private int mFakeVariable = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +164,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                         .targetCircleColor(R.color.colorAccent),
                 new TapTargetView.Listener() {
                     SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
                     @Override
                     public void onTargetClick(TapTargetView view) {
                         super.onTargetClick(view);
@@ -217,9 +215,9 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     private void setValue(BookObject bookEditObject) {
         name.setText(bookEditObject.getName());
         publisher.setText(bookEditObject.getPublisher());
-        sellingPrice.setText(bookEditObject.getSellingPrice() + "");
-        edition.setText(bookEditObject.getEdition() + "");
-        costPrice.setText(bookEditObject.getCostPrice() + "");
+        sellingPrice.setText(String.valueOf(bookEditObject.getSellingPrice()));
+        edition.setText(String.valueOf(bookEditObject.getEdition()));
+        costPrice.setText(String.valueOf(bookEditObject.getCostPrice()));
         if (!bookEditObject.getDescription().isEmpty() || bookEditObject.getDescription().length() != 0) {
             comment.setText(bookEditObject.getDescription());
         }
@@ -321,9 +319,9 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                 }
             }
         }
-        if(imageUrls.size()==mCountIfDone){
+        if (imageUrls.size() == mCountIfDone) {
             mWt.dismiss();
-            mCountIfDone=0;
+            mCountIfDone = 0;
         }
     }
 
@@ -336,7 +334,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         setSupportActionBar(toolbarAddBook);
 
         imageContainer = (RecyclerView) findViewById(R.id.addBookView);
-        mLinearLayoutManager  = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
+        mLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         imageContainer.setLayoutManager(mLinearLayoutManager);
         imageList = new ArrayList<>();
         mCategoryList = new ArrayList<>();
@@ -349,22 +347,21 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         buildConditionListUri();
 
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        if(spf.getInt(getResources().getString(R.string.prefFirstOpenAddd),0)==0){
+        if (spf.getInt(getResources().getString(R.string.prefFirstOpenAddd), 0) == 0) {
             buildTapTarget();
         }
     }
 
-    private void buildCategoryListUri(){
+    private void buildCategoryListUri() {
         String host = getResources().getString(R.string.urlServer);
         String queryFilename = getResources().getString(R.string.urlCategoryList);
-        String url = host+queryFilename;
-        RequestQueue requestQueue = Volley.newRequestQueue(AddBook.this);
+        String url = host + queryFilename;
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 try {
-                    cateogory.setAdapter(new ArrayAdapter<>(getApplicationContext(),android.R.layout.simple_spinner_dropdown_item, makeCategoryList(response)));
-                    if(mFakeVariable==1){
+                    cateogory.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, makeCategoryList(response)));
+                    if (mFakeVariable == 1) {
                         setCategory();
                     }
                 } catch (JSONException e) {
@@ -374,15 +371,15 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
-        requestQueue.add(jsonArrayRequest);
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
     }
 
     private ArrayList<String> makeCategoryList(JSONArray array) throws JSONException {
-        if(array.length()>0){
-            for(int i=0;i<array.length();i++){
+        if (array.length() > 0) {
+            for (int i = 0; i < array.length(); i++) {
                 JSONObject object = array.getJSONObject(i);
                 mCategoryList.add(object.getString("name"));
             }
@@ -390,17 +387,16 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         return mCategoryList;
     }
 
-    private void buildConditionListUri(){
+    private void buildConditionListUri() {
         String host = getResources().getString(R.string.urlServer);
         String queryFilename = getResources().getString(R.string.urlCondtnList);
-        String url = host+queryFilename;
-        RequestQueue requestQueue = Volley.newRequestQueue(AddBook.this);
+        String url = host + queryFilename;
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 try {
-                    condition.setAdapter(new ArrayAdapter<>(getApplicationContext(),android.R.layout.simple_spinner_dropdown_item, makeConditionList(response)));
-                    if(mFakeVariable==1){
+                    condition.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, makeConditionList(response)));
+                    if (mFakeVariable == 1) {
                         setCondition();
                     }
                 } catch (JSONException e) {
@@ -410,22 +406,21 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
-        requestQueue.add(jsonArrayRequest);
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
     }
 
     private ArrayList<String> makeConditionList(JSONArray array) throws JSONException {
-        if(array.length()>0){
-            for(int i=0;i<array.length();i++){
+        if (array.length() > 0) {
+            for (int i = 0; i < array.length(); i++) {
                 JSONObject object = array.getJSONObject(i);
                 mConditionList.add(object.getString("cndtn"));
             }
         }
-        return  mConditionList;
+        return mConditionList;
     }
-
 
 
     private String buildUrl() {
@@ -628,7 +623,6 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
             for (int i = 0; i < imageList.size(); i++) {
                 makeFile(fileArrayNames[i], i);
             }
-            RequestQueue request = Volley.newRequestQueue(getApplicationContext());
             StringRequest stringRequest = new StringRequest(Request.Method.GET, buildUpdateUrl(), new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -644,7 +638,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                     Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
                 }
             });
-            request.add(stringRequest);
+            VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
         }
     }
 
@@ -655,7 +649,6 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
             for (int i = 0; i < imageList.size(); i++) {
                 makeFile(fileArrayNames[i], i);
             }
-            RequestQueue request = Volley.newRequestQueue(getApplicationContext());
             StringRequest stringRequest = new StringRequest(Request.Method.GET, buildUrl(), new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -673,7 +666,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                     Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                 }
             });
-            request.add(stringRequest);
+            VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
         }
     }
 
@@ -686,7 +679,6 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void removeRequest() {
-        RequestQueue remove = Volley.newRequestQueue(getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, buildDeleteFromRequestUri(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -698,7 +690,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                 Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
-        remove.add(stringRequest);
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
     }
 
     private File createImageFile() throws IOException {
@@ -711,7 +703,6 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void chooseImageAction() {
-        Toast.makeText(getApplicationContext(), "Its is preferred to use add images via gallery as we are still working on improving the camera uploads", Toast.LENGTH_LONG).show();
         AlertDialog.Builder choosePath = new AlertDialog.Builder(AddBook.this);
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(AddBook.this, android.R.layout.simple_list_item_1);
         arrayAdapter.add("Take a picture");
@@ -720,16 +711,12 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialog, int position) {
                 if (position == 0) {
-                    /*Intent intentcam = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    if (intentcam.resolveActivity(getPackageManager()) != null) {
-                        startActivityForResult(intentcam, CAMERA_REQUEST_CODE);
-                    }*/
                     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                         File photoFile = null;
                         try {
                             photoFile = createImageFile();
-                        } catch (IOException ex) {
+                        } catch (IOException ignored) {
 
                         }
                         if (photoFile != null) {
@@ -740,12 +727,9 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                     }
                 }
                 if (position == 1) {
-                    /*Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType("image/*");
-                    startActivityForResult(intent, GALLERY_REQUEST_CODE);*/
                     Intent intent = new Intent();
                     intent.setType("image/*");
-                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
+                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                     intent.setAction(Intent.ACTION_GET_CONTENT);
                     startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_REQUEST_CODE);
                 }
@@ -758,32 +742,27 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GALLERY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                if (resultCode == RESULT_OK) {
-                    InputStream is = null;
-                    if (data != null) {
-                        try {
-                            is = getContentResolver().openInputStream(data.getData());
-                            Bitmap b = BitmapFactory.decodeStream(is);
-                            imageList.add(getResizedBitmap(b, 700));
-                            imageContainer.swapAdapter(imageAdapter, true);
-
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        Bitmap b = BitmapFactory.decodeFile(data.getData().getPath());
+                InputStream is;
+                if (data != null) {
+                    try {
+                        is = getContentResolver().openInputStream(data.getData());
+                        Bitmap b = BitmapFactory.decodeStream(is);
                         imageList.add(getResizedBitmap(b, 700));
                         imageContainer.swapAdapter(imageAdapter, true);
+
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
                     }
+                } else {
+                    Bitmap b = BitmapFactory.decodeFile(data.getData().getPath());
+                    imageList.add(getResizedBitmap(b, 700));
+                    imageContainer.swapAdapter(imageAdapter, true);
                 }
+
             }
         }
         if (requestCode == CAMERA_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                /*Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                imageList.add(imageBitmap);
-                imageContainer.swapAdapter(imageAdapter, true);*/
                 int targetW = imageContainer.getWidth();
                 int targetH = imageContainer.getHeight();
                 BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -791,7 +770,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                 BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
                 int photoW = bmOptions.outWidth;
                 int photoH = bmOptions.outHeight;
-                int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+                int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
                 bmOptions.inJustDecodeBounds = false;
                 bmOptions.inSampleSize = scaleFactor;
                 bmOptions.inPurgeable = true;

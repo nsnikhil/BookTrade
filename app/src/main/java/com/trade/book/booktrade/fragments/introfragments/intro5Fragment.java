@@ -3,11 +3,7 @@ package com.trade.book.booktrade.fragments.introfragments;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -16,23 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.github.paolorotolo.appintro.ISlidePolicy;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.trade.book.booktrade.R;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,15 +23,17 @@ import butterknife.Unbinder;
 
 public class intro5Fragment extends Fragment implements ISlidePolicy/*, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener*/ {
 
-    @BindView(R.id.intro5LocateText) TextView locate;
-    @BindView(R.id.intro5GrantText) Button grant;
     //GoogleApiClient mGoogleApiClient;
     //Location mLastLocation;
-    private static final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 56;
-    private static final int MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE_CODE = 57;
+    //private static final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 56;
+    //private static final int MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE_CODE = 57;
     private static final int mPermissionCode = 58;
+    @BindView(R.id.intro5LocateText)
+    TextView locate;
+    @BindView(R.id.intro5GrantText)
+    Button grant;
     boolean location = false;
-    int mCount = 1;
+    //int mCount = 1;
     private Unbinder mUnbinder;
 
     public intro5Fragment() {
@@ -60,7 +44,7 @@ public class intro5Fragment extends Fragment implements ISlidePolicy/*, GoogleAp
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_intro5, container, false);
-        mUnbinder = ButterKnife.bind(this,v);
+        mUnbinder = ButterKnife.bind(this, v);
         //askPermission();
         //initilize();
         grant.setOnClickListener(new View.OnClickListener() {
@@ -72,25 +56,25 @@ public class intro5Fragment extends Fragment implements ISlidePolicy/*, GoogleAp
         return v;
     }
 
-    private void checkPermission(){
+    private void checkPermission() {
         if ((ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED)||
+                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) ||
                 (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE}, mPermissionCode);
+                        ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE}, mPermissionCode);
         }
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            location=true;
+            location = true;
         }
     }
 
-    private void askPermission() {
+    /*private void askPermission() {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_ACCESS_COARSE_LOCATION);
         }
-    }
+    }*/
 
     /*@Override
     public void onStart() {
@@ -189,7 +173,8 @@ public class intro5Fragment extends Fragment implements ISlidePolicy/*, GoogleAp
 
     }*/
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
     }

@@ -1,22 +1,18 @@
 package com.trade.book.booktrade;
 
 import android.app.Dialog;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -26,7 +22,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
 
@@ -35,24 +30,31 @@ import butterknife.ButterKnife;
 
 public class PrefActivity extends AppCompatActivity implements View.OnClickListener {
 
-    @BindView(R.id.toolbarPref) Toolbar prefToolbar;
-    @BindView(R.id.aboutContainer) RelativeLayout aboutContainer;
-    @BindView(R.id.prefContainer) LinearLayout prefContainer;
-    @BindView(R.id.aboutButtonDevs) Button devs;
-    @BindView(R.id.aboutButtonTerms) Button terms;
-    @BindView(R.id.aboutButtonLibraries) Button libraries;
-    @BindView(R.id.aboutText) ShimmerTextView mShimmerTextView;
-    @BindView(R.id.aboutVersion) TextView mVersionText;
+    private static final String termsUrl = "https://docs.google.com/document/d/1a67czBVEUSpL0u8DCByhEbEG1cTVyB8mvC9eLo3Jt6M/pub";
+    @BindView(R.id.toolbarPref)
+    Toolbar prefToolbar;
+    @BindView(R.id.aboutContainer)
+    RelativeLayout aboutContainer;
+    @BindView(R.id.prefContainer)
+    LinearLayout prefContainer;
+    @BindView(R.id.aboutButtonDevs)
+    Button devs;
+    @BindView(R.id.aboutButtonTerms)
+    Button terms;
+    @BindView(R.id.aboutButtonLibraries)
+    Button libraries;
+    @BindView(R.id.aboutText)
+    ShimmerTextView mShimmerTextView;
+    @BindView(R.id.aboutVersion)
+    TextView mVersionText;
     Shimmer shimmer = new Shimmer();
-    private static final String termsUrl  ="https://docs.google.com/document/d/1a67czBVEUSpL0u8DCByhEbEG1cTVyB8mvC9eLo3Jt6M/pub";
+    String[] libraryName = {"Clans-FloatingActionButton", "lopspower-CircularImageView", "apl-devs-AppIntro", "lapism-SearchView", "Facebook SDK for Android", "AWS Mobile SDK for Android",
+            "bumptech-glide", "claudiodegio-MsvSearch", "RomainPiel-Shimmer-android", "wasabeef-Blurry", "KeepSafe-TapTargetView", "square-leakcanary", "JakeWharton-butterknife"};
 
-    String[] libraryName = { "Clans-FloatingActionButton","lopspower-CircularImageView","apl-devs-AppIntro","lapism-SearchView","Facebook SDK for Android","AWS Mobile SDK for Android",
-            "bumptech-glide","claudiodegio-MsvSearch","RomainPiel-Shimmer-android","wasabeef-Blurry","KeepSafe-TapTargetView","square-leakcanary","JakeWharton-butterknife"};
-
-    String[] libraryLink = {"https://github.com/Clans/FloatingActionButton","https://github.com/lopspower/CircularImageView","https://github.com/apl-devs/AppIntro"
-            ,"https://github.com/lapism/SearchView","https://developers.facebook.com/docs/android","https://aws.amazon.com/mobile/sdk/","https://github.com/bumptech/glide"
-            ,"https://github.com/claudiodegio/MsvSearch","https://github.com/RomainPiel/Shimmer-android","https://github.com/wasabeef/Blurry"
-            ,"https://github.com/KeepSafe/TapTargetView","https://github.com/square/leakcanary","https://github.com/JakeWharton/butterknife"};
+    String[] libraryLink = {"https://github.com/Clans/FloatingActionButton", "https://github.com/lopspower/CircularImageView", "https://github.com/apl-devs/AppIntro"
+            , "https://github.com/lapism/SearchView", "https://developers.facebook.com/docs/android", "https://aws.amazon.com/mobile/sdk/", "https://github.com/bumptech/glide"
+            , "https://github.com/claudiodegio/MsvSearch", "https://github.com/RomainPiel/Shimmer-android", "https://github.com/wasabeef/Blurry"
+            , "https://github.com/KeepSafe/TapTargetView", "https://github.com/square/leakcanary", "https://github.com/JakeWharton/butterknife"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +89,7 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
         PackageInfo info;
         try {
             info = manager.getPackageInfo(getPackageName(), 0);
-            mVersionText.setText(getResources().getString(R.string.aboutVersion)+" : "+info.versionName);
+            mVersionText.setText(getResources().getString(R.string.aboutVersion) + " : " + info.versionName);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -101,7 +103,6 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.aboutButtonDevs:
-                Log.d("Refreshed token: ", PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getResources().getString(R.string.prefFirebaseToken),""));
                 aboutDialog("Shelf Bee");
                 break;
             case R.id.aboutButtonTerms:
@@ -118,8 +119,8 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
     private void showLibrariesList() {
         AlertDialog.Builder choosePath = new AlertDialog.Builder(PrefActivity.this);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(PrefActivity.this, android.R.layout.simple_list_item_1);
-        for(int i=0;i<libraryName.length;i++){
-            arrayAdapter.add(libraryName[i]);
+        for (String aLibraryName : libraryName) {
+            arrayAdapter.add(aLibraryName);
         }
         choosePath.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
             @Override
@@ -130,13 +131,13 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
         choosePath.create().show();
     }
 
-    private void openLink(String url){
+    private void openLink(String url) {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
-        if(i.resolveActivity(getPackageManager())!=null){
+        if (i.resolveActivity(getPackageManager()) != null) {
             startActivity(i);
-        }else {
-            Toast.makeText(getApplicationContext(),"You don't have a browser app to visit the link",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "You don't have a browser app to visit the link", Toast.LENGTH_SHORT).show();
         }
     }
 

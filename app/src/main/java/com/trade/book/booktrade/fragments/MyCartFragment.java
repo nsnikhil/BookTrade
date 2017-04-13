@@ -1,7 +1,6 @@
 package com.trade.book.booktrade.fragments;
 
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -11,7 +10,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.net.Uri;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -29,19 +27,17 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.PurchaseActivity;
 import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.StartActivity;
 import com.trade.book.booktrade.adapters.adapterCart;
-import com.trade.book.booktrade.cartData.CartTables.tablecart;
 import com.trade.book.booktrade.cartData.CartTables;
-import com.trade.book.booktrade.interfaces.RequestListScrollChange;
+import com.trade.book.booktrade.cartData.CartTables.tablecart;
+import com.trade.book.booktrade.network.VolleySingleton;
 import com.trade.book.booktrade.objects.BookObject;
 
 import org.json.JSONArray;
@@ -57,12 +53,15 @@ import butterknife.Unbinder;
 
 public class MyCartFragment extends Fragment implements View.OnClickListener, android.app.LoaderManager.LoaderCallbacks<Cursor> {
 
-    @BindView(R.id.cartList) GridView bookCartGrid;
-    @BindView(R.id.cartEmpty) ImageView noItem;
-    @BindView(R.id.cartCheckOut) FloatingActionButton checkOut;
     private static final int mCartLoaderId = 2;
-    adapterCart cartAdapter;
     private static final String mNullValue = "N/A";
+    @BindView(R.id.cartList)
+    GridView bookCartGrid;
+    @BindView(R.id.cartEmpty)
+    ImageView noItem;
+    @BindView(R.id.cartCheckOut)
+    FloatingActionButton checkOut;
+    adapterCart cartAdapter;
     private int mCursorCount = 0;
     private Unbinder mUnbinder;
 
@@ -73,8 +72,8 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_my_cart,container,false);
-        mUnbinder = ButterKnife.bind(this,v);
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_my_cart, container, false);
+        mUnbinder = ButterKnife.bind(this, v);
         initilize();
         setEmpty();
         return v;
@@ -141,9 +140,9 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
 
     @Override
     public android.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id){
+        switch (id) {
             case mCartLoaderId:
-                return new android.content.CursorLoader(getActivity(),CartTables.mCartContentUri,null,null,null,null);
+                return new android.content.CursorLoader(getActivity(), CartTables.mCartContentUri, null, null, null, null);
         }
         return null;
     }
@@ -163,7 +162,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     @Override
     public void setMenuVisibility(final boolean visible) {
         if (visible) {
-           Toast.makeText(getActivity(),"Visible",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Visible", Toast.LENGTH_SHORT).show();
         }
 
         super.setMenuVisibility(visible);
@@ -299,7 +298,6 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     }
 
     private void buy(Cursor cursor) {
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, buildTransactionUri(cursor), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -311,7 +309,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
                 Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
     }
 
     private String buildSoldUri(int id) {
@@ -325,12 +323,11 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     }
 
     private void removeSold(final int bid, final int count, final Dialog d) {
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, buildSoldUri(bid), null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 try {
-                    removeIfAvailable(response, bid,count,d);
+                    removeIfAvailable(response, bid, count, d);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -341,10 +338,10 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
                 Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
-        requestQueue.add(jsonArrayRequest);
+        VolleySingleton.getInstance(getActivity()).addToRequestQueue(jsonArrayRequest);
     }
 
-    private void removeIfAvailable(JSONArray status, int id,int count,Dialog d) throws JSONException {
+    private void removeIfAvailable(JSONArray status, int id, int count, Dialog d) throws JSONException {
         if (status.length() > 0) {
             JSONObject obj = status.getJSONObject(0);
             int statusCode = obj.getInt("status");
@@ -354,14 +351,14 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
                 Toast.makeText(getActivity(), "Item removed from cart as it was sold", Toast.LENGTH_SHORT).show();
             }
         }
-        if(mCursorCount==count){
+        if (mCursorCount == count) {
             Cursor c1 = getActivity().getContentResolver().query(CartTables.mCartContentUri, null, null, null, null);
-            mCursorCount=0;
+            mCursorCount = 0;
             d.dismiss();
-            if(c1.getCount()>0){
+            if (c1.getCount() > 0) {
                 showCheckOutDialog();
-            }else {
-                Toast.makeText(getActivity(),"Cart Empty",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "Cart Empty", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -373,11 +370,11 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
         final Dialog d = wait.create();
         d.show();
         while (c.moveToNext()) {
-            removeSold(c.getInt(c.getColumnIndex(tablecart.mBuid)),c.getCount(),d);
+            removeSold(c.getInt(c.getColumnIndex(tablecart.mBuid)), c.getCount(), d);
         }
     }
 
-    private void showCheckOutDialog(){
+    private void showCheckOutDialog() {
         Cursor c = getActivity().getContentResolver().query(CartTables.mCartContentUri, null, null, null, null);
         int sp = 0;
         while (c.moveToNext()) {
@@ -386,17 +383,17 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
         double taxPrice = Double.parseDouble(String.format("%.2f", compute(sp)));
         taxPrice = Math.round(taxPrice);
-        buildCheckOutDialog("All the books left in your cart will delivered to "+
-                spf.getString(getActivity().getResources().getString(R.string.prefAccountAddress), mNullValue) + " within one week\n\n"+
-                "Total Price    : " + "र "+(double)sp + "\n"
+        buildCheckOutDialog("All the books left in your cart will delivered to " +
+                spf.getString(getActivity().getResources().getString(R.string.prefAccountAddress), mNullValue) + " within one week\n\n" +
+                "Total Price    : " + "र " + (double) sp + "\n"
                 + "\n"
-                + "Convenience Fee     : " + "र "+taxPrice + "\n"
+                + "Convenience Fee     : " + "र " + taxPrice + "\n"
                 + "\n"
-                + "Final Amount   : " + "र "+(sp + taxPrice));
+                + "Final Amount   : " + "र " + (sp + taxPrice));
     }
 
     private void sendNotification() {
-        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getActivity())
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("Order Confirmed")
@@ -408,7 +405,6 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     }
 
     private void shift(Cursor cursor) {
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, buildUpdateUri(cursor), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -420,10 +416,11 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
                 Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
     }

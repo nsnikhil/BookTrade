@@ -1,34 +1,21 @@
 package com.trade.book.booktrade.fragments.introfragments;
 
 
-import android.app.Activity;
-import android.app.Dialog;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessTokenTracker;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.ProfileTracker;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.github.paolorotolo.appintro.ISlidePolicy;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -37,20 +24,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.trade.book.booktrade.AddBook;
 import com.trade.book.booktrade.R;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,12 +41,14 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
 
     boolean signedIn = false;
 
-    private CallbackManager callbackManager;
-    private AccessTokenTracker accessTokenTracker;
-    private ProfileTracker profileTracker;
-    @BindView(R.id.intro2Text) TextView mSignInText;
-    @BindView(R.id.sign_in_button) SignInButton signInButton;
-    @BindView(R.id.login_button) LoginButton loginButton;
+    //private CallbackManager callbackManager;
+    //private AccessTokenTracker accessTokenTracker;
+    //private ProfileTracker profileTracker;
+    @BindView(R.id.intro2Text)
+    TextView mSignInText;
+    @BindView(R.id.sign_in_button)
+    SignInButton signInButton;
+    //@BindView(R.id.login_button) LoginButton loginButton;
     private Unbinder mUnbinder;
 
 
@@ -82,24 +60,24 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_intro2, container, false);
-        mUnbinder = ButterKnife.bind(this,v);
-        initilize(v);
+        mUnbinder = ButterKnife.bind(this, v);
+        initilize();
         setGooglePlus();
-        FacebookSdk.sdkInitialize(getActivity());
-        setUpFblogin();
+        //FacebookSdk.sdkInitialize(getActivity());
+        //setUpFblogin();
         return v;
     }
 
 
-    private void initilize(View v) {
+    private void initilize() {
         signInButton.setSize(SignInButton.SIZE_WIDE);
         signInButton.setOnClickListener(this);
-        loginButton.setReadPermissions("public_profile");
-        loginButton.setReadPermissions();
-        callbackManager = CallbackManager.Factory.create();
+        //loginButton.setReadPermissions("public_profile");
+        //loginButton.setReadPermissions();
+        //callbackManager = CallbackManager.Factory.create();
     }
 
-    private void setUpFblogin() {
+    /*private void setUpFblogin() {
         loginButton.setFragment(this);
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -135,7 +113,7 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
 
             }
         });
-    }
+    }*/
 
     private void setGooglePlus() {
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestId().requestEmail().requestProfile().build();
@@ -155,7 +133,7 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
                 signIn();
                 break;
             case R.id.login_button:
-                setUpFblogin();
+                //setUpFblogin();
                 break;
         }
     }
@@ -173,29 +151,38 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
         }
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        // callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
             GoogleSignInAccount acct = result.getSignInAccount();
-            spf.edit().putString(getResources().getString(R.string.prefAccountId), acct.getId()).apply();
-            spf.edit().putString(getResources().getString(R.string.prefAccountName), acct.getDisplayName()).apply();
-            if (acct.getPhotoUrl() != null) {
-                new DownloadImage().execute(acct.getPhotoUrl().toString());
-            } else {
-                signedIn = true;
-                Toast.makeText(getActivity(), "Signed In", Toast.LENGTH_SHORT).show();
-                Toast.makeText(getActivity(), "Swipe Left", Toast.LENGTH_SHORT).show();
+            if (acct != null) {
+                spf.edit().putString(getResources().getString(R.string.prefAccountId), acct.getId()).apply();
+                spf.edit().putString(getResources().getString(R.string.prefAccountName), acct.getDisplayName()).apply();
+                if (acct.getPhotoUrl() != null) {
+                    downloadProfilePic(acct.getPhotoUrl().toString());
+                    closeSingInActivity();
+                } else {
+                    closeSingInActivity();
+                }
             }
         }
+    }
+
+    private void downloadProfilePic(String url) {
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        request.allowScanningByMediaScanner();
+        request.setDestinationUri(Uri.fromFile(new File(getActivity().getExternalCacheDir() + "/profile.jpg")));
+        DownloadManager manager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+        manager.enqueue(request);
     }
 
 
     public void closeSingInActivity() {
         signedIn = true;
-        mSignInText.setText("Signed In");
+        mSignInText.setText(getActivity().getResources().getString(R.string.singin));
         signInButton.setVisibility(View.GONE);
         Toast.makeText(getActivity(), "Signed In", Toast.LENGTH_SHORT).show();
     }
@@ -210,86 +197,8 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
         Toast.makeText(getActivity(), "Sign In using any one service to continue", Toast.LENGTH_SHORT).show();
     }
 
-    private class DownloadImage extends AsyncTask<String, Void, Void> {
-
-
-        @Override
-        protected Void doInBackground(String... params) {
-            Bitmap poster;
-            try {
-                poster = getBitmap(new URL(params[0]));
-                saveImage("profile.jpg", poster);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            closeSingInActivity();
-        }
-
-        private Bitmap getBitmap(URL imageUrl) {
-            Bitmap pstr = null;
-            HttpURLConnection htpc = null;
-            InputStream ir = null;
-            try {
-                htpc = (HttpURLConnection) imageUrl.openConnection();
-                htpc.setRequestMethod("GET");
-                htpc.connect();
-                if (htpc.getResponseCode() == 200) {
-                    ir = htpc.getInputStream();
-                    pstr = BitmapFactory.decodeStream(ir);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (htpc != null) {
-                    htpc.disconnect();
-                }
-                if (ir != null) {
-                    try {
-                        ir.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            }
-            return pstr;
-        }
-
-        private void saveImage(String s, Bitmap b) {
-            File folder = getActivity().getExternalCacheDir();
-            File f = new File(folder, s);
-            FileOutputStream fos = null;
-            try {
-                fos = new FileOutputStream(f);
-                b.compress(Bitmap.CompressFormat.JPEG, 20, fos);
-                try {
-                    fos.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } finally {
-                if (fos != null) {
-                    try {
-                        fos.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-    }
-
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
     }

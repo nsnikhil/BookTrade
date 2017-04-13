@@ -3,12 +3,12 @@ package com.trade.book.booktrade.fragments;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,22 +16,23 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
-import java.util.ArrayList;
+
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.AddBook;
 import com.trade.book.booktrade.R;
-import com.trade.book.booktrade.adapters.*;
+import com.trade.book.booktrade.adapters.adapterRequest;
 import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentRequest;
+import com.trade.book.booktrade.network.VolleySingleton;
 import com.trade.book.booktrade.objects.RequestObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,29 +40,33 @@ import butterknife.Unbinder;
 
 public class RequestListFragment extends Fragment {
 
-    @BindView(R.id.requestList) ListView requestList;
-    @BindView(R.id.requestAdd) FloatingActionButton requestAdd;
-    @BindView(R.id.requestListNoRequest) ImageView noRequest;
-    @BindView(R.id.requestListSwipeRefresh) SwipeRefreshLayout mSwipeRefresh;
+    @BindView(R.id.requestList)
+    ListView requestList;
+    @BindView(R.id.requestAdd)
+    FloatingActionButton requestAdd;
+    @BindView(R.id.requestListNoRequest)
+    ImageView noRequest;
+    @BindView(R.id.requestListSwipeRefresh)
+    SwipeRefreshLayout mSwipeRefresh;
     ArrayList<RequestObject> requestObjectList;
     adapterRequest adapter;
-    View mainView = null;
+    //View mainView = null;
     private Unbinder mUnbinder;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mainView= LayoutInflater.from(getActivity()).inflate(R.layout.fragment_request_list,container,false);
-        mUnbinder = ButterKnife.bind(this,mainView);
-        intilize(mainView);
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_request_list, container, false);
+        mUnbinder = ButterKnife.bind(this, v);
+        intilize();
         mSwipeRefresh.setRefreshing(true);
         downloadList();
-        return mainView;
+        return v;
     }
 
 
-    private void intilize(View v) {
+    private void intilize() {
         requestObjectList = new ArrayList<>();
         requestAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,13 +101,13 @@ public class RequestListFragment extends Fragment {
             }
         });
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                requestList.setAdapter(null);
-                requestObjectList.clear();
-                downloadList();
-            }
-        }
+                                               @Override
+                                               public void onRefresh() {
+                                                   requestList.setAdapter(null);
+                                                   requestObjectList.clear();
+                                                   downloadList();
+                                               }
+                                           }
         );
     }
 
@@ -120,7 +125,7 @@ public class RequestListFragment extends Fragment {
             mSwipeRefresh.setRefreshing(false);
             adapter = new adapterRequest(getActivity(), requestObjectList);
             requestList.setAdapter(adapter);
-        }else {
+        } else {
             mSwipeRefresh.setRefreshing(false);
             noRequest.setVisibility(View.VISIBLE);
         }
@@ -130,7 +135,6 @@ public class RequestListFragment extends Fragment {
         String host = getResources().getString(R.string.urlServer);
         String queryFilename = getResources().getString(R.string.urlRequestQuery);
         String url = host + queryFilename;
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -146,10 +150,11 @@ public class RequestListFragment extends Fragment {
                 Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
-        requestQueue.add(jsonArrayRequest);
+        VolleySingleton.getInstance(getActivity()).addToRequestQueue(jsonArrayRequest);
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
     }

@@ -3,7 +3,6 @@ package com.trade.book.booktrade;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 import android.view.WindowManager;
 
 import com.github.paolorotolo.appintro.AppIntro;
@@ -36,7 +35,7 @@ public class IntroActivity extends AppIntro {
         setNextArrowColor(getResources().getColor(R.color.colorAccent));
         setSeparatorColor(getResources().getColor(android.R.color.transparent));
         setColorDoneText(getResources().getColor(R.color.colorAccent));
-        setIndicatorColor(getResources().getColor(R.color.colorAccent),getResources().getColor(R.color.cardview_dark_background));
+        setIndicatorColor(getResources().getColor(R.color.colorAccent), getResources().getColor(R.color.cardview_dark_background));
     }
 
 }

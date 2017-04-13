@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
@@ -15,7 +16,6 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -24,15 +24,13 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.lapism.searchview.SearchView;
-import com.squareup.leakcanary.LeakCanary;
 import com.trade.book.booktrade.adapters.adapterBookList;
 import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentRequest;
+import com.trade.book.booktrade.network.VolleySingleton;
 import com.trade.book.booktrade.objects.BookObject;
 
 import org.json.JSONArray;
@@ -47,13 +45,18 @@ import butterknife.ButterKnife;
 
 public class SearchActivity extends AppCompatActivity {
 
-    @BindView(R.id.searchListGrid) GridView searchList;
-    @BindView(R.id.searchErrorImage) ImageView noList;
-    @BindView(R.id.searchProgress) ProgressBar searchProgress;
-    @BindView(R.id.sSearchView) SearchView searchView;
-    @BindView(R.id.searchRequest) FloatingActionButton request;
+    private static final int REQ_CODE_SPEECH_INPUT = 564;
+    @BindView(R.id.searchListGrid)
+    GridView searchList;
+    @BindView(R.id.searchErrorImage)
+    ImageView noList;
+    @BindView(R.id.searchProgress)
+    ProgressBar searchProgress;
+    @BindView(R.id.sSearchView)
+    SearchView searchView;
+    @BindView(R.id.searchRequest)
+    FloatingActionButton request;
     ArrayList<BookObject> srchList;
-    private static final int  REQ_CODE_SPEECH_INPUT = 564;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +68,7 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
         searchProgress.setVisibility(View.GONE);
-        if(!checkConnection()){
+        if (!checkConnection()) {
             AlertDialog.Builder noInternet = new AlertDialog.Builder(SearchActivity.this);
             noInternet.setMessage("No Internet").setCancelable(false).create().show();
         }
@@ -88,8 +91,7 @@ public class SearchActivity extends AppCompatActivity {
     private boolean checkConnection() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        return isConnected;
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
     private void initilize() {
@@ -129,7 +131,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 BookObject bookObject = (BookObject) parent.getItemAtPosition(position);
-                Intent detail  = new Intent(SearchActivity.this,PurchaseActivity.class);
+                Intent detail = new Intent(SearchActivity.this, PurchaseActivity.class);
                 Bundle b = new Bundle();
                 b.putSerializable(getResources().getString(R.string.intenKeyObejct), bookObject);
                 detail.putExtras(b);
@@ -138,8 +140,8 @@ public class SearchActivity extends AppCompatActivity {
                     Pair<View, String> p2 = Pair.create(view, "transitionBookPublisher");
                     Pair<View, String> p3 = Pair.create(view, "transitionBookImage");
                     ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(SearchActivity.this, p1, p2, p3);
-                    startActivity(detail,options.toBundle());
-                }else {
+                    startActivity(detail, options.toBundle());
+                } else {
                     startActivity(detail);
                 }
             }
@@ -166,7 +168,7 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-    private void inSearch(String query){
+    private void inSearch(String query) {
         searchList.setAdapter(null);
         srchList.clear();
         buildRequest(query);
@@ -191,15 +193,13 @@ public class SearchActivity extends AppCompatActivity {
         String searchFileName = getResources().getString(R.string.urlSearchQuery);
         String url = host + searchFileName;
         String searchQuery = "nm";
-        String searchValue = query;
         return Uri.parse(url).buildUpon()
-                .appendQueryParameter(searchQuery, searchValue)
+                .appendQueryParameter(searchQuery, query)
                 .build()
                 .toString();
     }
 
     private void buildRequest(String query) {
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, searchQuery(query), null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -216,7 +216,7 @@ public class SearchActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
-        requestQueue.add(jsonArrayRequest);
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
     }
 
     private void addToList(JSONArray response) throws JSONException {
@@ -244,15 +244,15 @@ public class SearchActivity extends AppCompatActivity {
                 String photoUrlName6 = jsonObject.getString("pic6");
                 String photoUrlName7 = jsonObject.getString("pic7");
                 int status = jsonObject.getInt("status");
-                srchList.add(new BookObject(bid,name, publisher, costPrice, sellingPrice, edition, description, condtn, cateogory, userId,itmId
-                        ,photoUrlName0,photoUrlName1,photoUrlName2,photoUrlName3,photoUrlName4,photoUrlName5,photoUrlName6,photoUrlName7,status));
+                srchList.add(new BookObject(bid, name, publisher, costPrice, sellingPrice, edition, description, condtn, cateogory, userId, itmId
+                        , photoUrlName0, photoUrlName1, photoUrlName2, photoUrlName3, photoUrlName4, photoUrlName5, photoUrlName6, photoUrlName7, status));
             }
-            adapterBookList bookAdapter = new adapterBookList(getApplicationContext(), srchList,0);
+            adapterBookList bookAdapter = new adapterBookList(getApplicationContext(), srchList, 0);
             searchList.setAdapter(bookAdapter);
-        }else {
+        } else {
             noList.setVisibility(View.VISIBLE);
             request.setVisibility(View.VISIBLE);
-            Toast.makeText(getApplicationContext(),"You can add book request clicking the  + icon",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "You can add book request clicking the  + icon", Toast.LENGTH_LONG).show();
         }
     }
 

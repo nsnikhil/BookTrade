@@ -3,13 +3,13 @@ package com.trade.book.booktrade.objects;
 
 import java.io.Serializable;
 
-public class BookObject implements Serializable{
+public class BookObject implements Serializable {
 
-    private String name,publisher,description,cateogory,condition,photo0,photo1,photo2,photo3,photo4,photo5,photo6,photo7,userId;
-    private int bid,costPrice,sellingPrice,edition,itemId,status;
+    private String name, publisher, description, cateogory, condition, photo0, photo1, photo2, photo3, photo4, photo5, photo6, photo7, userId;
+    private int bid, costPrice, sellingPrice, edition, itemId, status;
 
-    public BookObject(int id,String nm,String pb,int cp,int sp, int ed,String des,String condt,String cat,String usrd,int itmid,
-                      String pic0,String pic1,String pic2,String pic3,String pic4,String pic5,String pic6,String pic7,int bookstatus){
+    public BookObject(int id, String nm, String pb, int cp, int sp, int ed, String des, String condt, String cat, String usrd, int itmid,
+                      String pic0, String pic1, String pic2, String pic3, String pic4, String pic5, String pic6, String pic7, int bookstatus) {
         bid = id;
         name = nm;
         publisher = pb;

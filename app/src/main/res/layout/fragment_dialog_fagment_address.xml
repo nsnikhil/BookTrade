@@ -1,22 +1,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/verticalLinearLayout"
+    android:layout_width="250dp"
     android:padding="@dimen/sixteen"
     tools:context="com.trade.book.booktrade.fragments.dialogfragments.dialogFagmentAddress">
 
-    <android.support.design.widget.TextInputLayout
+    <TextView
+        style="@style/addBookText"
         android:layout_width="250dp"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/dialogYourAddress"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/dialogPhone"
+            style="@style/addBookText"
             android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/dialogPhone"
-            android:inputType="phone"
             android:padding="@dimen/eight"
-            android:maxLines="1" />
+            android:singleLine="true"
+            android:hint="@string/dialogPhone"
+            android:inputType="phone" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -28,11 +38,12 @@
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/dialogAddress"
+            style="@style/addBookText"
             android:layout_width="250dp"
+            android:padding="@dimen/eight"
             android:layout_height="wrap_content"
             android:hint="@string/dialogAddress"
-            android:inputType="textPostalAddress"
-            android:padding="@dimen/eight" />
+            android:inputType="textPostalAddress" />
 
     </android.support.design.widget.TextInputLayout>
 

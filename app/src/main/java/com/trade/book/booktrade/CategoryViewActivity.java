@@ -4,30 +4,32 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.adapters.adapterBookList;
+import com.trade.book.booktrade.network.VolleySingleton;
 import com.trade.book.booktrade.objects.BookObject;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -36,12 +38,16 @@ import butterknife.ButterKnife;
 public class CategoryViewActivity extends AppCompatActivity {
 
     private static final int mRequestCode = 151;
-    @BindView(R.id.catrLst) GridView catList;
-    @BindView(R.id.categoryEmpty) ImageView emptyCat;
-    @BindView(R.id.toolbarCategory) Toolbar catToolbar;
+    @BindView(R.id.catrLst)
+    GridView catList;
+    @BindView(R.id.categoryEmpty)
+    ImageView emptyCat;
+    @BindView(R.id.toolbarCategory)
+    Toolbar catToolbar;
     ArrayList<BookObject> categoryList;
     int mUploadIndicator = 0;
-    @BindView(R.id.catListSwipeRefresh) SwipeRefreshLayout mSwipeRefresh;
+    @BindView(R.id.catListSwipeRefresh)
+    SwipeRefreshLayout mSwipeRefresh;
     String catUri;
 
 
@@ -69,7 +75,6 @@ public class CategoryViewActivity extends AppCompatActivity {
     private void initilize() {
         setSupportActionBar(catToolbar);
         if (mUploadIndicator == 0) {
-           // getSupportActionBar().setTitle(getResources().getStringArray(R.array.bookCateogories)[getIntent().getExtras().getInt(getResources().getString(R.string.intencateuripos))]);
             getSupportActionBar().setTitle(getIntent().getExtras().getString(getResources().getString(R.string.intencateuripos)));
         } else if (mUploadIndicator == 123) {
             getSupportActionBar().setTitle("My Purchases");
@@ -78,17 +83,17 @@ public class CategoryViewActivity extends AppCompatActivity {
         }
         categoryList = new ArrayList<>();
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                catList.setAdapter(null);
-                categoryList.clear();
-                if (mUploadIndicator == 123) {
-                    getList(catUri, 1);
-                } else {
-                    getList(catUri, 0);
-                }
-            }
-        }
+                                               @Override
+                                               public void onRefresh() {
+                                                   catList.setAdapter(null);
+                                                   categoryList.clear();
+                                                   if (mUploadIndicator == 123) {
+                                                       getList(catUri, 1);
+                                                   } else {
+                                                       getList(catUri, 0);
+                                                   }
+                                               }
+                                           }
         );
         catList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -107,8 +112,8 @@ public class CategoryViewActivity extends AppCompatActivity {
                         Pair<View, String> p2 = Pair.create(view, "transitionBookPublisher");
                         Pair<View, String> p3 = Pair.create(view, "transitionBookImage");
                         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(CategoryViewActivity.this, p1, p2, p3);
-                       startActivityForResult(detail, mRequestCode,options.toBundle());
-                    }else {
+                        startActivityForResult(detail, mRequestCode, options.toBundle());
+                    } else {
                         startActivityForResult(detail, mRequestCode);
                     }
                 } else {
@@ -145,7 +150,6 @@ public class CategoryViewActivity extends AppCompatActivity {
     }
 
     private void cancelPurchase(int bid) {
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, buildCancelPurchaseUri(bid), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -157,7 +161,7 @@ public class CategoryViewActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
     }
 
     private String buildMoveToAvailable(int bid) {
@@ -170,7 +174,6 @@ public class CategoryViewActivity extends AppCompatActivity {
     }
 
     private void moveToAvailable(int bid) {
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, buildMoveToAvailable(bid), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -184,7 +187,7 @@ public class CategoryViewActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
     }
 
     @Override
@@ -199,7 +202,6 @@ public class CategoryViewActivity extends AppCompatActivity {
     }
 
     private void getList(String url, final int k) {
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -215,7 +217,7 @@ public class CategoryViewActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
-        requestQueue.add(jsonArrayRequest);
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
     }
 
     private void addToList(JSONArray response, int k) throws JSONException {

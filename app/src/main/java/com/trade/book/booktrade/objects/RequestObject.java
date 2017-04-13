@@ -1,17 +1,14 @@
 package com.trade.book.booktrade.objects;
 
-/**
- * Created by Nikhil on 28-Mar-17.
- */
 
 public class RequestObject {
 
-    private String name,publisher,userId;
+    private String name, publisher, userId;
     private int requestId;
 
-    public RequestObject(String nm,String pb,String uid,int rid){
+    public RequestObject(String nm, String pb, String uid, int rid) {
         name = nm;
-        publisher =pb;
+        publisher = pb;
         userId = uid;
         requestId = rid;
     }

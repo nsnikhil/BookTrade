@@ -1,8 +1,6 @@
 package com.trade.book.booktrade;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,12 +8,11 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -24,47 +21,70 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
 import com.claudiodegio.msv.MaterialSearchView;
 import com.claudiodegio.msv.OnSearchViewListener;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.trade.book.booktrade.fragments.*;
-import com.trade.book.booktrade.interfaces.RequestListScrollChange;
+import com.trade.book.booktrade.fragments.AccountFragment;
+import com.trade.book.booktrade.fragments.BookPagerFragment;
+import com.trade.book.booktrade.fragments.MoreFragment;
+import com.trade.book.booktrade.fragments.MyCartFragment;
+import com.trade.book.booktrade.fragments.RequestListFragment;
+
 import java.lang.reflect.Field;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static java.security.AccessController.getContext;
 
+public class StartActivity extends AppCompatActivity {
 
-public class StartActivity extends AppCompatActivity implements RequestListScrollChange {
-
-    @BindView(R.id.bottomToolbar) Toolbar mBottomToolbar;
-    @BindView(R.id.bottomFabAdd) FloatingActionButton mFabAddBook;
-    @BindView(R.id.bottomSearchView) MaterialSearchView mBottomSearchView;
     private static final String[] colorArray = {"#5D4037", "#FFA000", "#455A64", "#388E3C"};
     private static final String[] colorArrayDark = {"#3E2723", "#FF6F00", "#263238", "#1B5E20"};
+    private static final int MY_WRITE_EXTERNAL_STORAGE_CODE = 556;
+    @BindView(R.id.bottomToolbar)
+    Toolbar mBottomToolbar;
+    @BindView(R.id.bottomFabAdd)
+    FloatingActionButton mFabAddBook;
+    @BindView(R.id.bottomSearchView)
+    MaterialSearchView mBottomSearchView;
     BookPagerFragment mFragmentBookPager;
     RequestListFragment mRequestListFragment;
     AccountFragment mAccountFragment;
     MoreFragment mMoreFragment;
     MyCartFragment myCartFragment;
-    @BindView(R.id.mainBottomNaviagtion) BottomNavigationView mBottomNaviagtionView;
-    @BindView(R.id.bottomMainContainer) RelativeLayout mBottomConatainer;
-    @BindView(R.id.entireContainer) RelativeLayout mEntireContainer;
+    @BindView(R.id.mainBottomNaviagtion)
+    BottomNavigationView mBottomNaviagtionView;
+    @BindView(R.id.bottomMainContainer)
+    RelativeLayout mBottomConatainer;
+    @BindView(R.id.entireContainer)
+    RelativeLayout mEntireContainer;
     int mAddBookRequestCode = 1080;
-    @BindView(R.id.bottomErrorImage) ImageView errorImage;
-    private static final int MY_WRITE_EXTERNAL_STORAGE_CODE = 556;
+    @BindView(R.id.bottomErrorImage)
+    ImageView errorImage;
+
+    public static void disableShiftMode(BottomNavigationView view) {
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
+        try {
+            Field shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
+            shiftingMode.setAccessible(true);
+            shiftingMode.setBoolean(menuView, false);
+            shiftingMode.setAccessible(false);
+            for (int i = 0; i < menuView.getChildCount(); i++) {
+                BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
+                item.setShiftingMode(false);
+                item.setChecked(item.getItemData().isChecked());
+            }
+        } catch (NoSuchFieldException | IllegalAccessException ignored) {
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,39 +124,39 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
         }
     }
 
-    private void buildTapTarget(){
+    private void buildTapTarget() {
         TapTargetView.showFor(this, TapTarget.forView(findViewById(R.id.bottomFabAdd), "Click + to upload a book", "")
-                .icon(getResources().getDrawable(R.drawable.ic_add_white_48dp))
-                .targetCircleColor(R.color.colorAccent),
-        new TapTargetView.Listener() {
-            SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        .icon(getResources().getDrawable(R.drawable.ic_add_white_48dp))
+                        .targetCircleColor(R.color.colorAccent),
+                new TapTargetView.Listener() {
+                    SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-            @Override
-            public void onTargetClick(TapTargetView view) {
-                super.onTargetClick(view);
-                view.dismiss(false);
-                fabClick();
-            }
+                    @Override
+                    public void onTargetClick(TapTargetView view) {
+                        super.onTargetClick(view);
+                        view.dismiss(false);
+                        fabClick();
+                    }
 
-            @Override
-            public void onTargetCancel(TapTargetView view) {
-                super.onTargetCancel(view);
-                view.dismiss(false);
-            }
+                    @Override
+                    public void onTargetCancel(TapTargetView view) {
+                        super.onTargetCancel(view);
+                        view.dismiss(false);
+                    }
 
-            @Override
-            public void onOuterCircleClick(TapTargetView view) {
-                super.onOuterCircleClick(view);
-                view.dismiss(false);
-            }
+                    @Override
+                    public void onOuterCircleClick(TapTargetView view) {
+                        super.onOuterCircleClick(view);
+                        view.dismiss(false);
+                    }
 
-            @Override
-            public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
-                spf.edit().putInt(getResources().getString(R.string.prefFirstOpen),1).apply();
-                view.dismiss(false);
-                super.onTargetDismissed(view, userInitiated);
-            }
-        });
+                    @Override
+                    public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
+                        spf.edit().putInt(getResources().getString(R.string.prefFirstOpen), 1).apply();
+                        view.dismiss(false);
+                        super.onTargetDismissed(view, userInitiated);
+                    }
+                });
     }
 
     @Override
@@ -146,7 +166,6 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
         mBottomSearchView.setMenuItem(item);
         return true;
     }
-
 
     private void initialize(Bundle savedInstanceState) {
         disableShiftMode(mBottomNaviagtionView);
@@ -166,27 +185,10 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
         }
     }
 
-    public static void disableShiftMode(BottomNavigationView view) {
-        BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
-        try {
-            Field shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
-            shiftingMode.setAccessible(true);
-            shiftingMode.setBoolean(menuView, false);
-            shiftingMode.setAccessible(false);
-            for (int i = 0; i < menuView.getChildCount(); i++) {
-                BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
-                item.setShiftingMode(false);
-                item.setChecked(item.getItemData().isChecked());
-            }
-        } catch (NoSuchFieldException | IllegalAccessException ignored) {
-        }
-    }
-
     private boolean checkConnection() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        return isConnected;
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
     private void addOnConnection(Bundle savedInstanceState) {
@@ -197,7 +199,7 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
             mBottomNaviagtionView.setVisibility(View.VISIBLE);
             mFabAddBook.setVisibility(View.VISIBLE);
             SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            if(spf.getInt(getResources().getString(R.string.prefFirstOpen),0)==0){
+            if (spf.getInt(getResources().getString(R.string.prefFirstOpen), 0) == 0) {
                 buildTapTarget();
             }
         } else {
@@ -227,7 +229,7 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
         }
     }
 
-    private void fabClick(){
+    private void fabClick() {
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if (spf.getBoolean(getResources().getString(R.string.prefAccountIndicator), false)) {
             startActivityForResult(new Intent(StartActivity.this, AddBook.class), mAddBookRequestCode);
@@ -240,7 +242,7 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_WRITE_EXTERNAL_STORAGE_CODE);
-        }else {
+        } else {
             fabClick();
         }
     }
@@ -267,7 +269,7 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 switch (item.getItemId()) {
                     case R.id.bottomMenuBooks:
-                        if(mFragmentBookPager!=null) {
+                        if (mFragmentBookPager != null) {
                             if (mFragmentBookPager.isHidden()) {
                                 ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                                 ft.show(mFragmentBookPager);
@@ -280,7 +282,7 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
                         }
                         break;
                     case R.id.bottomMenuCart:
-                        if(myCartFragment!=null) {
+                        if (myCartFragment != null) {
                             if (myCartFragment.isHidden()) {
                                 ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                                 ft.hide(mFragmentBookPager);
@@ -293,7 +295,7 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
                         }
                         break;
                     case R.id.bottomMenuRequest:
-                        if(mRequestListFragment!=null) {
+                        if (mRequestListFragment != null) {
                             if (mRequestListFragment.isHidden()) {
                                 ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                                 ft.hide(mFragmentBookPager);
@@ -306,7 +308,7 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
                         }
                         break;
                     case R.id.bottomMenuAccount:
-                        if(mAccountFragment!=null) {
+                        if (mAccountFragment != null) {
                             if (mAccountFragment.isHidden()) {
                                 ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                                 ft.hide(mFragmentBookPager);
@@ -319,7 +321,7 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
                         }
                         break;
                     case R.id.bottomMenuMore:
-                        if(mMoreFragment!=null) {
+                        if (mMoreFragment != null) {
                             if (mMoreFragment.isHidden()) {
                                 ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                                 ft.hide(mFragmentBookPager);
@@ -432,90 +434,5 @@ public class StartActivity extends AppCompatActivity implements RequestListScrol
                 getSupportActionBar().setTitle(getResources().getString(R.string.navMore));
                 break;
         }
-    }
-
-    @Override
-    public void hideItems() {
-        /*Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                animateOut();
-            }
-        }, 50);*/
-    }
-
-    private void animateOut() {
-        if (!mFragmentBookPager.isHidden()) {
-            if (mFabAddBook.getVisibility() == View.VISIBLE) {
-                mFabAddBook.animate().alpha(0.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        mFabAddBook.setVisibility(View.GONE);
-                    }
-                });
-            }
-        }
-        if (mBottomNaviagtionView.getVisibility() == View.VISIBLE) {
-            mBottomNaviagtionView.animate().alpha(0.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    mBottomNaviagtionView.setVisibility(View.GONE);
-                }
-            });
-        }
-        if (mBottomToolbar.getVisibility() == View.VISIBLE) {
-            mBottomToolbar.animate().alpha(0.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    mBottomToolbar.setVisibility(View.GONE);
-                }
-            });
-        }
-    }
-
-    private void animateIn() {
-        if (!mFragmentBookPager.isHidden()) {
-            if (mFabAddBook.getVisibility() == View.GONE) {
-                mFabAddBook.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        mFabAddBook.setVisibility(View.VISIBLE);
-                    }
-                });
-            }
-        }
-        if (mBottomNaviagtionView.getVisibility() == View.GONE) {
-            mBottomNaviagtionView.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    mBottomNaviagtionView.setVisibility(View.VISIBLE);
-                }
-            });
-        }
-        if (mBottomToolbar.getVisibility() == View.GONE) {
-            mBottomToolbar.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    mBottomToolbar.setVisibility(View.VISIBLE);
-                }
-            });
-        }
-
-    }
-
-    @Override
-    public void showItems() {
-        /*Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                animateIn();
-            }
-        }, 50);*/
     }
 }

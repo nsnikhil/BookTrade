@@ -13,6 +13,7 @@
     <string name="ImageDescriptionError">Error</string>
     <string name="ImageDescriptionBackground">Background</string>
     <string name="grantpermission">Grant Permission</string>
+    <string name="singin">Signed In</string>
 
 
 
@@ -141,6 +142,7 @@
     <string name="dialogConvenience">Convenience Fee</string>
     <string name="dialogTotal">Total Price</string>
     <string name="dialogAddRequest">Add book for request</string>
+    <string name="dialogYourAddress">Your Address</string>
     <!-- -->
 
 
