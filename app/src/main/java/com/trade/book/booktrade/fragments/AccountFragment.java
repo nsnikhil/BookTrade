@@ -14,6 +14,8 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -162,6 +164,38 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         if (f.exists()) {
             f.delete();
         }
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        Animation animation = super.onCreateAnimation(transit, enter, nextAnim);
+
+        if (animation == null && nextAnim != 0) {
+            animation = AnimationUtils.loadAnimation(getActivity(), nextAnim);
+        }
+
+        if (animation != null) {
+            getView().setLayerType(View.LAYER_TYPE_HARDWARE, null);
+
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                public void onAnimationEnd(Animation animation) {
+                    getView().setLayerType(View.LAYER_TYPE_NONE, null);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+
+
+            });
+        }
+
+        return animation;
     }
 
     @Override

@@ -364,6 +364,7 @@ public class StartActivity extends AppCompatActivity {
         });
     }
 
+
     private void bottomSelection(int key) {
         invalidateOptionsMenu();
         MenuItem menuBook = mBottomNaviagtionView.getMenu().getItem(0).setChecked(false);
