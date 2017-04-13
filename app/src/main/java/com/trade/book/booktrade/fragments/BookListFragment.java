@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class BookListFragment extends Fragment {
     @BindView(R.id.bookListSwipeRefresh) SwipeRefreshLayout mSwipeRefresh;
     ArrayList<BookObject> bookList = new ArrayList<>();
     private Unbinder mUnbinder;
+    private static final String mLog_Tag = BookListFragment.class.getSimpleName();
 
     public BookListFragment() {
     }

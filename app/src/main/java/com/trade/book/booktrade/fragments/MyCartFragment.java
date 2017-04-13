@@ -3,10 +3,13 @@ package com.trade.book.booktrade.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.media.RingtoneManager;
 import android.net.Uri;
 
 import android.os.Bundle;
@@ -15,6 +18,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -169,7 +173,6 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cartCheckOut:
-
                 Cursor c = getActivity().getContentResolver().query(CartTables.mCartContentUri, null, null, null, null);
                 if (c.getCount() > 0) {
                     checkSold();
@@ -231,6 +234,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
             public void run() {
                 uploadigDialog().dismiss();
                 getActivity().getContentResolver().delete(CartTables.mCartContentUri, null, null);
+                sendNotification();
                 getActivity().finish();
                 startActivity(new Intent(getActivity(), StartActivity.class));
             }
@@ -389,6 +393,18 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
                 + "Convenience Fee     : " + "र "+taxPrice + "\n"
                 + "\n"
                 + "Final Amount   : " + "र "+(sp + taxPrice));
+    }
+
+    private void sendNotification() {
+        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getActivity())
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("Order Confirmed")
+                .setContentText("All item will be delivered within a week")
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri);
+        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0, notificationBuilder.build());
     }
 
     private void shift(Cursor cursor) {

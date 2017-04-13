@@ -175,6 +175,8 @@
     <string name="intentRequestBookRid">inrqbkrid</string>
     <string name="intentExtraPrefrence">inexpref</string>
     <string name="intentExtraAbout">inexabut</string>
+    <string name="intentArrayListUrl">intarlstur</string>
+    <string name="intentArrayListPosition">intarlstposi</string>
     <!-- -->
 
     <!-- prefStrings-->
@@ -185,6 +187,7 @@
     <string name="prefAccountAddress" translatable="false">prefaccountadr</string>
     <string name="prefFirstOpen" translatable="false">prefFrstOpn</string>
     <string name="prefFirstOpenAddd" translatable="false">prefFrstOpnAdd</string>
+    <string name="prefFirebaseToken" translatable="false">prefFbTknky</string>
     <!-- -->
 
     <!-- About-->

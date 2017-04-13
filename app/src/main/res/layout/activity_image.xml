@@ -4,17 +4,10 @@
     style="@style/verticalLinearLayout"
     tools:context="com.trade.book.booktrade.ImageActivity">
 
-    <ProgressBar
-        android:visibility="visible"
-        android:id="@+id/imageFullScreenProgress"
-        android:layout_gravity="center"
-        style="@style/progressbar" />
-
-    <ImageView
-        android:contentDescription="@string/ImageDescriptionBackground"
-        android:id="@+id/imageFullScreen"
-        android:transitionName="transitionBookImage"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/imageFullScreenImages"
         style="@style/matchParent"
-        android:background="#000000" />
+        android:background="#000000"
+        android:transitionName="transitionBookImage" />
 
 </RelativeLayout>

@@ -3,6 +3,7 @@ package com.trade.book.booktrade.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -20,6 +21,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.trade.book.booktrade.ImageActivity;
 import com.trade.book.booktrade.R;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -28,12 +30,12 @@ import butterknife.ButterKnife;
 
 public class adapterPurchaseImage extends RecyclerView.Adapter<adapterPurchaseImage.MyViewHolder> {
 
+    private static final String mNullValue = "N/A";
     private Context mContext;
     private ArrayList<String> url;
     private int key;
-    private static final String mNullValue = "N/A";
 
-    public adapterPurchaseImage(Context c, ArrayList<String> list,int k) {
+    public adapterPurchaseImage(Context c, ArrayList<String> list, int k) {
         mContext = c;
         url = list;
         key = k;
@@ -66,6 +68,7 @@ public class adapterPurchaseImage extends RecyclerView.Adapter<adapterPurchaseIm
                 .placeholder(R.color.colorAccent)
                 .crossFade()
                 .into(holder.img);
+
     }
 
     @Override
@@ -75,16 +78,23 @@ public class adapterPurchaseImage extends RecyclerView.Adapter<adapterPurchaseIm
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.singleImage) ImageView img;
-        @BindView(R.id.seingleImageRemove) ImageView remove;
-        @BindView(R.id.singleImageProgress) ProgressBar progress;
+        @BindView(R.id.singleImage)
+        ImageView img;
+        @BindView(R.id.seingleImageRemove)
+        ImageView remove;
+        @BindView(R.id.singleImageProgress)
+        ProgressBar progress;
+
         public MyViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
             progress.getIndeterminateDrawable().setColorFilter(mContext.getResources().getColor(R.color.white), PorterDuff.Mode.MULTIPLY);
-            if(key==0){
+            if (key == 0) {
                 remove.setVisibility(View.GONE);
-            }else {
+            } else if (key == 2) {
+                remove.setVisibility(View.GONE);
+                img.setBackgroundColor(Color.parseColor("#000000"));
+            } else {
                 remove.setVisibility(View.VISIBLE);
             }
             remove.setOnClickListener(new View.OnClickListener() {
@@ -94,20 +104,24 @@ public class adapterPurchaseImage extends RecyclerView.Adapter<adapterPurchaseIm
                     notifyItemRemoved(getPosition());
                 }
             });
-            img.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent fullScreen = new Intent(mContext, ImageActivity.class);
-                    fullScreen.putExtra(mContext.getResources().getString(R.string.intentImageUrl),url.get(getPosition()));
-                    fullScreen.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext,img,"transitionBookImage");
-                        mContext.startActivity(fullScreen,options.toBundle());
-                    }else {
-                        mContext.startActivity(fullScreen);
+            if (key != 2) {
+                img.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent fullScreen = new Intent(mContext, ImageActivity.class);
+                        //fullScreen.putExtra(mContext.getResources().getString(R.string.intentImageUrl), url.get(getPosition()));
+                        fullScreen.putStringArrayListExtra(mContext.getResources().getString(R.string.intentArrayListUrl), url);
+                        fullScreen.putExtra(mContext.getResources().getString(R.string. intentArrayListPosition), getPosition());
+                        fullScreen.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, img, "transitionBookImage");
+                            mContext.startActivity(fullScreen, options.toBundle());
+                        } else {
+                            mContext.startActivity(fullScreen);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
     }
