@@ -577,8 +577,8 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         } else if (spf.getString(getResources().getString(R.string.prefAccountId), mNullValue).equalsIgnoreCase(mNullValue)) {
             Toast.makeText(this, "Invalid User Id", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (imageList.size() < 2) {
-            Toast.makeText(this, "You need to upload atleast two image", Toast.LENGTH_SHORT).show();
+        } else if (imageList.size() < 1) {
+            Toast.makeText(this, "You need to upload at-least one image", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
