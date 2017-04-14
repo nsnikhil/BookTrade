@@ -11,6 +11,16 @@
         android:id="@+id/myPasswordContainer">
 
 
+        <TextView
+            style="@style/wrapContent"
+            android:id="@+id/myPasswordLoadingText"
+            android:layout_width="match_parent"
+            android:textSize="24sp"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:text="@string/myLoading"/>
+
+
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -21,6 +31,7 @@
                 android:id="@+id/myPasswordText"
                 style="@style/addBookText"
                 android:hint="@string/myPassword"
+                android:maxLength="4"
                 android:inputType="numberPassword"
                 android:padding="@dimen/eight" />
 

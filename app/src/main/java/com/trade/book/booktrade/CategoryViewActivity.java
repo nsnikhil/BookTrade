@@ -1,5 +1,6 @@
 package com.trade.book.booktrade;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -33,6 +34,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,6 +53,8 @@ public class CategoryViewActivity extends AppCompatActivity {
     @BindView(R.id.catListSwipeRefresh)
     SwipeRefreshLayout mSwipeRefresh;
     String catUri;
+    AlertDialog.Builder mAlertDialog;
+    Dialog mDialog;
 
 
     @Override
@@ -119,6 +123,11 @@ public class CategoryViewActivity extends AppCompatActivity {
                         startActivityForResult(detail, mRequestCode);
                     }
                 } else {
+                    mAlertDialog = new AlertDialog.Builder(CategoryViewActivity.this);
+                    mAlertDialog.setMessage(getResources().getString(R.string.myLoading));
+                    mAlertDialog.setCancelable(false);
+                    mDialog = mAlertDialog.create();
+                    mDialog.show();
                     BookObject bookObject = (BookObject) parent.getItemAtPosition(position);
                     checkForCancel(bookObject);
                 }
@@ -138,6 +147,9 @@ public class CategoryViewActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             } else {
+                mDialog.dismiss();
+                mDialog = null;
+                mAlertDialog = null;
                 AlertDialog.Builder delivered = new AlertDialog.Builder(CategoryViewActivity.this);
                 delivered.setMessage("Book was delivered successfully ")
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -152,17 +164,13 @@ public class CategoryViewActivity extends AppCompatActivity {
 
     private void formatDate(String dateString, final BookObject object) throws ParseException {
         Calendar c = Calendar.getInstance();
-        Calendar c1 = Calendar.getInstance();
         long seconds = Long.parseLong(dateString);
-        c.setTimeInMillis(seconds);
-        long days = c.get(Calendar.DAY_OF_MONTH);
-        long month = c.get(Calendar.MONTH);
-        long year = c.get(Calendar.YEAR);
-        c1.getTimeInMillis();
-        long cDays = c1.get(Calendar.DAY_OF_MONTH);
-        long cMonth = c1.get(Calendar.MONTH);
-        long cYear = c1.get(Calendar.YEAR);
-        if (cDays - days >= 3) {
+        long first = TimeUnit.MILLISECONDS.toDays(seconds);
+        long second = TimeUnit.MILLISECONDS.toDays(c.getTimeInMillis());
+        if (second - first > 3) {
+            mDialog.dismiss();
+            mDialog = null;
+            mAlertDialog = null;
             AlertDialog.Builder delivered = new AlertDialog.Builder(CategoryViewActivity.this);
             delivered.setMessage("You cannot cancel your purchase now")
                     .setPositiveButton("cancel", new DialogInterface.OnClickListener() {
@@ -172,6 +180,9 @@ public class CategoryViewActivity extends AppCompatActivity {
                         }
                     }).create().show();
         } else {
+            mDialog.dismiss();
+            mDialog = null;
+            mAlertDialog = null;
             AlertDialog.Builder cancel = new AlertDialog.Builder(CategoryViewActivity.this)
                     .setTitle("Warning")
                     .setMessage("Do you want to cancel your purchase")

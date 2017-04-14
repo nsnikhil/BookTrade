@@ -18,11 +18,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.trade.book.booktrade.R;
+import com.trade.book.booktrade.network.VolleySingleton;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
 
@@ -34,9 +43,14 @@ import butterknife.Unbinder;
 public class dialogFragmentMyInfo extends DialogFragment {
 
 
-    private static final String mNrsImageUrl = "https://s3-ap-northeast-1.amazonaws.com/shelfbeecategory/nrs.png";
-    private static final String mMyImageUrl = "https://s3-ap-northeast-1.amazonaws.com/shelfbeecategory/my.jpg";
-    private static final int mPassword = 3103;
+    private static final int[] m1 = {116, 104, 101, 71, 111, 111, 100, 71, 117, 121};
+    private static final int[] m2 = {78, 101, 119, 97, 110, 116};
+    private static final int[] m3 = {78, 111, 111, 98, 105, 101, 32, 78, 111, 111, 98, 101, 114, 115, 111, 110};
+    private static String mNrsImageUrl = null;
+    private static String mMyImageUrl = null;
+    private static String mReyImageUrl = null;
+    private static String mMenuImageUrl = null;
+    private static int mPassword;
     @BindView(R.id.myNrsImage)
     ImageView mNrsImage;
     @BindView(R.id.myPImage)
@@ -57,7 +71,11 @@ public class dialogFragmentMyInfo extends DialogFragment {
     Button mSubmit;
     @BindView(R.id.myPasswordText)
     TextView mPasswordText;
+    @BindView(R.id.myPasswordLoadingText)
+    TextView mLoadingText;
     private Unbinder mUnbinder;
+    private int mCounter = 1;
+
 
     public dialogFragmentMyInfo() {
 
@@ -68,28 +86,102 @@ public class dialogFragmentMyInfo extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dialog_fragment_my_info, container, false);
         mUnbinder = ButterKnife.bind(this, v);
-        clickListener();
+        mSubmit.setVisibility(View.GONE);
+        mPasswordText.setVisibility(View.GONE);
+        getValues();
         return v;
     }
 
-    private void clickListener() {
-        mSubmit.setOnClickListener(new View.OnClickListener() {
+    private void getValues() {
+        String host = getResources().getString(R.string.urlServer);
+        String queryFilename = getResources().getString(R.string.urlMineQueryAll);
+        String url = host + queryFilename;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
-            public void onClick(View v) {
-                if (!mPasswordText.getText().toString().isEmpty() || mPasswordText.getText().toString().length() != 0) {
-                    int password = Integer.parseInt(mPasswordText.getText().toString());
-                    if (password == mPassword) {
-                        mPasswordContainer.setVisibility(View.GONE);
-                        mImageContainer.setVisibility(View.VISIBLE);
-                        setImages();
-                    } else {
-                        Toast.makeText(getActivity(), "Wrong password", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getActivity(), "Enter the password to see the magic", Toast.LENGTH_SHORT).show();
+            public void onResponse(JSONArray response) {
+                try {
+                    setValues(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+            }
         });
+        VolleySingleton.getInstance(getActivity()).addToRequestQueue(jsonArrayRequest);
+    }
+
+    private void setValues(JSONArray array) throws JSONException {
+        if (array.length() > 0) {
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject object = array.getJSONObject(i);
+                int id = object.getInt("id");
+                String value = object.getString("value");
+                set(id, value.replaceAll("\\/", "/"));
+                if (i == 2) {
+                    setEnabled();
+                    clickListener();
+                }
+            }
+        }
+    }
+
+    private void setEnabled() {
+        if (mLoadingText != null) {
+            mLoadingText.setVisibility(View.GONE);
+        }
+        if (mSubmit != null) {
+            mSubmit.setVisibility(View.VISIBLE);
+        }
+        if (mPasswordText != null) {
+            mPasswordText.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void set(int id, String v) {
+        switch (id) {
+            case 1:
+                mNrsImageUrl = v;
+                break;
+            case 2:
+                mMyImageUrl = v;
+                break;
+            case 3:
+                mPassword = Integer.parseInt(v);
+                break;
+            case 4:
+                mReyImageUrl = v;
+                break;
+            case 5:
+                mMenuImageUrl = v;
+                break;
+        }
+    }
+
+    private void clickListener() {
+        if (mSubmit != null) {
+            mSubmit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!mPasswordText.getText().toString().isEmpty() || mPasswordText.getText().toString().length() != 0) {
+                        int password = Integer.parseInt(mPasswordText.getText().toString());
+                        if (password == mPassword) {
+                            mPasswordContainer.setVisibility(View.GONE);
+                            mImageContainer.setVisibility(View.VISIBLE);
+                            setImages();
+                        } else {
+                            Toast.makeText(getActivity(), "Wrong password", Toast.LENGTH_LONG).show();
+                            dismiss();
+                        }
+                    } else {
+                        Toast.makeText(getActivity(), "Enter the password to see the magic", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
     }
 
     private void setImages() {
@@ -116,8 +208,41 @@ public class dialogFragmentMyInfo extends DialogFragment {
                 .placeholder(R.color.colorPrimaryDark)
                 .crossFade()
                 .into(mNrsImage);
+        loadGlideProfileImage(mMyImageUrl, "theGoodGuy");
+        setClick();
+    }
+
+    private void setClick() {
+        if (mMyImage != null) {
+            mMyImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mCounter == 0) {
+                        mCounter++;
+                        loadGlideProfileImage(mMyImageUrl, mkn(m1));
+                    } else if (mCounter == 1) {
+                        mCounter++;
+                        loadGlideProfileImage(mReyImageUrl, mkn(m2));
+                    } else if (mCounter == 2) {
+                        mCounter = 0;
+                        loadGlideProfileImage(mMenuImageUrl, mkn(m3));
+                    }
+                }
+            });
+        }
+    }
+
+    private String mkn(int[] arr) {
+        StringBuilder sb = new StringBuilder();
+        for (int anArr : arr) {
+            sb.append(Character.toString((char) anArr));
+        }
+        return sb.toString();
+    }
+
+    private void loadGlideProfileImage(final String url, final String name) {
         Glide.with(getActivity())
-                .load(mMyImageUrl)
+                .load(url)
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -127,7 +252,8 @@ public class dialogFragmentMyInfo extends DialogFragment {
                     @Override
                     public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
                         mMyImageProgress.setVisibility(View.GONE);
-                        setTextBackGround(mMyImageUrl, mMyText);
+                        mMyText.setText(name);
+                        setTextBackGround(url, mMyText);
                         return false;
                     }
                 })

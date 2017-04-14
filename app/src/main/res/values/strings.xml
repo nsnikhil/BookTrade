@@ -18,6 +18,7 @@
     <string name="myName">theGoodGuy</string>
     <string name="myPassword">Password</string>
     <string name="myPasswordSubmit">Submit</string>
+    <string name="myLoading">Just a sec…</string>
 
 
     <!-- IntroText-->
@@ -73,7 +74,10 @@
 
     <string name="urlCategoryList" translatable="false">booktrade/categoryQueryAll.php</string>
     <string name="urlCondtnList" translatable="false">booktrade/condtnQueryAll.php</string>
+
+    <string name="urlMineQueryAll" translatable="false">booktrade/mineQueryAll.php</string>
     <!-- -->
+
 
     <!-- LuancherShortcuts-->
     <string name="launcherAddBook">Upload Book</string>
