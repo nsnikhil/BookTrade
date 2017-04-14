@@ -1,0 +1,105 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/verticalLinearLayout"
+    tools:context="com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentMyInfo">
+
+
+    <LinearLayout
+        style="@style/verticalLinearLayout"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/sixteen"
+        android:id="@+id/myPasswordContainer">
+
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/myPasswordText"
+                style="@style/addBookText"
+                android:hint="@string/myPassword"
+                android:inputType="numberPassword"
+                android:padding="@dimen/eight" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/myPasswordGo"
+            style="@style/wrapContent"
+            android:layout_gravity="end"
+            android:layout_marginTop="@dimen/eight"
+            android:text="@string/myPasswordSubmit"
+            android:textColor="@color/white"
+            android:theme="@style/buttonClr" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/myImageContainer"
+        android:visibility="gone"
+        style="@style/verticalLinearLayout"
+        android:baselineAligned="false">
+
+        <RelativeLayout
+            style="@style/matchParent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/myNrsImage"
+                style="@style/matchParent"
+                android:background="@color/colorAccent"
+                android:contentDescription="@string/ImageDescriptionBackground" />
+
+            <TextView
+                android:id="@+id/myNrsText"
+                style="@style/matchParent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:padding="@dimen/sixteen"
+                android:text="@string/myNrs"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+
+            <ProgressBar
+                android:id="@+id/myNrsImageProgress"
+                style="@style/progressbar"
+                android:layout_gravity="center" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            style="@style/matchParent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/myPImage"
+                style="@style/matchParent"
+                android:background="@color/colorAccentLight"
+                android:contentDescription="@string/ImageDescriptionBackground" />
+
+            <TextView
+                android:id="@+id/myPTEXT"
+                style="@style/matchParent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:padding="@dimen/sixteen"
+                android:text="@string/myName"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <ProgressBar
+                android:id="@+id/myPImageProgress"
+                style="@style/progressbar"
+                android:layout_gravity="center" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

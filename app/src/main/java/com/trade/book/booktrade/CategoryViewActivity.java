@@ -30,7 +30,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -117,28 +119,107 @@ public class CategoryViewActivity extends AppCompatActivity {
                         startActivityForResult(detail, mRequestCode);
                     }
                 } else {
-                    final BookObject bookObject = (BookObject) parent.getItemAtPosition(position);
-                    AlertDialog.Builder cancel = new AlertDialog.Builder(CategoryViewActivity.this)
-                            .setTitle("Warning")
-                            .setMessage("Do you want to cancel your purchase")
-                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            }).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    int bookId = bookObject.getBid();
-                                    cancelPurchase(bookId);
-                                    moveToAvailable(bookId);
-                                }
-                            });
-                    cancel.create().show();
+                    BookObject bookObject = (BookObject) parent.getItemAtPosition(position);
+                    checkForCancel(bookObject);
                 }
             }
         });
     }
+
+    private void checkIfCancelable(JSONArray array, BookObject object) throws JSONException {
+        if (array.length() > 0) {
+            JSONObject jsonObject = array.getJSONObject(0);
+            String time = jsonObject.getString("buytime");
+            String status = jsonObject.getString("tranStatus");
+            if (Integer.parseInt(status) == 0) {
+                try {
+                    formatDate(time, object);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                AlertDialog.Builder delivered = new AlertDialog.Builder(CategoryViewActivity.this);
+                delivered.setMessage("Book was delivered successfully ")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).create().show();
+            }
+        }
+    }
+
+    private void formatDate(String dateString, final BookObject object) throws ParseException {
+        Calendar c = Calendar.getInstance();
+        Calendar c1 = Calendar.getInstance();
+        long seconds = Long.parseLong(dateString);
+        c.setTimeInMillis(seconds);
+        long days = c.get(Calendar.DAY_OF_MONTH);
+        long month = c.get(Calendar.MONTH);
+        long year = c.get(Calendar.YEAR);
+        c1.getTimeInMillis();
+        long cDays = c1.get(Calendar.DAY_OF_MONTH);
+        long cMonth = c1.get(Calendar.MONTH);
+        long cYear = c1.get(Calendar.YEAR);
+        if (cDays - days >= 3) {
+            AlertDialog.Builder delivered = new AlertDialog.Builder(CategoryViewActivity.this);
+            delivered.setMessage("You cannot cancel your purchase now")
+                    .setPositiveButton("cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).create().show();
+        } else {
+            AlertDialog.Builder cancel = new AlertDialog.Builder(CategoryViewActivity.this)
+                    .setTitle("Warning")
+                    .setMessage("Do you want to cancel your purchase")
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            int bookId = object.getBid();
+                            cancelPurchase(bookId);
+                            moveToAvailable(bookId);
+                        }
+                    });
+            cancel.create().show();
+        }
+    }
+
+    private String buildCheckCancel(int bid) {
+        String host = getResources().getString(R.string.urlServer);
+        String cancelPurchase = getResources().getString(R.string.urlTransactionCheck);
+        String url = host + cancelPurchase;
+        String bidQuery = "bkid";
+        String bidValue = String.valueOf(bid);
+        return Uri.parse(url).buildUpon().appendQueryParameter(bidQuery, bidValue).build().toString();
+    }
+
+    private void checkForCancel(final BookObject bookObject) {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, buildCheckCancel(bookObject.getBid()), null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    checkIfCancelable(response, bookObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
+    }
+
 
     private String buildCancelPurchaseUri(int bid) {
         String host = getResources().getString(R.string.urlServer);

@@ -14,13 +14,16 @@
     <string name="ImageDescriptionBackground">Background</string>
     <string name="grantpermission">Grant Permission</string>
     <string name="singin">Signed In</string>
-
+    <string name="myNrs">NRS DEVS</string>
+    <string name="myName">theGoodGuy</string>
+    <string name="myPassword">Password</string>
+    <string name="myPasswordSubmit">Submit</string>
 
 
     <!-- IntroText-->
     <string name="introSignin">Sign In</string>
     <string name="introExtraDetails">Just few more Details</string>
-    <string name="introTermsHeading">By continuing  you  agree to all the <a href='https://docs.google.com/document/d/1a67czBVEUSpL0u8DCByhEbEG1cTVyB8mvC9eLo3Jt6M/pub' > Terms and Conditions</a></string>
+    <string name="introTermsHeading">By continuing  you  agree to all the <a href='https://docs.google.com/document/d/1a67czBVEUSpL0u8DCByhEbEG1cTVyB8mvC9eLo3Jt6M/pub'> Terms and Conditions</a></string>
     <string name="introLocate">Let us locate you</string>
     <string name="introPermission">We need the permissions to locate you and access your external storage</string>
     <!-- -->
@@ -58,6 +61,7 @@
     <string name="urlTransactionInsert" translatable="false">booktrade/transactionInsert.php</string>
     <string name="urlTransactionQueryYour" translatable="false">booktrade/transactionYourPurchase.php</string>
     <string name="urlTransactionDelete" translatable="false">booktrade/transactionDelete.php</string>
+    <string name="urlTransactionCheck" translatable="false">booktrade/transactionCheckForCancel.php</string>
 
     <string name="urlRequestInsert" translatable="false">booktrade/requestInsert.php</string>
     <string name="urlRequestDelete" translatable="false">booktrade/requestDelete.php</string>

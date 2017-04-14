@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
+import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentMyInfo;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +32,11 @@ import butterknife.ButterKnife;
 public class PrefActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String termsUrl = "https://docs.google.com/document/d/1a67czBVEUSpL0u8DCByhEbEG1cTVyB8mvC9eLo3Jt6M/pub";
+    private static final int[] mName = {84, 104, 101, 32,
+            97, 112, 112, 32, 105, 115, 32, 100, 101, 118, 101, 108,
+            111, 112, 101, 100, 32, 98, 121, 32, 116, 104, 101, 71, 111,
+            111, 100, 71, 117, 121, 32, 97, 107, 97, 32, 78, 105, 107, 104, 105,
+            108, 32, 83, 111, 110, 105};
     @BindView(R.id.toolbarPref)
     Toolbar prefToolbar;
     @BindView(R.id.aboutContainer)
@@ -55,6 +61,7 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
             , "https://github.com/lapism/SearchView", "https://developers.facebook.com/docs/android", "https://aws.amazon.com/mobile/sdk/", "https://github.com/bumptech/glide"
             , "https://github.com/claudiodegio/MsvSearch", "https://github.com/RomainPiel/Shimmer-android", "https://github.com/wasabeef/Blurry"
             , "https://github.com/KeepSafe/TapTargetView", "https://github.com/square/leakcanary", "https://github.com/JakeWharton/butterknife"};
+    private int mCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +110,14 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.aboutButtonDevs:
-                aboutDialog("Shelf Bee");
+                if (mCount == 4) {
+                    mCount = 0;
+                    dialogFragmentMyInfo dialogFragmentMyInfo = new dialogFragmentMyInfo();
+                    dialogFragmentMyInfo.show(getSupportFragmentManager(), "myinfo");
+                } else {
+                    mCount++;
+                    aboutDialog("Shelf Bee");
+                }
                 break;
             case R.id.aboutButtonTerms:
                 CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
