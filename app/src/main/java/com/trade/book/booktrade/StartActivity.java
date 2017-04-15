@@ -245,6 +245,7 @@ public class StartActivity extends AppCompatActivity implements  GoogleApiClient
     private void addOnConnection(Bundle savedInstanceState) {
         if (checkConnection()) {
             checkFirst();
+            verifyLocation();
             addFragments(savedInstanceState);
             errorImage.setVisibility(View.GONE);
             mBottomNaviagtionView.setVisibility(View.VISIBLE);
@@ -268,6 +269,23 @@ public class StartActivity extends AppCompatActivity implements  GoogleApiClient
         }
     }
 
+
+    private void verifyLocation(){
+        final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            Snackbar.make(mBottomConatainer, "Gps turned Off", BaseTransientBottomBar.LENGTH_INDEFINITE)
+                    .setActionTextColor(getResources().getColor(R.color.white))
+                    .setAction("Enable", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        }
+                    }).show();
+
+        }else {
+            initializeGps();
+        }
+    }
 
     /*
     builds Uri to insert firebasekey
@@ -420,7 +438,11 @@ public class StartActivity extends AppCompatActivity implements  GoogleApiClient
     private void fabClick() {
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if (spf.getBoolean(getResources().getString(R.string.prefAccountIndicator), false)) {
-            startActivityForResult(new Intent(StartActivity.this, AddBook.class), mAddBookRequestCode);
+            if(ifInCircle()){
+                startActivityForResult(new Intent(StartActivity.this, AddBook.class), mAddBookRequestCode);
+            }else {
+                Toast.makeText(getApplicationContext(),"Sorry we don't have provide service in your area now we are continuously working hard to increase our coverage zone",Toast.LENGTH_LONG).show();
+            }
         } else {
             checkFirst();
         }
@@ -434,7 +456,14 @@ public class StartActivity extends AppCompatActivity implements  GoogleApiClient
                 ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_WRITE_EXTERNAL_STORAGE_CODE);
         } else {
-            fabClick();
+            SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            if(spf.getString(getResources().getString(R.string.prefLatitude),mNullValue).equalsIgnoreCase(mNullValue)||
+                    spf.getString(getResources().getString(R.string.prefLongitude),mNullValue).equalsIgnoreCase(mNullValue)){
+                initializeGps();
+                locateOnConnection();
+            }else {
+                fabClick();
+            }
         }
     }
 
@@ -643,6 +672,7 @@ public class StartActivity extends AppCompatActivity implements  GoogleApiClient
         return distanceInMeters < 5000;
     }
 
+
     private void initializeGps() {
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
@@ -669,19 +699,23 @@ public class StartActivity extends AppCompatActivity implements  GoogleApiClient
     }
 
     public void onStart() {
-        mGoogleApiClient.connect();
+        if(mGoogleApiClient!=null){
+            mGoogleApiClient.connect();
+        }
         super.onStart();
     }
 
     @Override
     public void onStop() {
-        mGoogleApiClient.disconnect();
+        if(mGoogleApiClient!=null){
+            mGoogleApiClient.disconnect();
+        }
         super.onStop();
     }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
+        locateOnConnection();
     }
 
     @Override
