@@ -1,11 +1,16 @@
 package com.trade.book.booktrade.fragments;
 
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +24,10 @@ import android.widget.Toast;
 
 import com.trade.book.booktrade.PrefActivity;
 import com.trade.book.booktrade.R;
+import com.trade.book.booktrade.StartActivity;
 import com.trade.book.booktrade.adapters.adapterList;
 import com.trade.book.booktrade.fragments.dialogfragments.dialogFagmentAddress;
+import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentGetLocation;
 
 import java.util.ArrayList;
 
@@ -28,12 +35,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static android.content.Context.LOCATION_SERVICE;
+
 
 public class MoreFragment extends Fragment {
 
     @BindView(R.id.cateogoryList)
     ListView moreList;
     private Unbinder mUnbinder;
+    private static final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 56;
 
     public MoreFragment() {
 
@@ -51,6 +61,7 @@ public class MoreFragment extends Fragment {
     private void addList() {
         ArrayList<String> moreItem = new ArrayList<>();
         moreItem.add("Your Address");
+        moreItem.add("Recalibrate Location");
         moreItem.add("Refer a Friend");
         moreItem.add("Help");
         moreItem.add("Chat with us");
@@ -74,32 +85,69 @@ public class MoreFragment extends Fragment {
                 address.show(getFragmentManager(), "dialog");
                 break;
             case 1:
+                checkLocation();
+                break;
+            case 2:
                 Intent share = new Intent(android.content.Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
                 share.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.trade.book.booktrade");
                 startActivity(Intent.createChooser(share, "Share link!"));
                 break;
-            case 2:
-                chooseHelpDialog();
-                break;
             case 3:
-                emailIntent();
+                chooseHelpDialog();
                 break;
             case 4:
                 emailIntent();
                 break;
             case 5:
+                emailIntent();
+                break;
+            case 6:
                 Intent settings = new Intent(getActivity(), PrefActivity.class);
                 settings.putExtra(getResources().getString(R.string.intentExtraPrefrence), 3002);
                 startActivity(settings);
                 break;
-            case 6:
+            case 7:
                 Intent about = new Intent(getActivity(), PrefActivity.class);
                 about.putExtra(getResources().getString(R.string.intentExtraAbout), 3003);
                 startActivity(about);
                 break;
         }
+    }
+
+    private void checkLocation(){
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_ACCESS_COARSE_LOCATION);
+        } else {
+            LocationManager service = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+            boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            if (!enabled) {
+                buildAlertMessageNoGps();
+            }else {
+                dialogFragmentGetLocation getLocation = new dialogFragmentGetLocation();
+                getLocation.show(getFragmentManager(),"location");
+            }
+        }
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("You should turn on gps to take advantage of all our services")
+                .setCancelable(false)
+                .setPositiveButton("Enable", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private void chooseHelpDialog() {

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/verticalLinearLayout"
+    tools:context="com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentGetLocation">
+
+    <TextView
+        style="@style/wrapContent"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:id="@+id/locationStatus"
+        android:layout_margin="@dimen/sixteen"
+        android:textColor="@color/black"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
+        android:text="Status"/>
+
+    <TextView
+        style="@style/wrapContent"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:id="@+id/locationLatitude"
+        android:layout_margin="@dimen/sixteen"
+        android:textColor="@color/black"
+        android:layout_gravity="center_horizontal"
+        android:text="Latitude"/>
+
+    <TextView
+        style="@style/wrapContent"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:id="@+id/locationLongitude"
+        android:textColor="@color/black"
+        android:layout_margin="@dimen/sixteen"
+        android:layout_gravity="center_horizontal"
+        android:text="Longitude"/>
+
+</LinearLayout>

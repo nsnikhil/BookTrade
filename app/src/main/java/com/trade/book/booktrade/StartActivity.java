@@ -14,8 +14,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BaseTransientBottomBar;
@@ -45,9 +45,7 @@ import com.claudiodegio.msv.MaterialSearchView;
 import com.claudiodegio.msv.OnSearchViewListener;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.trade.book.booktrade.cartData.CartTables;
 import com.trade.book.booktrade.fragments.AccountFragment;
@@ -55,6 +53,7 @@ import com.trade.book.booktrade.fragments.BookPagerFragment;
 import com.trade.book.booktrade.fragments.MoreFragment;
 import com.trade.book.booktrade.fragments.MyCartFragment;
 import com.trade.book.booktrade.fragments.RequestListFragment;
+import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentGetLocation;
 import com.trade.book.booktrade.network.VolleySingleton;
 
 import org.json.JSONArray;
@@ -67,11 +66,9 @@ import java.lang.reflect.Field;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import static com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 
 
-public class StartActivity extends AppCompatActivity implements  GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+public class StartActivity extends AppCompatActivity {
 
     private static final String[] colorArray = {"#5D4037", "#FFA000", "#455A64", "#388E3C"};
     private static final String[] colorArrayDark = {"#3E2723", "#FF6F00", "#263238", "#1B5E20"};
@@ -245,7 +242,6 @@ public class StartActivity extends AppCompatActivity implements  GoogleApiClient
     private void addOnConnection(Bundle savedInstanceState) {
         if (checkConnection()) {
             checkFirst();
-            verifyLocation();
             addFragments(savedInstanceState);
             errorImage.setVisibility(View.GONE);
             mBottomNaviagtionView.setVisibility(View.VISIBLE);
@@ -269,23 +265,6 @@ public class StartActivity extends AppCompatActivity implements  GoogleApiClient
         }
     }
 
-
-    private void verifyLocation(){
-        final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
-        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-            Snackbar.make(mBottomConatainer, "Gps turned Off", BaseTransientBottomBar.LENGTH_INDEFINITE)
-                    .setActionTextColor(getResources().getColor(R.color.white))
-                    .setAction("Enable", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                        }
-                    }).show();
-
-        }else {
-            initializeGps();
-        }
-    }
 
     /*
     builds Uri to insert firebasekey
@@ -438,14 +417,79 @@ public class StartActivity extends AppCompatActivity implements  GoogleApiClient
     private void fabClick() {
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if (spf.getBoolean(getResources().getString(R.string.prefAccountIndicator), false)) {
-            if(ifInCircle()){
-                startActivityForResult(new Intent(StartActivity.this, AddBook.class), mAddBookRequestCode);
+            if(spf.getString(getResources().getString(R.string.prefLatitude),mNullValue).equalsIgnoreCase(mNullValue)||
+                    spf.getString(getResources().getString(R.string.prefLongitude),mNullValue).equalsIgnoreCase(mNullValue)) {
+                checkLocation();
             }else {
-                Toast.makeText(getApplicationContext(),"Sorry we don't have provide service in your area now we are continuously working hard to increase our coverage zone",Toast.LENGTH_LONG).show();
+                if(checkStatus()){
+                    startActivityForResult(new Intent(StartActivity.this, AddBook.class), mAddBookRequestCode);
+                }else {
+                    Toast.makeText(getApplicationContext(),"We are sorry your region doesn't fall into " +
+                            "our coverage zone, we are continuously working hard to expand our coverage zone",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"If you think its an mistake try recalibrating location from more ",Toast.LENGTH_SHORT).show();
+                }
             }
         } else {
             checkFirst();
         }
+    }
+
+    private boolean checkStatus() {
+        SharedPreferences spf  = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        double sLatitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.latitude));
+        double sLongitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.longititude));
+        double myLatitude = 0.0;
+        double myLongitude = 0.0;
+        int count=0;
+        if(!spf.getString(getResources().getString(R.string.prefLatitude),mNullValue).equalsIgnoreCase(mNullValue)){
+            count++;
+            myLatitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude),mNullValue));
+        }
+        if(!spf.getString(getResources().getString(R.string.prefLongitude),mNullValue).equalsIgnoreCase(mNullValue)){
+            count++;
+            myLongitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude),mNullValue));
+        }
+        if(count==2){
+            float[] results = new float[1];
+            Location.distanceBetween(sLatitude, sLongitude, myLatitude, myLongitude, results);
+            float distanceInMeters = results[0];
+            return distanceInMeters < 5000;
+        }
+        return false;
+    }
+
+    private void checkLocation(){
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(StartActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_ACCESS_COARSE_LOCATION);
+        } else {
+            LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
+            boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            if (!enabled) {
+                buildAlertMessageNoGps();
+            }else {
+                dialogFragmentGetLocation getLocation = new dialogFragmentGetLocation();
+                getLocation.show(getSupportFragmentManager(),"location");
+            }
+        }
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("You should turn on gps to take advantage of all our services")
+                .setCancelable(false)
+                .setPositiveButton("Enable", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
     /*
@@ -456,14 +500,7 @@ public class StartActivity extends AppCompatActivity implements  GoogleApiClient
                 ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_WRITE_EXTERNAL_STORAGE_CODE);
         } else {
-            SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            if(spf.getString(getResources().getString(R.string.prefLatitude),mNullValue).equalsIgnoreCase(mNullValue)||
-                    spf.getString(getResources().getString(R.string.prefLongitude),mNullValue).equalsIgnoreCase(mNullValue)){
-                initializeGps();
-                locateOnConnection();
-            }else {
                 fabClick();
-            }
         }
     }
 
@@ -471,13 +508,13 @@ public class StartActivity extends AppCompatActivity implements  GoogleApiClient
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == MY_WRITE_EXTERNAL_STORAGE_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                fabClick();
+               fabClick();
             }
         }
     }
 
     /*
-    click listener and g=fragment switch
+    click listener and fragment switch
     */
     private void setClickListeners() {
         mFabAddBook.setOnClickListener(new View.OnClickListener() {
@@ -660,71 +697,4 @@ public class StartActivity extends AppCompatActivity implements  GoogleApiClient
         }
     }
 
-    private boolean ifInCircle(){
-        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        double fixedLatitude = Double.parseDouble(spf.getString(getResources().getString(R.string.longititude),mNullValue));
-        double fixedLongitude = Double.parseDouble(spf.getString(getResources().getString(R.string.longititude),mNullValue));
-        double myLatitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude),mNullValue));
-        double myLongitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude),mNullValue));
-        float[] results = new float[1];
-        Location.distanceBetween(fixedLatitude, fixedLongitude, myLatitude, myLongitude, results);
-        float distanceInMeters = results[0];
-        return distanceInMeters < 5000;
-    }
-
-
-    private void initializeGps() {
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
-    }
-
-    private void locateOnConnection(){
-        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-        }
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLastLocation != null) {
-            PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString(getResources().getString(R.string.prefLatitude),
-                    String.valueOf(mLastLocation.getLatitude())).apply();
-            PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString(getResources().getString(R.string.prefLatitude),
-                    String.valueOf(mLastLocation.getLongitude())).apply();
-
-        }
-    }
-
-    public void onStart() {
-        if(mGoogleApiClient!=null){
-            mGoogleApiClient.connect();
-        }
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        if(mGoogleApiClient!=null){
-            mGoogleApiClient.disconnect();
-        }
-        super.onStop();
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        locateOnConnection();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 }

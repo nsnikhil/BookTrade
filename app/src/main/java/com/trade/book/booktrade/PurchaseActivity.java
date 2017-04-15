@@ -1,15 +1,21 @@
 package com.trade.book.booktrade;
 
+import android.*;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +35,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.trade.book.booktrade.adapters.adapterPurchaseImage;
 import com.trade.book.booktrade.cartData.CartTables;
 import com.trade.book.booktrade.cartData.CartTables.tablecart;
+import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentGetLocation;
 import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentPurchase;
 import com.trade.book.booktrade.network.VolleySingleton;
 import com.trade.book.booktrade.objects.BookObject;
@@ -71,6 +78,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
     BookObject bObject = null;
     adapterPurchaseImage imageAdapter;
     ArrayList<String> urls;
+    private static final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 56;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,10 +209,80 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
                     detail.putExtras(b);
                     startActivityForResult(detail, mEditRequestCode);
                 } else {
-                    checkSold(bObject.getBid());
+                    SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    if(spf.getString(getResources().getString(R.string.prefLatitude),mNullValue).equalsIgnoreCase(mNullValue)||
+                            spf.getString(getResources().getString(R.string.prefLongitude),mNullValue).equalsIgnoreCase(mNullValue)) {
+                        checkLocation();
+                    }else {
+                        if (checkStatus()) {
+                            checkSold(bObject.getBid());
+                        } else {
+                            Toast.makeText(getApplicationContext(), "We are sorry your region doesn't fall into " +
+                                    "our coverage zone, we are continuously working hard to expand our coverage zone", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "If you think its a mistake try recalibrating location from more ", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
                 break;
         }
+    }
+
+    private void checkLocation(){
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(PurchaseActivity.this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_ACCESS_COARSE_LOCATION);
+        } else {
+            LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
+            boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            if (!enabled) {
+                buildAlertMessageNoGps();
+            }else {
+                dialogFragmentGetLocation getLocation = new dialogFragmentGetLocation();
+                getLocation.show(getSupportFragmentManager(),"location");
+            }
+        }
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("You should turn on gps to take advantage of all our services")
+                .setCancelable(false)
+                .setPositiveButton("Enable", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private boolean checkStatus() {
+        SharedPreferences spf  = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        double sLatitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.latitude));
+        double sLongitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.longititude));
+        double myLatitude = 0.0;
+        double myLongitude = 0.0;
+        int count=0;
+        if(!spf.getString(getResources().getString(R.string.prefLatitude),mNullValue).equalsIgnoreCase(mNullValue)){
+            count++;
+            myLatitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude),mNullValue));
+        }
+        if(!spf.getString(getResources().getString(R.string.prefLongitude),mNullValue).equalsIgnoreCase(mNullValue)){
+            count++;
+            myLongitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude),mNullValue));
+        }
+        if(count==2){
+            float[] results = new float[1];
+            Location.distanceBetween(sLatitude, sLongitude, myLatitude, myLongitude, results);
+            float distanceInMeters = results[0];
+            return distanceInMeters < 5000;
+        }
+        return false;
     }
 
     private void showPurchaseDialog() {

@@ -129,7 +129,7 @@
         <item name="android:layout_centerInParent">true</item>
     </style>
 
-    <style name="progressbarSMALL" parent="@android:style/Widget.DeviceDefault.ProgressBar.Small">
+    <style name="progressbarSMALL" parent="@android:style/Widget.DeviceDefault.ProgressBar">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_centerInParent">true</item>
