@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/horizontalLinearLayout"
+    android:layout_height="wrap_content"
+    tools:context="com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentLoading">
+
+
+    <ProgressBar
+        android:padding="@dimen/eight"
+       style="@style/progressbarSMALL"/>
+
+    <TextView
+        style="@style/wrapContent"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_marginStart="@dimen/sixteen"
+        android:layout_gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:text="@string/myLoading"/>
+
+</LinearLayout>

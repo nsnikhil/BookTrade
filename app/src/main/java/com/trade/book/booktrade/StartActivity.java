@@ -2,15 +2,20 @@ package com.trade.book.booktrade;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BaseTransientBottomBar;
@@ -20,35 +25,59 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.claudiodegio.msv.MaterialSearchView;
 import com.claudiodegio.msv.OnSearchViewListener;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.trade.book.booktrade.cartData.CartTables;
 import com.trade.book.booktrade.fragments.AccountFragment;
 import com.trade.book.booktrade.fragments.BookPagerFragment;
 import com.trade.book.booktrade.fragments.MoreFragment;
 import com.trade.book.booktrade.fragments.MyCartFragment;
 import com.trade.book.booktrade.fragments.RequestListFragment;
+import com.trade.book.booktrade.network.VolleySingleton;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
 import java.lang.reflect.Field;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import static com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 
 
 public class StartActivity extends AppCompatActivity {
 
     private static final String[] colorArray = {"#5D4037", "#FFA000", "#455A64", "#388E3C"};
     private static final String[] colorArrayDark = {"#3E2723", "#FF6F00", "#263238", "#1B5E20"};
+    private static final String mNullValue = "N/A";
     private static final int MY_WRITE_EXTERNAL_STORAGE_CODE = 556;
+    private static final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 56;
     @BindView(R.id.bottomToolbar)
     Toolbar mBottomToolbar;
     @BindView(R.id.bottomFabAdd)
@@ -69,6 +98,8 @@ public class StartActivity extends AppCompatActivity {
     int mAddBookRequestCode = 1080;
     @BindView(R.id.bottomErrorImage)
     ImageView errorImage;
+    GoogleApiClient mGoogleApiClient;
+    Location mLastLocation;
 
     public static void disableShiftMode(BottomNavigationView view) {
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
@@ -102,6 +133,10 @@ public class StartActivity extends AppCompatActivity {
         setClickListeners();
     }
 
+
+    /*
+    Adds Fragment to bottomnavgationview
+     */
     private void addFragments(Bundle savedInstanceState) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (savedInstanceState == null) {
@@ -124,6 +159,9 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    build tap target for add book
+     */
     private void buildTapTarget() {
         TapTargetView.showFor(this, TapTarget.forView(findViewById(R.id.bottomFabAdd), "Click + to upload a book", "")
                         .icon(getResources().getDrawable(R.drawable.ic_add_white_48dp))
@@ -167,6 +205,10 @@ public class StartActivity extends AppCompatActivity {
         return true;
     }
 
+
+    /*
+   initialize function
+     */
     private void initialize(Bundle savedInstanceState) {
         disableShiftMode(mBottomNaviagtionView);
         setSupportActionBar(mBottomToolbar);
@@ -174,6 +216,9 @@ public class StartActivity extends AppCompatActivity {
         addOnConnection(savedInstanceState);
     }
 
+    /*
+   check for account
+     */
     private void checkFirst() {
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean id = spf.getBoolean(getResources().getString(R.string.prefAccountIndicator), false);
@@ -185,12 +230,18 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
+    /*
+   check for connection
+     */
     private boolean checkConnection() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
+    /*
+   add this on connection
+     */
     private void addOnConnection(Bundle savedInstanceState) {
         if (checkConnection()) {
             checkFirst();
@@ -201,6 +252,16 @@ public class StartActivity extends AppCompatActivity {
             SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             if (spf.getInt(getResources().getString(R.string.prefFirstOpen), 0) == 0) {
                 buildTapTarget();
+                String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+                if (!spf.getString(getResources().getString(R.string.prefAccountId), mNullValue).equalsIgnoreCase(mNullValue)) {
+                    if (refreshedToken != null) {
+                        updateValues(refreshedToken);
+                    }
+                }
+            } else {
+                if (!spf.getString(getResources().getString(R.string.prefAccountId), mNullValue).equalsIgnoreCase(mNullValue)) {
+                    preFetchValues(spf.getString(getResources().getString(R.string.prefAccountId), mNullValue));
+                }
             }
         } else {
             removeOffConnection(savedInstanceState);
@@ -208,6 +269,130 @@ public class StartActivity extends AppCompatActivity {
     }
 
 
+    /*
+    builds Uri to insert firebasekey
+    */
+    private String buildUri(String fkey) {
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String host = getResources().getString(R.string.urlServer);
+        String updateUser = getResources().getString(R.string.urlUserInsertFkey);
+        String url = host + updateUser;
+
+        String uidQuery = "uid";
+        String uidValue = spf.getString(getResources().getString(R.string.prefAccountId), mNullValue);
+
+        String fkeyQuery = "fk";
+
+        return Uri.parse(url).buildUpon().appendQueryParameter(fkeyQuery, fkey)
+                .appendQueryParameter(uidQuery, uidValue).build().toString();
+    }
+
+    /*
+    check if banned status and if firebase key exists on server
+    */
+    private void checkForKey(JSONArray array) throws JSONException {
+        if (array.length() > 0) {
+            if (array.length() > 0) {
+                JSONObject object = array.getJSONObject(0);
+                int banstatus = object.getInt("bstatus");
+                if (banstatus == 1) {
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.singinBanned), Toast.LENGTH_LONG).show();
+                    deleteAllUserEntity();
+                    Intent intro = new Intent(StartActivity.this, IntroActivity.class);
+                    intro.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intro);
+                } else if (banstatus == 0) {
+                    String firekey = object.getString("fkey");
+                    String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+                    if (firekey == null || firekey.equalsIgnoreCase("null")) {
+                        if (refreshedToken != null) {
+                            updateValues(refreshedToken);
+                        }
+                    } else if (!(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getResources().getString(R.string.prefFirebaseToken), mNullValue)).equalsIgnoreCase(mNullValue)) {
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString(getResources().getString(R.string.prefFirebaseToken), refreshedToken).apply();
+                    }
+                }
+            }
+        }
+    }
+
+    private void deleteAllUserEntity() {
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        spf.edit().putBoolean(getResources().getString(R.string.prefAccountIndicator), false).apply();
+        spf.edit().putString(getResources().getString(R.string.prefAccountId), mNullValue).apply();
+        spf.edit().putString(getResources().getString(R.string.prefAccountName), mNullValue).apply();
+        spf.edit().putString(getResources().getString(R.string.prefFirebaseToken), mNullValue).apply();
+        spf.edit().putInt(getResources().getString(R.string.prefFirstOpen), 0).apply();
+        deleteFile();
+        getContentResolver().delete(CartTables.mCartContentUri, null, null);
+    }
+
+    private void deleteFile() {
+        File folder = getExternalCacheDir();
+        File f = new File(folder, "profile.jpg");
+        if (f.exists()) {
+            f.delete();
+        }
+    }
+
+
+    /*
+    returns uri for a single user
+    */
+    private String buildGetAllUser(String accId) {
+        String host = getResources().getString(R.string.urlServer);
+        String queryUserName = getResources().getString(R.string.urlUserQuery);
+        String url = host + queryUserName;
+        String uidQuery = "uid";
+        return Uri.parse(url).buildUpon().appendQueryParameter(uidQuery, accId).build().toString();
+    }
+
+    /*
+    get all values of a particular user
+    */
+    private void preFetchValues(String id) {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, buildGetAllUser(id), null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    checkForKey(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
+    }
+
+    /*
+    updates firebasekey value on server
+    */
+    private void updateValues(final String key) {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, buildUri(key), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                        .edit().putString(getResources().getString(R.string.prefFirebaseToken), key).apply();
+                Log.d("fkey", response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("fkey", error.toString());
+            }
+        });
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+    }
+
+
+    /*
+    remove this on connection
+    */
     private void removeOffConnection(final Bundle savedInstanceState) {
         errorImage.setVisibility(View.VISIBLE);
         mBottomNaviagtionView.setVisibility(View.GONE);
@@ -229,6 +414,9 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    do this on plus click
+    */
     private void fabClick() {
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if (spf.getBoolean(getResources().getString(R.string.prefAccountIndicator), false)) {
@@ -238,9 +426,12 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    function to check storage permission
+    */
     private void askPermission() {
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_DENIED) {
+                ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_WRITE_EXTERNAL_STORAGE_CODE);
         } else {
             fabClick();
@@ -256,6 +447,9 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    click listener and g=fragment switch
+    */
     private void setClickListeners() {
         mFabAddBook.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -436,4 +630,5 @@ public class StartActivity extends AppCompatActivity {
                 break;
         }
     }
+
 }

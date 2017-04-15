@@ -3,19 +3,28 @@ package com.trade.book.booktrade.fragments.introfragments;
 
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.github.paolorotolo.appintro.ISlidePolicy;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -24,9 +33,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.trade.book.booktrade.AddBook;
 import com.trade.book.booktrade.R;
+import com.trade.book.booktrade.network.VolleySingleton;
+import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentLoading;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +55,7 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
     GoogleSignInOptions gso;
     GoogleApiClient mGoogleApiClient;
     int RC_SIGN_IN = 540;
+    private static final String mNullValue = "N/A";
 
     boolean signedIn = false;
 
@@ -50,6 +68,7 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
     SignInButton signInButton;
     //@BindView(R.id.login_button) LoginButton loginButton;
     private Unbinder mUnbinder;
+    dialogFragmentLoading dialogFragmentLoading;
 
 
     public intro2Fragment() {
@@ -156,18 +175,98 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
 
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
-            SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
             GoogleSignInAccount acct = result.getSignInAccount();
             if (acct != null) {
-                spf.edit().putString(getResources().getString(R.string.prefAccountId), acct.getId()).apply();
-                spf.edit().putString(getResources().getString(R.string.prefAccountName), acct.getDisplayName()).apply();
-                if (acct.getPhotoUrl() != null) {
-                    downloadProfilePic(acct.getPhotoUrl().toString());
-                    closeSingInActivity();
-                } else {
-                    closeSingInActivity();
+                dialogFragmentLoading = new dialogFragmentLoading();
+                dialogFragmentLoading.show(getFragmentManager(),"loading");
+                preFetchValues(acct.getId(),acct);
+            }
+        }
+    }
+
+    private String buildBanUri(String accId, GoogleSignInAccount acct) {
+        String host = getResources().getString(R.string.urlServer);
+        String queryUserName = getResources().getString(R.string.urlUserQuery);
+        String url = host + queryUserName;
+        String uidQuery = "uid";
+        return Uri.parse(url).buildUpon().appendQueryParameter(uidQuery, accId).build().toString();
+    }
+
+    private void preFetchValues(String id, final GoogleSignInAccount acct) {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, buildBanUri(id, acct), null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    checkBanned(response,acct);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+        VolleySingleton.getInstance(getActivity()).addToRequestQueue(jsonArrayRequest);
+    }
+
+    private void checkBanned(JSONArray array, GoogleSignInAccount acct) throws JSONException {
+        if(array.length()>0){
+            JSONObject object = array.getJSONObject(0);
+            int banstatus = object.getInt("bstatus");
+            if(banstatus==0){
+                dialogFragmentLoading.dismiss();
+                goForward(acct);
+            }if(banstatus==1){
+                dialogFragmentLoading.dismiss();
+                chooseBanAction(acct);
+            }
+        }
+    }
+
+    private void chooseBanAction(final GoogleSignInAccount acct) {
+        final AlertDialog.Builder choosePath = new AlertDialog.Builder(getActivity());
+        choosePath.setTitle(getActivity().getResources().getString(R.string.singinBanned));
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
+        arrayAdapter.add("Send a request");
+        arrayAdapter.add("Try different account");
+        choosePath.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int position) {
+                if (position == 0) {
+                    emailIntent(acct);
+                }
+                if (position == 1) {
+                    signedIn = false;
+                    choosePath.create().dismiss();
+                }
+            }
+        });
+        choosePath.create().show();
+    }
+
+    private void emailIntent(GoogleSignInAccount acct) {
+        Intent request = new Intent(Intent.ACTION_SENDTO);
+        request.putExtra(Intent.EXTRA_EMAIL, new String[]{"shelf.bee.corp@gmail.com"});
+        request.putExtra(Intent.EXTRA_TEXT, "ShelfBee id : "+ acct.getId()+"\n\n");
+        request.setData(Uri.parse("mailto:"));
+        if (request.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(request);
+        } else {
+            Toast.makeText(getActivity(), "No email app found", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void goForward(GoogleSignInAccount acct){
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        spf.edit().putString(getResources().getString(R.string.prefAccountId), acct.getId()).apply();
+        spf.edit().putString(getResources().getString(R.string.prefAccountName), acct.getDisplayName()).apply();
+        if (acct.getPhotoUrl() != null) {
+            downloadProfilePic(acct.getPhotoUrl().toString());
+            closeSingInActivity();
+        } else {
+            closeSingInActivity();
         }
     }
 

@@ -21,6 +21,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.paolorotolo.appintro.ISlidePolicy;
 import com.trade.book.booktrade.R;
+import com.trade.book.booktrade.network.VolleySingleton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,7 +69,6 @@ public class intro3Fragment extends Fragment implements ISlidePolicy {
     }
 
     private void preFetchValues() {
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, buildSetUri(), null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -84,7 +84,7 @@ public class intro3Fragment extends Fragment implements ISlidePolicy {
                 Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
-        requestQueue.add(jsonArrayRequest);
+        VolleySingleton.getInstance(getActivity()).addToRequestQueue(jsonArrayRequest);
     }
 
     private void setValues(JSONArray response) throws JSONException {
@@ -170,7 +170,6 @@ public class intro3Fragment extends Fragment implements ISlidePolicy {
     }
 
     private void checkExist() {
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, budilCheckUri(), null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -186,11 +185,10 @@ public class intro3Fragment extends Fragment implements ISlidePolicy {
                 Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
-        requestQueue.add(jsonArrayRequest);
+        VolleySingleton.getInstance(getActivity()).addToRequestQueue(jsonArrayRequest);
     }
 
     private void upadteValues() {
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, buildUpdateUri(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -203,11 +201,10 @@ public class intro3Fragment extends Fragment implements ISlidePolicy {
                 Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
     }
 
     private void insertIntoDatabase() {
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, budilUri(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -221,7 +218,7 @@ public class intro3Fragment extends Fragment implements ISlidePolicy {
                 Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
-        requestQueue.add(stringRequest);
+        VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
     }
 
     @Override
