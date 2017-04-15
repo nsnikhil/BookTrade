@@ -71,7 +71,7 @@ import static com.google.android.gms.common.api.GoogleApiClient.ConnectionCallba
 import static com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 
 
-public class StartActivity extends AppCompatActivity {
+public class StartActivity extends AppCompatActivity implements  GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     private static final String[] colorArray = {"#5D4037", "#FFA000", "#455A64", "#388E3C"};
     private static final String[] colorArrayDark = {"#3E2723", "#FF6F00", "#263238", "#1B5E20"};
@@ -631,4 +631,66 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
+    private boolean ifInCircle(){
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        double fixedLatitude = Double.parseDouble(spf.getString(getResources().getString(R.string.longititude),mNullValue));
+        double fixedLongitude = Double.parseDouble(spf.getString(getResources().getString(R.string.longititude),mNullValue));
+        double myLatitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude),mNullValue));
+        double myLongitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude),mNullValue));
+        float[] results = new float[1];
+        Location.distanceBetween(fixedLatitude, fixedLongitude, myLatitude, myLongitude, results);
+        float distanceInMeters = results[0];
+        return distanceInMeters < 5000;
+    }
+
+    private void initializeGps() {
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+    }
+
+    private void locateOnConnection(){
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+        }
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLastLocation != null) {
+            PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString(getResources().getString(R.string.prefLatitude),
+                    String.valueOf(mLastLocation.getLatitude())).apply();
+            PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString(getResources().getString(R.string.prefLatitude),
+                    String.valueOf(mLastLocation.getLongitude())).apply();
+
+        }
+    }
+
+    public void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 }
