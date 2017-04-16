@@ -1,6 +1,7 @@
 package com.trade.book.booktrade.fragments.dialogfragments;
 
 import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.trade.book.booktrade.R;
 
@@ -21,7 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class dialogFragmentGetLocation extends DialogFragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class dialogFragmentGetLocation extends DialogFragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
     @BindView(R.id.locationLatitude) TextView mLatitude;
     @BindView(R.id.locationLongitude) TextView mLongitude;
@@ -29,6 +31,9 @@ public class dialogFragmentGetLocation extends DialogFragment implements GoogleA
     private Unbinder mUnbinder;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
+    private LocationRequest mLocationRequest;
+    private long UPDATE_INTERVAL = 10 * 1000;
+    private long FASTEST_INTERVAL = 2000;
 
 
     @Nullable
@@ -81,12 +86,17 @@ public class dialogFragmentGetLocation extends DialogFragment implements GoogleA
 
 
     public void onStart() {
-        mGoogleApiClient.connect();
+        if(mGoogleApiClient!=null){
+            mGoogleApiClient.connect();
+        }
         super.onStart();
     }
 
     public void onStop() {
-        mGoogleApiClient.disconnect();
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        if(mGoogleApiClient!=null){
+            mGoogleApiClient.disconnect();
+        }
         super.onStop();
     }
 
@@ -97,12 +107,19 @@ public class dialogFragmentGetLocation extends DialogFragment implements GoogleA
         mUnbinder.unbind();
     }
 
+
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
+            mStatus.setVisibility(View.GONE);
             setLocationValue(mLastLocation);
+        }else {
+            mStatus.setVisibility(View.VISIBLE);
+            mStatus.setText("If your having trouble finding location open your maps app locate yourself and then restart the app again");
         }
+        startLocationUpdates();
     }
 
     @Override
@@ -113,5 +130,18 @@ public class dialogFragmentGetLocation extends DialogFragment implements GoogleA
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    protected void startLocationUpdates() {
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(UPDATE_INTERVAL)
+                .setFastestInterval(FASTEST_INTERVAL);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,mLocationRequest,this);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        setLocationValue(location);
     }
 }
