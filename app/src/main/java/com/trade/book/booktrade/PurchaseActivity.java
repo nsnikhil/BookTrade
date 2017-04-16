@@ -78,7 +78,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
     BookObject bObject = null;
     adapterPurchaseImage imageAdapter;
     ArrayList<String> urls;
-    private static final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 56;
+    private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 56;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,9 +228,9 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void checkLocation(){
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(PurchaseActivity.this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_ACCESS_COARSE_LOCATION);
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(PurchaseActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_ACCESS_FINE_LOCATION);
         } else {
             LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
             boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);

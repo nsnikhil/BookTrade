@@ -43,7 +43,7 @@ public class MoreFragment extends Fragment {
     @BindView(R.id.cateogoryList)
     ListView moreList;
     private Unbinder mUnbinder;
-    private static final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 56;
+    private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 56;
 
     public MoreFragment() {
 
@@ -117,9 +117,9 @@ public class MoreFragment extends Fragment {
     }
 
     private void checkLocation(){
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_ACCESS_COARSE_LOCATION);
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_ACCESS_FINE_LOCATION);
         } else {
             LocationManager service = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
             boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);

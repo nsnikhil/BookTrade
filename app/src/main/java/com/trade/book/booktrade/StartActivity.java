@@ -74,7 +74,7 @@ public class StartActivity extends AppCompatActivity {
     private static final String[] colorArrayDark = {"#3E2723", "#FF6F00", "#263238", "#1B5E20"};
     private static final String mNullValue = "N/A";
     private static final int MY_WRITE_EXTERNAL_STORAGE_CODE = 556;
-    private static final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 56;
+    private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 56;
     @BindView(R.id.bottomToolbar)
     Toolbar mBottomToolbar;
     @BindView(R.id.bottomFabAdd)
@@ -459,9 +459,9 @@ public class StartActivity extends AppCompatActivity {
     }
 
     private void checkLocation(){
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(StartActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_ACCESS_COARSE_LOCATION);
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(StartActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_ACCESS_FINE_LOCATION);
         } else {
             LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
             boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
