@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,19 +22,21 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.StartActivity;
+import com.trade.book.booktrade.interfaces.interfaceAddRequest;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class dialogFragmentRequest extends DialogFragment {
+public class dialogFragmentRequest extends DialogFragment{
 
     @BindView(R.id.requestName) TextInputEditText name;
     @BindView(R.id.requestPublisher) TextInputEditText publisher;
     @BindView(R.id.requestSave) Button save;
     private static final String mNullValue = "N/A";
     private Unbinder mUnbinder;
+    interfaceAddRequest addRequest;
 
 
     public dialogFragmentRequest() {
@@ -47,6 +48,7 @@ public class dialogFragmentRequest extends DialogFragment {
         View v =  inflater.inflate(R.layout.fragment_dialog_fragment_request, container, false);
         mUnbinder = ButterKnife.bind(this,v);
         initilize();
+        addRequest = (interfaceAddRequest) getTargetFragment();
         return v;
     }
 
@@ -92,8 +94,10 @@ public class dialogFragmentRequest extends DialogFragment {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, buildRequestUri(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                getActivity().finish();
-                startActivity(new Intent(getActivity(), StartActivity.class));
+                dismiss();
+                addRequest.refreshList();
+                //getActivity().finish();
+                //startActivity(new Intent(getActivity(), StartActivity.class));
             }
         }, new Response.ErrorListener() {
             @Override
@@ -119,5 +123,4 @@ public class dialogFragmentRequest extends DialogFragment {
         super.onDestroyView();
         mUnbinder.unbind();
     }
-
 }

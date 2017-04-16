@@ -3,10 +3,17 @@ package com.trade.book.booktrade.fragments;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -26,7 +33,9 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.trade.book.booktrade.AddBook;
 import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.adapters.adapterRequest;
+import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentGetLocation;
 import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentRequest;
+import com.trade.book.booktrade.interfaces.interfaceAddRequest;
 import com.trade.book.booktrade.network.VolleySingleton;
 import com.trade.book.booktrade.objects.RequestObject;
 
@@ -40,7 +49,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class RequestListFragment extends Fragment {
+import static android.content.Context.LOCATION_SERVICE;
+
+public class RequestListFragment extends Fragment implements interfaceAddRequest {
 
     @BindView(R.id.requestList)
     ListView requestList;
@@ -52,8 +63,10 @@ public class RequestListFragment extends Fragment {
     SwipeRefreshLayout mSwipeRefresh;
     ArrayList<RequestObject> requestObjectList;
     adapterRequest adapter;
-    //View mainView = null;
+    private static final String mNullValue = "N/A";
     private Unbinder mUnbinder;
+    private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 56;
+    Fragment f;
 
 
     @Nullable
@@ -64,6 +77,7 @@ public class RequestListFragment extends Fragment {
         intilize();
         mSwipeRefresh.setRefreshing(true);
         downloadList();
+        f = this;
         return v;
     }
 
@@ -74,6 +88,7 @@ public class RequestListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 dialogFragmentRequest dialogFragmentRequest = new dialogFragmentRequest();
+                dialogFragmentRequest.setTargetFragment(f, 0);
                 dialogFragmentRequest.show(getActivity().getSupportFragmentManager(), "request");
             }
         });
@@ -91,12 +106,20 @@ public class RequestListFragment extends Fragment {
                         .setPositiveButton("Sell", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                RequestObject object = (RequestObject) parent.getItemAtPosition(position);
-                                Intent sell = new Intent(getActivity(), AddBook.class);
-                                sell.putExtra(getResources().getString(R.string.intentRequestBookName), object.getName());
-                                sell.putExtra(getResources().getString(R.string.intentRequestBookPublisher), object.getPublisher());
-                                sell.putExtra(getResources().getString(R.string.intentRequestBookRid), object.getRequestId());
-                                startActivity(sell);
+                                SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                                if (spf.getString(getResources().getString(R.string.prefLatitude), mNullValue).equalsIgnoreCase(mNullValue) ||
+                                        spf.getString(getResources().getString(R.string.prefLongitude), mNullValue).equalsIgnoreCase(mNullValue)) {
+                                    checkLocation();
+                                } else {
+                                    if (checkStatus()) {
+                                        submitRequest(parent, position);
+                                    } else {
+                                        Toast.makeText(getActivity(), "We are sorry your region doesn't fall into " +
+                                                "our coverage zone, we are continuously working hard to expand our coverage zone", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), "If you think its a mistake try recalibrating location from more ", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }
                             }
                         });
                 have.create().show();
@@ -111,6 +134,74 @@ public class RequestListFragment extends Fragment {
                                                }
                                            }
         );
+    }
+
+    private void submitRequest(final AdapterView<?> parent, final int position) {
+        RequestObject object = (RequestObject) parent.getItemAtPosition(position);
+        Intent sell = new Intent(getActivity(), AddBook.class);
+        sell.putExtra(getResources().getString(R.string.intentRequestBookName), object.getName());
+        sell.putExtra(getResources().getString(R.string.intentRequestBookPublisher), object.getPublisher());
+        sell.putExtra(getResources().getString(R.string.intentRequestBookRid), object.getRequestId());
+        startActivity(sell);
+    }
+
+    private void checkLocation() {
+        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_ACCESS_FINE_LOCATION);
+        } else {
+            LocationManager service = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+            boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            if (!enabled) {
+                buildAlertMessageNoGps();
+            } else {
+                dialogFragmentGetLocation getLocation = new dialogFragmentGetLocation();
+                getLocation.show(getFragmentManager(), "location");
+            }
+        }
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setCancelable(false);
+        builder.setMessage("You should turn on gps to take advantage of all our services")
+                .setCancelable(false)
+                .setPositiveButton("Enable", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private boolean checkStatus() {
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        double sLatitude = Double.parseDouble(getActivity().getResources().getString(R.string.latitude));
+        double sLongitude = Double.parseDouble(getActivity().getResources().getString(R.string.longititude));
+        double myLatitude = 0.0;
+        double myLongitude = 0.0;
+        int count = 0;
+        if (!spf.getString(getResources().getString(R.string.prefLatitude), mNullValue).equalsIgnoreCase(mNullValue)) {
+            count++;
+            myLatitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude), mNullValue));
+        }
+        if (!spf.getString(getResources().getString(R.string.prefLongitude), mNullValue).equalsIgnoreCase(mNullValue)) {
+            count++;
+            myLongitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude), mNullValue));
+        }
+        if (count == 2) {
+            float[] results = new float[1];
+            Location.distanceBetween(sLatitude, sLongitude, myLatitude, myLongitude, results);
+            float distanceInMeters = results[0];
+            return distanceInMeters < 5000;
+        }
+        return false;
     }
 
     private void addToList(JSONArray array) throws JSONException {
@@ -190,5 +281,13 @@ public class RequestListFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
+    }
+
+    @Override
+    public void refreshList() {
+        mSwipeRefresh.setRefreshing(true);
+        requestList.setAdapter(null);
+        requestObjectList.clear();
+        downloadList();
     }
 }

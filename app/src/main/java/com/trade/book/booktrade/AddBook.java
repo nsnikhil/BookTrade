@@ -5,8 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -17,6 +20,8 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -131,20 +136,22 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         if (!checkConnection()) {
             AlertDialog.Builder noInternet = new AlertDialog.Builder(AddBook.this);
             noInternet.setMessage("No Internet").setCancelable(false).create().show();
-        }
-        checkFirst();
-        initilize();
-        setClickListener();
-        if (getIntent().getExtras() != null) {
-            if (getIntent().getExtras().getString(getResources().getString(R.string.intentRequestBookName)) != null) {
-                setTwoVal();
-            } else {
-                bookEditObject = (BookObject) getIntent().getExtras().getSerializable(getResources().getString(R.string.intentEditObject));
-                getSupportActionBar().setTitle("Edit Book");
-                mFakeVariable = 1;
-                setValue(bookEditObject);
+        } else {
+            checkFirst();
+            initilize();
+            setClickListener();
+            if (getIntent().getExtras() != null) {
+                if (getIntent().getExtras().getString(getResources().getString(R.string.intentRequestBookName)) != null) {
+                    setTwoVal();
+                } else {
+                    bookEditObject = (BookObject) getIntent().getExtras().getSerializable(getResources().getString(R.string.intentEditObject));
+                    getSupportActionBar().setTitle("Edit Book");
+                    mFakeVariable = 1;
+                    setValue(bookEditObject);
+                }
             }
         }
+
     }
 
     private void checkFirst() {

@@ -1,17 +1,5 @@
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
-        android:shortcutId="addBook"
-        android:enabled="true"
-        android:icon="@drawable/launcheradd"
-        android:shortcutShortLabel="@string/launcherAddBook"
-        android:shortcutLongLabel="@string/launcherAddBook"
-        android:shortcutDisabledMessage="@string/launcherError">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="com.trade.book.booktrade"
-            android:targetClass="com.trade.book.booktrade.AddBook" />
-    </shortcut>
-    <shortcut
         android:shortcutId="searchBook"
         android:enabled="true"
         android:icon="@drawable/launchersearch"
