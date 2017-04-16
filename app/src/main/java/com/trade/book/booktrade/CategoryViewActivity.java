@@ -78,8 +78,15 @@ public class CategoryViewActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return super.onSupportNavigateUp();
+    }
+
     private void initilize() {
         setSupportActionBar(catToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (mUploadIndicator == 0) {
             getSupportActionBar().setTitle(getIntent().getExtras().getString(getResources().getString(R.string.intencateuripos)));
         } else if (mUploadIndicator == 123) {

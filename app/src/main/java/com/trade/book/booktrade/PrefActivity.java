@@ -89,8 +89,15 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return super.onSupportNavigateUp();
+    }
+
     private void initialize() {
         setSupportActionBar(prefToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         shimmer.setDuration(6000).setDirection(Shimmer.ANIMATION_DIRECTION_LTR);
         PackageManager manager = getPackageManager();
         PackageInfo info;

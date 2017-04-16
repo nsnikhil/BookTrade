@@ -62,6 +62,10 @@
         <item name="android:background">@drawable/toolbargradeint</item>
     </style>
 
+    <style name="whiteColorCode">
+        <item name="colorControlNormal">@color/white</item>
+    </style>
+
     <style name="purchaseDialog">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>

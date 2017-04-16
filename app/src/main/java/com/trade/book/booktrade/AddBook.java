@@ -330,9 +330,15 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         newImage.setOnClickListener(this);
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return super.onSupportNavigateUp();
+    }
+
     private void initilize() {
         setSupportActionBar(toolbarAddBook);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         imageContainer = (RecyclerView) findViewById(R.id.addBookView);
         mLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         imageContainer.setLayoutManager(mLinearLayoutManager);
