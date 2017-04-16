@@ -65,6 +65,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
 
     private static final int mCartLoaderId = 2;
     private static final String mNullValue = "N/A";
+    private static final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 56;
     @BindView(R.id.cartList)
     GridView bookCartGrid;
     @BindView(R.id.cartEmpty)
@@ -74,7 +75,6 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     adapterCart cartAdapter;
     private int mCursorCount = 0;
     private Unbinder mUnbinder;
-    private static final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 56;
 
     public MyCartFragment() {
 
@@ -184,10 +184,10 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
         switch (v.getId()) {
             case R.id.cartCheckOut:
                 SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                if(spf.getString(getResources().getString(R.string.prefLatitude),mNullValue).equalsIgnoreCase(mNullValue)||
-                        spf.getString(getResources().getString(R.string.prefLongitude),mNullValue).equalsIgnoreCase(mNullValue)) {
+                if (spf.getString(getResources().getString(R.string.prefLatitude), mNullValue).equalsIgnoreCase(mNullValue) ||
+                        spf.getString(getResources().getString(R.string.prefLongitude), mNullValue).equalsIgnoreCase(mNullValue)) {
                     checkLocation();
-                }else {
+                } else {
                     if (checkStatus()) {
                         Cursor c = getActivity().getContentResolver().query(CartTables.mCartContentUri, null, null, null, null);
                         if (c.getCount() > 0) {
@@ -205,7 +205,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
         }
     }
 
-    private void checkLocation(){
+    private void checkLocation() {
         if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_ACCESS_COARSE_LOCATION);
@@ -214,9 +214,9 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
             boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
             if (!enabled) {
                 buildAlertMessageNoGps();
-            }else {
+            } else {
                 dialogFragmentGetLocation getLocation = new dialogFragmentGetLocation();
-                getLocation.show(getFragmentManager(),"location");
+                getLocation.show(getFragmentManager(), "location");
             }
         }
     }
@@ -240,21 +240,21 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     }
 
     private boolean checkStatus() {
-        SharedPreferences spf  = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
         double sLatitude = Double.parseDouble(getActivity().getResources().getString(R.string.latitude));
         double sLongitude = Double.parseDouble(getActivity().getResources().getString(R.string.longititude));
         double myLatitude = 0.0;
         double myLongitude = 0.0;
-        int count=0;
-        if(!spf.getString(getActivity().getResources().getString(R.string.prefLatitude),mNullValue).equalsIgnoreCase(mNullValue)){
+        int count = 0;
+        if (!spf.getString(getActivity().getResources().getString(R.string.prefLatitude), mNullValue).equalsIgnoreCase(mNullValue)) {
             count++;
-            myLatitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude),mNullValue));
+            myLatitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude), mNullValue));
         }
-        if(!spf.getString(getActivity().getResources().getString(R.string.prefLongitude),mNullValue).equalsIgnoreCase(mNullValue)){
+        if (!spf.getString(getActivity().getResources().getString(R.string.prefLongitude), mNullValue).equalsIgnoreCase(mNullValue)) {
             count++;
-            myLongitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude),mNullValue));
+            myLongitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude), mNullValue));
         }
-        if(count==2){
+        if (count == 2) {
             float[] results = new float[1];
             Location.distanceBetween(sLatitude, sLongitude, myLatitude, myLongitude, results);
             float distanceInMeters = results[0];

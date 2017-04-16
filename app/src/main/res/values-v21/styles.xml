@@ -8,6 +8,7 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:windowContentTransitions">true</item>
+        <item name="colorControlNormal">@color/colorAccent</item>
     </style>
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">

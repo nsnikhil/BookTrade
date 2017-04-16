@@ -360,7 +360,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onResponse(JSONArray response) {
                 try {
-                    cateogory.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, makeCategoryList(response)));
+                    cateogory.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_text_layout, makeCategoryList(response)));
                     if (mFakeVariable == 1) {
                         setCategory();
                     }
@@ -395,7 +395,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onResponse(JSONArray response) {
                 try {
-                    condition.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, makeConditionList(response)));
+                    condition.setAdapter(new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_text_layout, makeConditionList(response)));
                     if (mFakeVariable == 1) {
                         setCondition();
                     }
