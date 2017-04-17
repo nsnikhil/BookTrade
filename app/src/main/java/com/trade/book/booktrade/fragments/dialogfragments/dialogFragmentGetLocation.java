@@ -1,5 +1,6 @@
 package com.trade.book.booktrade.fragments.dialogfragments;
 
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -67,7 +68,7 @@ public class dialogFragmentGetLocation extends DialogFragment implements GoogleA
                 .putString(getResources().getString(R.string.prefLatitude), String.valueOf(lat)).apply();
         PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
                 .putString(getResources().getString(R.string.prefLongitude), String.valueOf(lng)).apply();
-        if (checkStatus(lat, lng)) {
+        if (checkStatus(lat, lng)||checkVelloreStatus(lat,lng)) {
             mStatus.setVisibility(View.VISIBLE);
             mStatus.setText("Hurrah!!! You are eligible to use all our services");
         } else {
@@ -82,6 +83,15 @@ public class dialogFragmentGetLocation extends DialogFragment implements GoogleA
         double sLongitude = Double.parseDouble(getActivity().getResources().getString(R.string.longititude));
         float[] results = new float[1];
         Location.distanceBetween(sLatitude, sLongitude, myLatitude, myLongitude, results);
+        float distanceInMeters = results[0];
+        return distanceInMeters < 5000;
+    }
+
+    private boolean checkVelloreStatus(double myLatitude, double myLongitude) {
+        double vLatitude = Double.parseDouble(getActivity().getResources().getString(R.string.velloreLatitude));
+        double vLongitude = Double.parseDouble(getActivity().getResources().getString(R.string.velloreLatitude));
+        float[] results = new float[1];
+        Location.distanceBetween(vLatitude, vLongitude, myLatitude, myLongitude, results);
         float distanceInMeters = results[0];
         return distanceInMeters < 5000;
     }

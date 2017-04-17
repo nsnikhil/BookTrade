@@ -3,11 +3,9 @@ package com.trade.book.booktrade.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,8 +27,7 @@ import butterknife.ButterKnife;
 
 
 public class adapterPurchaseImage extends RecyclerView.Adapter<adapterPurchaseImage.MyViewHolder> {
-
-    private static final String mNullValue = "N/A";
+    
     private Context mContext;
     private ArrayList<String> url;
     private int key;
@@ -50,24 +47,45 @@ public class adapterPurchaseImage extends RecyclerView.Adapter<adapterPurchaseIm
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         String surl = url.get(position);
-        Glide.with(mContext)
-                .load(surl)
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        return false;
-                    }
+        if (key == 2) {
+            Glide.with(mContext)
+                    .load(surl)
+                    .listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            return false;
+                        }
 
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        holder.progress.setVisibility(View.GONE);
-                        return false;
-                    }
-                })
-                .centerCrop()
-                .placeholder(R.color.colorAccent)
-                .crossFade()
-                .into(holder.img);
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            holder.progress.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
+                    .placeholder(R.color.colorAccent)
+                    .crossFade()
+                    .into(holder.img);
+        } else {
+            Glide.with(mContext)
+                    .load(surl)
+                    .listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            holder.progress.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
+                    .placeholder(R.color.colorAccent)
+                    .centerCrop()
+                    .crossFade()
+                    .into(holder.img);
+        }
+
 
     }
 
@@ -90,11 +108,13 @@ public class adapterPurchaseImage extends RecyclerView.Adapter<adapterPurchaseIm
             ButterKnife.bind(this, itemView);
             progress.getIndeterminateDrawable().setColorFilter(mContext.getResources().getColor(R.color.white), PorterDuff.Mode.MULTIPLY);
             if (key == 0) {
+                img.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 remove.setVisibility(View.GONE);
             } else if (key == 2) {
                 remove.setVisibility(View.GONE);
-                img.setBackgroundColor(Color.parseColor("#000000"));
+                img.setBackgroundColor(mContext.getResources().getColor(R.color.black));
             } else {
+                img.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 remove.setVisibility(View.VISIBLE);
             }
             remove.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +131,7 @@ public class adapterPurchaseImage extends RecyclerView.Adapter<adapterPurchaseIm
                         Intent fullScreen = new Intent(mContext, ImageActivity.class);
                         //fullScreen.putExtra(mContext.getResources().getString(R.string.intentImageUrl), url.get(getPosition()));
                         fullScreen.putStringArrayListExtra(mContext.getResources().getString(R.string.intentArrayListUrl), url);
-                        fullScreen.putExtra(mContext.getResources().getString(R.string. intentArrayListPosition), getPosition());
+                        fullScreen.putExtra(mContext.getResources().getString(R.string.intentArrayListPosition), getPosition());
                         fullScreen.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, img, "transitionBookImage");

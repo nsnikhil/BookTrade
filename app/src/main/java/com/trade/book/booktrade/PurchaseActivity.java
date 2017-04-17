@@ -214,7 +214,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
                             spf.getString(getResources().getString(R.string.prefLongitude),mNullValue).equalsIgnoreCase(mNullValue)) {
                         checkLocation();
                     }else {
-                        if (checkStatus()) {
+                        if (checkStatus()||checkVelloreStatus()) {
                             checkSold(bObject.getBid());
                         } else {
                             Toast.makeText(getApplicationContext(), "We are sorry your region doesn't fall into " +
@@ -262,6 +262,30 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private boolean checkStatus() {
+        SharedPreferences spf  = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        double sLatitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.latitude));
+        double sLongitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.longititude));
+        double myLatitude = 0.0;
+        double myLongitude = 0.0;
+        int count=0;
+        if(!spf.getString(getResources().getString(R.string.prefLatitude),mNullValue).equalsIgnoreCase(mNullValue)){
+            count++;
+            myLatitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude),mNullValue));
+        }
+        if(!spf.getString(getResources().getString(R.string.prefLongitude),mNullValue).equalsIgnoreCase(mNullValue)){
+            count++;
+            myLongitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude),mNullValue));
+        }
+        if(count==2){
+            float[] results = new float[1];
+            Location.distanceBetween(sLatitude, sLongitude, myLatitude, myLongitude, results);
+            float distanceInMeters = results[0];
+            return distanceInMeters < 5000;
+        }
+        return false;
+    }
+
+    private boolean checkVelloreStatus() {
         SharedPreferences spf  = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         double sLatitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.latitude));
         double sLongitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.longititude));

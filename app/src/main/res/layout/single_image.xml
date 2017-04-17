@@ -6,8 +6,7 @@
         android:contentDescription="@string/ImageDescriptionBackground"
         android:id="@+id/singleImage"
         style="@style/matchParent"
-        android:background="#000000"
-        android:scaleType="centerCrop" />
+        android:background="@color/black" />
 
     <ImageView
         android:contentDescription="@string/ImageDescriptionBackground"

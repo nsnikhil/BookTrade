@@ -216,5 +216,7 @@
     <!-- Location-->
     <string name="latitude">22.591387</string>
     <string name="longititude">88.341108</string>
+    <string name="velloreLatitude">12.971035</string>
+    <string name="velloreLongititude">76.1612908</string>
     <!-- -->
 </resources>

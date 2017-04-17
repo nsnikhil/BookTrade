@@ -15,8 +15,6 @@ import butterknife.ButterKnife;
 
 public class ImageActivity extends AppCompatActivity {
 
-    //@BindView(R.id.imageFullScreen) ImageView fullImage;
-    //@BindView(R.id.imageFullScreenProgress) ProgressBar loading;
     @BindView(R.id.imageFullScreenImages)
     RecyclerView imageList;
     adapterPurchaseImage imageAdapter;

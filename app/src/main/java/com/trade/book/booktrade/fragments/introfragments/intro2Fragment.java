@@ -222,6 +222,9 @@ public class intro2Fragment extends Fragment implements ISlidePolicy, View.OnCli
                 dialogFragmentLoading.dismiss();
                 chooseBanAction(acct);
             }
+        }else {
+            dialogFragmentLoading.dismiss();
+            goForward(acct);
         }
     }
 
