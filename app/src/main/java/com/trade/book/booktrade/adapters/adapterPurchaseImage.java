@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 
 
 public class adapterPurchaseImage extends RecyclerView.Adapter<adapterPurchaseImage.MyViewHolder> {
-    
+
     private Context mContext;
     private ArrayList<String> url;
     private int key;
