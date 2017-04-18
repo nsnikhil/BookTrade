@@ -219,7 +219,7 @@ public class RequestListFragment extends Fragment implements interfaceAddRequest
     private boolean checkVelloreStatus() {
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
         double vLatitude = Double.parseDouble(getActivity().getResources().getString(R.string.velloreLatitude));
-        double vLongitude = Double.parseDouble(getActivity().getResources().getString(R.string.velloreLatitude));
+        double vLongitude = Double.parseDouble(getActivity().getResources().getString(R.string.velloreLongititude));
         double myLatitude = 0.0;
         double myLongitude = 0.0;
         int count = 0;

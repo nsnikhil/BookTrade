@@ -468,7 +468,7 @@ public class StartActivity extends AppCompatActivity {
     private boolean checkVelloreStatus() {
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         double vLatitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.velloreLatitude));
-        double vLongitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.velloreLatitude));
+        double vLongitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.velloreLongititude));
         double myLatitude = 0.0;
         double myLongitude = 0.0;
         int count = 0;
