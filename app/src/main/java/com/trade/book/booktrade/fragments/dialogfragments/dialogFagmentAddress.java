@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -30,10 +29,13 @@ import butterknife.Unbinder;
 
 public class dialogFagmentAddress extends DialogFragment {
 
-    @BindView(R.id.dialogAddress) TextInputEditText address;
-    @BindView(R.id.dialogPhone) TextInputEditText phone;
-    @BindView(R.id.dialogSave) Button save;
     private static final String mNullValue = "N/A";
+    @BindView(R.id.dialogAddress)
+    TextInputEditText address;
+    @BindView(R.id.dialogPhone)
+    TextInputEditText phone;
+    @BindView(R.id.dialogSave)
+    Button save;
     private Unbinder mUnbinder;
 
     public dialogFagmentAddress() {
@@ -43,7 +45,7 @@ public class dialogFagmentAddress extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dialog_fagment_address, container, false);
-        mUnbinder =  ButterKnife.bind(this,v);
+        mUnbinder = ButterKnife.bind(this, v);
         initilize();
         setValue();
         return v;
@@ -54,8 +56,8 @@ public class dialogFagmentAddress extends DialogFragment {
             @Override
             public void onClick(View v) {
                 SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                spf.edit().putString(getResources().getString(R.string.prefAccountPhone),phone.getText().toString()).apply();
-                spf.edit().putString(getResources().getString(R.string.prefAccountAddress),address.getText().toString()).apply();
+                spf.edit().putString(getResources().getString(R.string.prefAccountPhone), phone.getText().toString()).apply();
+                spf.edit().putString(getResources().getString(R.string.prefAccountAddress), address.getText().toString()).apply();
                 upadteValues();
             }
         });
@@ -64,20 +66,20 @@ public class dialogFagmentAddress extends DialogFragment {
         }
     }
 
-    private void setValue(){
+    private void setValue() {
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        address.setText(spf.getString(getResources().getString(R.string.prefAccountAddress),mNullValue));
-        phone.setText(spf.getString(getResources().getString(R.string.prefAccountPhone),mNullValue));
+        address.setText(spf.getString(getResources().getString(R.string.prefAccountAddress), mNullValue));
+        phone.setText(spf.getString(getResources().getString(R.string.prefAccountPhone), mNullValue));
     }
 
-    private String buildUpdateUri(){
+    private String buildUpdateUri() {
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String host = getResources().getString(R.string.urlServer);
         String updateUser = getResources().getString(R.string.urlUserUpdate);
         String url = host + updateUser;
 
         String uidQuery = "uid";
-        String uidValue = spf.getString(getResources().getString(R.string.prefAccountId),mNullValue);
+        String uidValue = spf.getString(getResources().getString(R.string.prefAccountId), mNullValue);
 
         String phoneQuery = "ph";
         String phoneValue = phone.getText().toString();
@@ -85,29 +87,30 @@ public class dialogFagmentAddress extends DialogFragment {
         String addressQuery = "adr";
         String adddressValue = address.getText().toString();
 
-        return Uri.parse(url).buildUpon().appendQueryParameter(uidQuery,uidValue)
-                .appendQueryParameter(phoneQuery,phoneValue)
-                .appendQueryParameter(addressQuery,adddressValue).build().toString();
+        return Uri.parse(url).buildUpon().appendQueryParameter(uidQuery, uidValue)
+                .appendQueryParameter(phoneQuery, phoneValue)
+                .appendQueryParameter(addressQuery, adddressValue).build().toString();
     }
 
-    private void upadteValues(){
+    private void upadteValues() {
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, buildUpdateUri(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(getActivity(),"Values Updated",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Values Updated", Toast.LENGTH_SHORT).show();
                 dismiss();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(),"Error",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
         requestQueue.add(stringRequest);
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
     }

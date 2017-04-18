@@ -1,6 +1,5 @@
 package com.trade.book.booktrade.fragments.dialogfragments;
 
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -68,12 +67,12 @@ public class dialogFragmentGetLocation extends DialogFragment implements GoogleA
                 .putString(getResources().getString(R.string.prefLatitude), String.valueOf(lat)).apply();
         PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
                 .putString(getResources().getString(R.string.prefLongitude), String.valueOf(lng)).apply();
-        if (checkStatus(lat, lng)||checkVelloreStatus(lat,lng)) {
+        if (checkStatus(lat, lng) || checkVelloreStatus(lat, lng)) {
             mStatus.setVisibility(View.VISIBLE);
-            mStatus.setText("Hurrah!!! You are eligible to use all our services");
+            mStatus.setText(getActivity().getResources().getString(R.string.locationServiceEligible));
         } else {
             mStatus.setVisibility(View.VISIBLE);
-            mStatus.setText("We are sorry your region doesn't fall into our coverage zone, we are continuously working hard to expand our coverage zone");
+            mStatus.setText(getActivity().getResources().getString(R.string.locationServiceIllEligible));
         }
     }
 
@@ -89,7 +88,7 @@ public class dialogFragmentGetLocation extends DialogFragment implements GoogleA
 
     private boolean checkVelloreStatus(double myLatitude, double myLongitude) {
         double vLatitude = Double.parseDouble(getActivity().getResources().getString(R.string.velloreLatitude));
-        double vLongitude = Double.parseDouble(getActivity().getResources().getString(R.string.velloreLatitude));
+        double vLongitude = Double.parseDouble(getActivity().getResources().getString(R.string.velloreLongititude));
         float[] results = new float[1];
         Location.distanceBetween(vLatitude, vLongitude, myLatitude, myLongitude, results);
         float distanceInMeters = results[0];

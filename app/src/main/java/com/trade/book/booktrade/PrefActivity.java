@@ -7,6 +7,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
@@ -37,6 +39,7 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
             111, 112, 101, 100, 32, 98, 121, 32, 116, 104, 101, 71, 111,
             111, 100, 71, 117, 121, 32, 97, 107, 97, 32, 78, 105, 107, 104, 105,
             108, 32, 83, 111, 110, 105};
+    private static final String mNullValue = "N/A";
     @BindView(R.id.toolbarPref)
     Toolbar prefToolbar;
     @BindView(R.id.aboutContainer)
@@ -188,7 +191,18 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref);
+            ListPreference lp = (ListPreference) findPreference(getActivity().getResources().getString(R.string.prefThemeKey));
+            lp.setSummary(lp.getEntry().toString());
+            lp.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    Toast.makeText(getActivity(), "Please restart the app to see the changes", Toast.LENGTH_SHORT).show();
+                    preference.setSummary(newValue.toString());
+                    return true;
+                }
+            });
         }
+
     }
 
 }

@@ -13,9 +13,6 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.StartActivity;
 
-/**
- * Created by Nikhil on 13-Apr-17.
- */
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -33,7 +30,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Test Notification")
+                .setContentTitle(getResources().getString(R.string.app_name))
                 .setContentText(messageBody)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)

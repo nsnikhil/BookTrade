@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -48,6 +49,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.accountPicture)
     CircularImageView profile;
     private Unbinder mUnbinder;
+    private boolean mTheme = false;
 
     @Nullable
     @Override
@@ -56,7 +58,26 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         mUnbinder = ButterKnife.bind(this, v);
         initialize();
         setVal();
+        checkPrefrence();
         return v;
+    }
+
+    private void checkPrefrence() {
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String prefValue = spf.getString(getResources().getString(R.string.prefThemeKey), mNullValue);
+        if (prefValue.equalsIgnoreCase("Default")) {
+            mTheme = false;
+            name.setTextColor(getResources().getColor(R.color.colorAccent));
+            signOut.setBackground(getActivity().getResources().getDrawable(R.drawable.roundbutton));
+            purchase.setBackground(getActivity().getResources().getDrawable(R.drawable.roundbutton));
+            uploads.setBackground(getActivity().getResources().getDrawable(R.drawable.roundbutton));
+        } else if (prefValue.equalsIgnoreCase("Multi-Color")) {
+            mTheme = true;
+            name.setTextColor(Color.parseColor("#455A64"));
+            signOut.setBackground(getActivity().getResources().getDrawable(R.drawable.roundbuttoncolor));
+            purchase.setBackground(getActivity().getResources().getDrawable(R.drawable.roundbuttoncolor));
+            uploads.setBackground(getActivity().getResources().getDrawable(R.drawable.roundbuttoncolor));
+        }
     }
 
     private void setVal() {

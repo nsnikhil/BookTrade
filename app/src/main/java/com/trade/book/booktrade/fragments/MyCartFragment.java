@@ -53,6 +53,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,6 +76,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     adapterCart cartAdapter;
     private int mCursorCount = 0;
     private Unbinder mUnbinder;
+    private boolean mTheme = false;
 
     public MyCartFragment() {
 
@@ -87,7 +89,20 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
         mUnbinder = ButterKnife.bind(this, v);
         initilize();
         setEmpty();
+        checkPrefrence();
         return v;
+    }
+
+    private void checkPrefrence() {
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String prefValue = spf.getString(getResources().getString(R.string.prefThemeKey), mNullValue);
+        if (prefValue.equalsIgnoreCase("Default")) {
+            mTheme = false;
+            noItem.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.emptycrt));
+        } else if (prefValue.equalsIgnoreCase("Multi-Color")) {
+            mTheme = true;
+            noItem.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.emptycrtcolor));
+        }
     }
 
 
@@ -188,7 +203,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
                         spf.getString(getResources().getString(R.string.prefLongitude), mNullValue).equalsIgnoreCase(mNullValue)) {
                     checkLocation();
                 } else {
-                    if (checkStatus()||checkVelloreStatus()) {
+                    if (checkStatus() || checkVelloreStatus()) {
                         Cursor c = getActivity().getContentResolver().query(CartTables.mCartContentUri, null, null, null, null);
                         if (c.getCount() > 0) {
                             checkSold();
@@ -264,23 +279,23 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     }
 
     private boolean checkVelloreStatus() {
-        SharedPreferences spf  = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        double sLatitude = Double.parseDouble(getActivity().getResources().getString(R.string.latitude));
-        double sLongitude = Double.parseDouble(getActivity().getResources().getString(R.string.longititude));
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        double vLatitude = Double.parseDouble(getActivity().getResources().getString(R.string.velloreLatitude));
+        double vLongitude = Double.parseDouble(getActivity().getResources().getString(R.string.velloreLatitude));
         double myLatitude = 0.0;
         double myLongitude = 0.0;
-        int count=0;
-        if(!spf.getString(getResources().getString(R.string.prefLatitude),mNullValue).equalsIgnoreCase(mNullValue)){
+        int count = 0;
+        if (!spf.getString(getResources().getString(R.string.prefLatitude), mNullValue).equalsIgnoreCase(mNullValue)) {
             count++;
-            myLatitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude),mNullValue));
+            myLatitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude), mNullValue));
         }
-        if(!spf.getString(getResources().getString(R.string.prefLongitude),mNullValue).equalsIgnoreCase(mNullValue)){
+        if (!spf.getString(getResources().getString(R.string.prefLongitude), mNullValue).equalsIgnoreCase(mNullValue)) {
             count++;
-            myLongitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude),mNullValue));
+            myLongitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude), mNullValue));
         }
-        if(count==2){
+        if (count == 2) {
             float[] results = new float[1];
-            Location.distanceBetween(sLatitude, sLongitude, myLatitude, myLongitude, results);
+            Location.distanceBetween(vLatitude, vLongitude, myLatitude, myLongitude, results);
             float distanceInMeters = results[0];
             return distanceInMeters < 5000;
         }
@@ -486,7 +501,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
             sp = sp + c.getInt(c.getColumnIndex(tablecart.mSellingPrice));
         }
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        double taxPrice = Double.parseDouble(String.format("%.2f", compute(sp)));
+        double taxPrice = Double.parseDouble(String.format(Locale.ENGLISH, "%.2f", compute(sp)));
         taxPrice = Math.round(taxPrice);
         buildCheckOutDialog("All the books left in your cart will delivered to " +
                 spf.getString(getActivity().getResources().getString(R.string.prefAccountAddress), mNullValue) + " within one week\n\n" +

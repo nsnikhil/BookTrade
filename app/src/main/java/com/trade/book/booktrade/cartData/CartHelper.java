@@ -8,9 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.trade.book.booktrade.cartData.CartTables.tablecart;
 
 
-class CartHelper extends SQLiteOpenHelper{
+class CartHelper extends SQLiteOpenHelper {
 
-    private static final String mCreateCartTable = "CREATE TABLE "+ CartTables.mTableName + " ("
+    private static final String mCreateCartTable = "CREATE TABLE " + CartTables.mTableName + " ("
             + tablecart.mUid + " INTEGER NOT NULL , "
             + tablecart.mBuid + " INTEGER NOT NULL , "
             + tablecart.mName + " TEXT NOT NULL, "
@@ -31,9 +31,9 @@ class CartHelper extends SQLiteOpenHelper{
             + tablecart.mPhoto6 + " TEXT , "
             + tablecart.mPhoto7 + " TEXT , "
             + tablecart.mstatus + " INTEGER NOT NULL "
-            +");";
+            + ");";
 
-    private static final String mDropCartTable = "DROP TABLE IF EXISTS "+ CartTables.mTableName;
+    private static final String mDropCartTable = "DROP TABLE IF EXISTS " + CartTables.mTableName;
 
     CartHelper(Context context) {
         super(context, CartTables.mDataBaseName, null, CartTables.mDatabaseVersion);
@@ -44,7 +44,7 @@ class CartHelper extends SQLiteOpenHelper{
         createDataBase(sqLiteDatabase);
     }
 
-    private void createDataBase(SQLiteDatabase sdb){
+    private void createDataBase(SQLiteDatabase sdb) {
         sdb.execSQL(mCreateCartTable);
     }
 

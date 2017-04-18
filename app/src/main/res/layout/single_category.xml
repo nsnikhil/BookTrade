@@ -13,6 +13,7 @@
 
 
         <ImageView
+            android:contentDescription="@string/ImageDescriptionBackground"
             android:id="@+id/singleCategoryPicture"
             android:scaleType="centerCrop"
             style="@style/crdvImage" />

@@ -1,6 +1,5 @@
 package com.trade.book.booktrade;
 
-import android.*;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -20,6 +19,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -53,6 +53,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
 
     private static final String mNullValue = "N/A";
     private static final int mEditRequestCode = 584;
+    private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 56;
     @BindView(R.id.purchaseName)
     TextView name;
     @BindView(R.id.purchasePublisher)
@@ -75,10 +76,11 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
     LinearLayout buttonConatiner;
     @BindView(R.id.purchaseBookView)
     RecyclerView imageHolder;
+    @BindView(R.id.purchaseToolbar)
+    Toolbar mPurchaseToolbar;
     BookObject bObject = null;
     adapterPurchaseImage imageAdapter;
     ArrayList<String> urls;
-    private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 56;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +122,18 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return super.onSupportNavigateUp();
+    }
+
     private void initilize() {
+        setSupportActionBar(mPurchaseToolbar);
+        mPurchaseToolbar.setPadding(0, 52, 0, 0);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.fill_transparent));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         imageHolder.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         addToCart.setOnClickListener(this);
         buyNow.setOnClickListener(this);
@@ -210,11 +223,11 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
                     startActivityForResult(detail, mEditRequestCode);
                 } else {
                     SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    if(spf.getString(getResources().getString(R.string.prefLatitude),mNullValue).equalsIgnoreCase(mNullValue)||
-                            spf.getString(getResources().getString(R.string.prefLongitude),mNullValue).equalsIgnoreCase(mNullValue)) {
+                    if (spf.getString(getResources().getString(R.string.prefLatitude), mNullValue).equalsIgnoreCase(mNullValue) ||
+                            spf.getString(getResources().getString(R.string.prefLongitude), mNullValue).equalsIgnoreCase(mNullValue)) {
                         checkLocation();
-                    }else {
-                        if (checkStatus()||checkVelloreStatus()) {
+                    } else {
+                        if (checkStatus() || checkVelloreStatus()) {
                             checkSold(bObject.getBid());
                         } else {
                             Toast.makeText(getApplicationContext(), "We are sorry your region doesn't fall into " +
@@ -227,7 +240,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void checkLocation(){
+    private void checkLocation() {
         if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(PurchaseActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_ACCESS_FINE_LOCATION);
@@ -236,9 +249,9 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
             boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
             if (!enabled) {
                 buildAlertMessageNoGps();
-            }else {
+            } else {
                 dialogFragmentGetLocation getLocation = new dialogFragmentGetLocation();
-                getLocation.show(getSupportFragmentManager(),"location");
+                getLocation.show(getSupportFragmentManager(), "location");
             }
         }
     }
@@ -262,21 +275,21 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private boolean checkStatus() {
-        SharedPreferences spf  = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         double sLatitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.latitude));
         double sLongitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.longititude));
         double myLatitude = 0.0;
         double myLongitude = 0.0;
-        int count=0;
-        if(!spf.getString(getResources().getString(R.string.prefLatitude),mNullValue).equalsIgnoreCase(mNullValue)){
+        int count = 0;
+        if (!spf.getString(getResources().getString(R.string.prefLatitude), mNullValue).equalsIgnoreCase(mNullValue)) {
             count++;
-            myLatitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude),mNullValue));
+            myLatitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude), mNullValue));
         }
-        if(!spf.getString(getResources().getString(R.string.prefLongitude),mNullValue).equalsIgnoreCase(mNullValue)){
+        if (!spf.getString(getResources().getString(R.string.prefLongitude), mNullValue).equalsIgnoreCase(mNullValue)) {
             count++;
-            myLongitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude),mNullValue));
+            myLongitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude), mNullValue));
         }
-        if(count==2){
+        if (count == 2) {
             float[] results = new float[1];
             Location.distanceBetween(sLatitude, sLongitude, myLatitude, myLongitude, results);
             float distanceInMeters = results[0];
@@ -286,23 +299,23 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private boolean checkVelloreStatus() {
-        SharedPreferences spf  = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        double sLatitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.latitude));
-        double sLongitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.longititude));
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        double vLatitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.velloreLatitude));
+        double vLongitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.velloreLatitude));
         double myLatitude = 0.0;
         double myLongitude = 0.0;
-        int count=0;
-        if(!spf.getString(getResources().getString(R.string.prefLatitude),mNullValue).equalsIgnoreCase(mNullValue)){
+        int count = 0;
+        if (!spf.getString(getResources().getString(R.string.prefLatitude), mNullValue).equalsIgnoreCase(mNullValue)) {
             count++;
-            myLatitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude),mNullValue));
+            myLatitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude), mNullValue));
         }
-        if(!spf.getString(getResources().getString(R.string.prefLongitude),mNullValue).equalsIgnoreCase(mNullValue)){
+        if (!spf.getString(getResources().getString(R.string.prefLongitude), mNullValue).equalsIgnoreCase(mNullValue)) {
             count++;
-            myLongitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude),mNullValue));
+            myLongitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude), mNullValue));
         }
-        if(count==2){
+        if (count == 2) {
             float[] results = new float[1];
-            Location.distanceBetween(sLatitude, sLongitude, myLatitude, myLongitude, results);
+            Location.distanceBetween(vLatitude, vLongitude, myLatitude, myLongitude, results);
             float distanceInMeters = results[0];
             return distanceInMeters < 5000;
         }
@@ -424,14 +437,14 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
     private void setCartText() {
         Cursor c = getContentResolver().query(CartTables.mCartContentUri, null, null, null, null);
         if (c.getCount() == 0) {
-            addToCart.setText("Add to cart");
+            addToCart.setText(getResources().getString(R.string.purchaseAddToCart));
         }
         while (c.moveToNext()) {
             if (c.getInt(c.getColumnIndex(tablecart.mUid)) == bObject.getItemId()) {
-                addToCart.setText("Remove from cart");
+                addToCart.setText(getResources().getString(R.string.purchaseRemoveFromCart));
                 return;
             } else {
-                addToCart.setText("Add to cart");
+                addToCart.setText(getResources().getString(R.string.purchaseAddToCart));
             }
         }
     }

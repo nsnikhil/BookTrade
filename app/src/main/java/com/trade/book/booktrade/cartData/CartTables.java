@@ -13,8 +13,8 @@ public class CartTables {
     public static final String mCartScheme = "content://";
     public static final String mCartAuthority = "com.trade.book.booktrade.cart";
 
-    public static final Uri mCartBaseUri = Uri.parse(mCartScheme+mCartAuthority);
-    public static final Uri mCartContentUri = Uri.withAppendedPath(mCartBaseUri,mTableName);
+    public static final Uri mCartBaseUri = Uri.parse(mCartScheme + mCartAuthority);
+    public static final Uri mCartContentUri = Uri.withAppendedPath(mCartBaseUri, mTableName);
 
     public class tablecart implements BaseColumns {
         public static final String mUid = BaseColumns._ID;

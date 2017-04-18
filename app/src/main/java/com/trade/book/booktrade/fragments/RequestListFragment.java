@@ -53,6 +53,8 @@ import static android.content.Context.LOCATION_SERVICE;
 
 public class RequestListFragment extends Fragment implements interfaceAddRequest {
 
+    private static final String mNullValue = "N/A";
+    private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 56;
     @BindView(R.id.requestList)
     ListView requestList;
     @BindView(R.id.requestAdd)
@@ -63,11 +65,9 @@ public class RequestListFragment extends Fragment implements interfaceAddRequest
     SwipeRefreshLayout mSwipeRefresh;
     ArrayList<RequestObject> requestObjectList;
     adapterRequest adapter;
-    private static final String mNullValue = "N/A";
-    private Unbinder mUnbinder;
-    private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 56;
     Fragment f;
-
+    private Unbinder mUnbinder;
+    private boolean mTheme = false;
 
     @Nullable
     @Override
@@ -78,9 +78,21 @@ public class RequestListFragment extends Fragment implements interfaceAddRequest
         mSwipeRefresh.setRefreshing(true);
         downloadList();
         f = this;
+        checkPrefrence();
         return v;
     }
 
+    private void checkPrefrence() {
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String prefValue = spf.getString(getResources().getString(R.string.prefThemeKey), mNullValue);
+        if (prefValue.equalsIgnoreCase("Default")) {
+            mTheme = false;
+            noRequest.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.norequest));
+        } else if (prefValue.equalsIgnoreCase("Multi-Color")) {
+            mTheme = true;
+            noRequest.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.norequestcolor));
+        }
+    }
 
     private void intilize() {
         requestObjectList = new ArrayList<>();
@@ -111,7 +123,7 @@ public class RequestListFragment extends Fragment implements interfaceAddRequest
                                         spf.getString(getResources().getString(R.string.prefLongitude), mNullValue).equalsIgnoreCase(mNullValue)) {
                                     checkLocation();
                                 } else {
-                                    if (checkStatus()||checkVelloreStatus()) {
+                                    if (checkStatus() || checkVelloreStatus()) {
                                         submitRequest(parent, position);
                                     } else {
                                         Toast.makeText(getActivity(), "We are sorry your region doesn't fall into " +
@@ -205,23 +217,23 @@ public class RequestListFragment extends Fragment implements interfaceAddRequest
     }
 
     private boolean checkVelloreStatus() {
-        SharedPreferences spf  = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        double sLatitude = Double.parseDouble(getActivity().getResources().getString(R.string.latitude));
-        double sLongitude = Double.parseDouble(getActivity().getResources().getString(R.string.longititude));
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        double vLatitude = Double.parseDouble(getActivity().getResources().getString(R.string.velloreLatitude));
+        double vLongitude = Double.parseDouble(getActivity().getResources().getString(R.string.velloreLatitude));
         double myLatitude = 0.0;
         double myLongitude = 0.0;
-        int count=0;
-        if(!spf.getString(getResources().getString(R.string.prefLatitude),mNullValue).equalsIgnoreCase(mNullValue)){
+        int count = 0;
+        if (!spf.getString(getResources().getString(R.string.prefLatitude), mNullValue).equalsIgnoreCase(mNullValue)) {
             count++;
-            myLatitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude),mNullValue));
+            myLatitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude), mNullValue));
         }
-        if(!spf.getString(getResources().getString(R.string.prefLongitude),mNullValue).equalsIgnoreCase(mNullValue)){
+        if (!spf.getString(getResources().getString(R.string.prefLongitude), mNullValue).equalsIgnoreCase(mNullValue)) {
             count++;
-            myLongitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude),mNullValue));
+            myLongitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude), mNullValue));
         }
-        if(count==2){
+        if (count == 2) {
             float[] results = new float[1];
-            Location.distanceBetween(sLatitude, sLongitude, myLatitude, myLongitude, results);
+            Location.distanceBetween(vLatitude, vLongitude, myLatitude, myLongitude, results);
             float distanceInMeters = results[0];
             return distanceInMeters < 5000;
         }

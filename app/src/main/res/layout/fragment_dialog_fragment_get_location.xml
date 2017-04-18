@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/verticalLinearLayout"
     tools:context="com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentGetLocation">
@@ -14,7 +13,7 @@
         android:textColor="@color/black"
         android:layout_gravity="center_horizontal"
         android:visibility="gone"
-        android:text="Status"/>
+        android:text="@string/dialogLocationStatus"/>
 
     <TextView
         style="@style/wrapContent"
@@ -24,7 +23,7 @@
         android:layout_margin="@dimen/sixteen"
         android:textColor="@color/black"
         android:layout_gravity="center_horizontal"
-        android:text="Latitude"/>
+        android:text="@string/dialogLocationLatitude"/>
 
     <TextView
         style="@style/wrapContent"
@@ -34,6 +33,6 @@
         android:textColor="@color/black"
         android:layout_margin="@dimen/sixteen"
         android:layout_gravity="center_horizontal"
-        android:text="Longitude"/>
+        android:text="@string/dialogLocationLongitude"/>
 
 </LinearLayout>

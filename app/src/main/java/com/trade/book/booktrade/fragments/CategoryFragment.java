@@ -72,7 +72,6 @@ public class CategoryFragment extends Fragment {
                 String su = buildUri(s);
                 Intent cat = new Intent(getActivity(), CategoryViewActivity.class);
                 cat.putExtra(getActivity().getResources().getString(R.string.intencateuri), su);
-                //cat.putExtra(getActivity().getResources().getString(R.string.intencateuripos),position);
                 cat.putExtra(getActivity().getResources().getString(R.string.intencateuripos), object.getmName());
                 startActivity(cat);
             }

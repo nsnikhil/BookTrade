@@ -9,22 +9,22 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.trade.book.booktrade.cartData.CartTables.tablecart;
 
 
-public class CartProvider extends ContentProvider{
-
-    CartHelper cartHelper;
-    static UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+public class CartProvider extends ContentProvider {
 
     private static final int uFullCart = 1007;
     private static final int uSingleCart = 1008;
+    static UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        sUriMatcher.addURI(CartTables.mCartAuthority,CartTables.mTableName,uFullCart);
-        sUriMatcher.addURI(CartTables.mCartAuthority,CartTables.mTableName+"/#",uSingleCart);
+        sUriMatcher.addURI(CartTables.mCartAuthority, CartTables.mTableName, uFullCart);
+        sUriMatcher.addURI(CartTables.mCartAuthority, CartTables.mTableName + "/#", uSingleCart);
     }
 
+    CartHelper cartHelper;
 
     @Override
     public boolean onCreate() {
@@ -37,19 +37,19 @@ public class CartProvider extends ContentProvider{
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteDatabase sdb = cartHelper.getReadableDatabase();
         Cursor c;
-        switch (sUriMatcher.match(uri)){
+        switch (sUriMatcher.match(uri)) {
             case uFullCart:
-                c = sdb.query(CartTables.mTableName,projection,selection,selectionArgs,null,null,sortOrder);
+                c = sdb.query(CartTables.mTableName, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             case uSingleCart:
                 selection = tablecart.mUid + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                c = sdb.query(CartTables.mTableName,projection,selection,selectionArgs,null,null,sortOrder);
+                c = sdb.query(CartTables.mTableName, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             default:
-                throw new IllegalArgumentException("Invalid Uri " +uri);
+                throw new IllegalArgumentException("Invalid Uri " + uri);
         }
-        c.setNotificationUri(getContext().getContentResolver(),uri);
+        c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
     }
 
@@ -62,46 +62,46 @@ public class CartProvider extends ContentProvider{
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues contentValues) {
-        switch (sUriMatcher.match(uri)){
+        switch (sUriMatcher.match(uri)) {
             case uFullCart:
-                return insertVal(uri,contentValues);
+                return insertVal(uri, contentValues);
             default:
-                throw new IllegalArgumentException("Invalid Uri "+ uri);
+                throw new IllegalArgumentException("Invalid Uri " + uri);
         }
     }
 
-    private Uri insertVal(Uri u,ContentValues cv){
+    private Uri insertVal(Uri u, ContentValues cv) {
         SQLiteDatabase sdb = cartHelper.getWritableDatabase();
-        long count = sdb.insert(CartTables.mTableName,null,cv);
-        if(count==0){
+        long count = sdb.insert(CartTables.mTableName, null, cv);
+        if (count == 0) {
             return null;
-        }else {
-            getContext().getContentResolver().notifyChange(u,null);
-            return Uri.withAppendedPath(u,String.valueOf(count));
+        } else {
+            getContext().getContentResolver().notifyChange(u, null);
+            return Uri.withAppendedPath(u, String.valueOf(count));
         }
     }
 
     @Override
     public int delete(@NonNull Uri uri, String s, String[] strings) {
-        switch (sUriMatcher.match(uri)){
+        switch (sUriMatcher.match(uri)) {
             case uFullCart:
-                return deleteVal(uri,s,strings);
+                return deleteVal(uri, s, strings);
             case uSingleCart:
                 s = tablecart.mUid + "=?";
                 strings = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return deleteVal(uri,s,strings);
+                return deleteVal(uri, s, strings);
             default:
-                throw new IllegalArgumentException("Invalid Uri " +uri);
+                throw new IllegalArgumentException("Invalid Uri " + uri);
         }
     }
 
-    private int deleteVal(Uri u, String s, String[] sa){
+    private int deleteVal(Uri u, String s, String[] sa) {
         SQLiteDatabase sdb = cartHelper.getWritableDatabase();
-        int count  = sdb.delete(CartTables.mTableName,s,sa);
-        if(count==0){
+        int count = sdb.delete(CartTables.mTableName, s, sa);
+        if (count == 0) {
             return count;
-        }else {
-            getContext().getContentResolver().notifyChange(u,null);
+        } else {
+            getContext().getContentResolver().notifyChange(u, null);
             return count;
         }
     }

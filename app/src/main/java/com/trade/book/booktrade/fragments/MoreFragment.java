@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import com.trade.book.booktrade.PrefActivity;
 import com.trade.book.booktrade.R;
-import com.trade.book.booktrade.StartActivity;
 import com.trade.book.booktrade.adapters.adapterList;
 import com.trade.book.booktrade.fragments.dialogfragments.dialogFagmentAddress;
 import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentGetLocation;
@@ -40,10 +39,10 @@ import static android.content.Context.LOCATION_SERVICE;
 
 public class MoreFragment extends Fragment {
 
+    private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 56;
     @BindView(R.id.cateogoryList)
     ListView moreList;
     private Unbinder mUnbinder;
-    private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 56;
 
     public MoreFragment() {
 
@@ -116,7 +115,7 @@ public class MoreFragment extends Fragment {
         }
     }
 
-    private void checkLocation(){
+    private void checkLocation() {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_ACCESS_FINE_LOCATION);
@@ -125,9 +124,9 @@ public class MoreFragment extends Fragment {
             boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
             if (!enabled) {
                 buildAlertMessageNoGps();
-            }else {
+            } else {
                 dialogFragmentGetLocation getLocation = new dialogFragmentGetLocation();
-                getLocation.show(getFragmentManager(),"location");
+                getLocation.show(getFragmentManager(), "location");
             }
         }
     }

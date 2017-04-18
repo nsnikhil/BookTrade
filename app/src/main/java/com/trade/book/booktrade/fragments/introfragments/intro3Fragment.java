@@ -13,12 +13,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.github.paolorotolo.appintro.ISlidePolicy;
 import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.network.VolleySingleton;

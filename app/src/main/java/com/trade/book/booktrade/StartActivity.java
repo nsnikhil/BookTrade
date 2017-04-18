@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -14,7 +15,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
@@ -45,7 +45,6 @@ import com.claudiodegio.msv.MaterialSearchView;
 import com.claudiodegio.msv.OnSearchViewListener;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.trade.book.booktrade.cartData.CartTables;
 import com.trade.book.booktrade.fragments.AccountFragment;
@@ -65,7 +64,6 @@ import java.lang.reflect.Field;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
 
 
 public class StartActivity extends AppCompatActivity {
@@ -95,8 +93,7 @@ public class StartActivity extends AppCompatActivity {
     int mAddBookRequestCode = 1080;
     @BindView(R.id.bottomErrorImage)
     ImageView errorImage;
-    GoogleApiClient mGoogleApiClient;
-    Location mLastLocation;
+    private boolean mTheme = false;
 
     public static void disableShiftMode(BottomNavigationView view) {
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
@@ -128,8 +125,18 @@ public class StartActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initialize(savedInstanceState);
         setClickListeners();
+        checkPrefrence();
     }
 
+    private void checkPrefrence() {
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String prefValue = spf.getString(getResources().getString(R.string.prefThemeKey), mNullValue);
+        if (prefValue.equalsIgnoreCase("Default")) {
+            mTheme = false;
+        } else if (prefValue.equalsIgnoreCase("Multi-Color")) {
+            mTheme = true;
+        }
+    }
 
     /*
     Adds Fragment to bottomnavgationview
@@ -417,16 +424,16 @@ public class StartActivity extends AppCompatActivity {
     private void fabClick() {
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if (spf.getBoolean(getResources().getString(R.string.prefAccountIndicator), false)) {
-            if(spf.getString(getResources().getString(R.string.prefLatitude),mNullValue).equalsIgnoreCase(mNullValue)||
-                    spf.getString(getResources().getString(R.string.prefLongitude),mNullValue).equalsIgnoreCase(mNullValue)) {
+            if (spf.getString(getResources().getString(R.string.prefLatitude), mNullValue).equalsIgnoreCase(mNullValue) ||
+                    spf.getString(getResources().getString(R.string.prefLongitude), mNullValue).equalsIgnoreCase(mNullValue)) {
                 checkLocation();
-            }else {
-                if(checkStatus()||checkVelloreStatus()){
+            } else {
+                if (checkStatus() || checkVelloreStatus()) {
                     startActivityForResult(new Intent(StartActivity.this, AddBook.class), mAddBookRequestCode);
-                }else {
-                    Toast.makeText(getApplicationContext(),"We are sorry your region doesn't fall into " +
-                            "our coverage zone, we are continuously working hard to expand our coverage zone",Toast.LENGTH_SHORT).show();
-                    Toast.makeText(getApplicationContext(),"If you think its an mistake try recalibrating location from more ",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "We are sorry your region doesn't fall into " +
+                            "our coverage zone, we are continuously working hard to expand our coverage zone", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "If you think its an mistake try recalibrating location from more ", Toast.LENGTH_SHORT).show();
                 }
             }
         } else {
@@ -435,21 +442,21 @@ public class StartActivity extends AppCompatActivity {
     }
 
     private boolean checkStatus() {
-        SharedPreferences spf  = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         double sLatitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.latitude));
         double sLongitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.longititude));
         double myLatitude = 0.0;
         double myLongitude = 0.0;
-        int count=0;
-        if(!spf.getString(getResources().getString(R.string.prefLatitude),mNullValue).equalsIgnoreCase(mNullValue)){
+        int count = 0;
+        if (!spf.getString(getResources().getString(R.string.prefLatitude), mNullValue).equalsIgnoreCase(mNullValue)) {
             count++;
-            myLatitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude),mNullValue));
+            myLatitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude), mNullValue));
         }
-        if(!spf.getString(getResources().getString(R.string.prefLongitude),mNullValue).equalsIgnoreCase(mNullValue)){
+        if (!spf.getString(getResources().getString(R.string.prefLongitude), mNullValue).equalsIgnoreCase(mNullValue)) {
             count++;
-            myLongitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude),mNullValue));
+            myLongitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude), mNullValue));
         }
-        if(count==2){
+        if (count == 2) {
             float[] results = new float[1];
             Location.distanceBetween(sLatitude, sLongitude, myLatitude, myLongitude, results);
             float distanceInMeters = results[0];
@@ -459,30 +466,30 @@ public class StartActivity extends AppCompatActivity {
     }
 
     private boolean checkVelloreStatus() {
-        SharedPreferences spf  = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        double sLatitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.latitude));
-        double sLongitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.longititude));
+        SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        double vLatitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.velloreLatitude));
+        double vLongitude = Double.parseDouble(getApplicationContext().getResources().getString(R.string.velloreLatitude));
         double myLatitude = 0.0;
         double myLongitude = 0.0;
-        int count=0;
-        if(!spf.getString(getResources().getString(R.string.prefLatitude),mNullValue).equalsIgnoreCase(mNullValue)){
+        int count = 0;
+        if (!spf.getString(getResources().getString(R.string.prefLatitude), mNullValue).equalsIgnoreCase(mNullValue)) {
             count++;
-            myLatitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude),mNullValue));
+            myLatitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLatitude), mNullValue));
         }
-        if(!spf.getString(getResources().getString(R.string.prefLongitude),mNullValue).equalsIgnoreCase(mNullValue)){
+        if (!spf.getString(getResources().getString(R.string.prefLongitude), mNullValue).equalsIgnoreCase(mNullValue)) {
             count++;
-            myLongitude =  Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude),mNullValue));
+            myLongitude = Double.parseDouble(spf.getString(getResources().getString(R.string.prefLongitude), mNullValue));
         }
-        if(count==2){
+        if (count == 2) {
             float[] results = new float[1];
-            Location.distanceBetween(sLatitude, sLongitude, myLatitude, myLongitude, results);
+            Location.distanceBetween(vLatitude, vLongitude, myLatitude, myLongitude, results);
             float distanceInMeters = results[0];
             return distanceInMeters < 5000;
         }
         return false;
     }
 
-    private void checkLocation(){
+    private void checkLocation() {
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(StartActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_ACCESS_FINE_LOCATION);
@@ -491,9 +498,9 @@ public class StartActivity extends AppCompatActivity {
             boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
             if (!enabled) {
                 buildAlertMessageNoGps();
-            }else {
+            } else {
                 dialogFragmentGetLocation getLocation = new dialogFragmentGetLocation();
-                getLocation.show(getSupportFragmentManager(),"location");
+                getLocation.show(getSupportFragmentManager(), "location");
             }
         }
     }
@@ -524,7 +531,7 @@ public class StartActivity extends AppCompatActivity {
                 ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_WRITE_EXTERNAL_STORAGE_CODE);
         } else {
-                fabClick();
+            fabClick();
         }
     }
 
@@ -532,7 +539,7 @@ public class StartActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == MY_WRITE_EXTERNAL_STORAGE_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-               fabClick();
+                fabClick();
             }
         }
     }
@@ -660,10 +667,12 @@ public class StartActivity extends AppCompatActivity {
             case 0:
                 getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    //getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimaryDark));
-                    //getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-                    //mBottomToolbar.setBackground(getResources().getDrawable(R.drawable.toolbargradeint));
-                    //mBottomNaviagtionView.setItemBackgroundResource(R.drawable.booknav);
+                    if (mTheme) {
+                        getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimaryDark));
+                        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+                        mBottomToolbar.setBackground(getResources().getDrawable(R.drawable.toolbargradeint));
+                        mBottomNaviagtionView.setItemBackgroundResource(R.drawable.booknav);
+                    }
                     getSupportActionBar().setElevation(0);
                 }
                 if (mFabAddBook.getVisibility() == View.GONE) {
@@ -697,25 +706,35 @@ public class StartActivity extends AppCompatActivity {
         }
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getSupportActionBar().setElevation(getResources().getDimension(R.dimen.toolbarElevation));
-            //getWindow().setNavigationBarColor(Color.parseColor(darkColor));
-            // getWindow().setStatusBarColor(Color.parseColor(darkColor));
-            //mBottomToolbar.setBackgroundColor(Color.parseColor(color));
+            if (mTheme) {
+                getWindow().setNavigationBarColor(Color.parseColor(darkColor));
+                getWindow().setStatusBarColor(Color.parseColor(darkColor));
+                mBottomToolbar.setBackgroundColor(Color.parseColor(color));
+            }
         }
         switch (code) {
             case 0:
-                //mBottomNaviagtionView.setItemBackgroundResource(R.drawable.reqnav);
+                if (mTheme) {
+                    mBottomNaviagtionView.setItemBackgroundResource(R.drawable.reqnav);
+                }
                 getSupportActionBar().setTitle(getResources().getString(R.string.navRequest));
                 break;
             case 1:
-                // mBottomNaviagtionView.setItemBackgroundResource(R.drawable.cartnav);
+                if (mTheme) {
+                    mBottomNaviagtionView.setItemBackgroundResource(R.drawable.cartnav);
+                }
                 getSupportActionBar().setTitle(getResources().getString(R.string.navMyCart));
                 break;
             case 2:
-                //  mBottomNaviagtionView.setItemBackgroundResource(R.drawable.accnav);
+                if (mTheme) {
+                    mBottomNaviagtionView.setItemBackgroundResource(R.drawable.accnav);
+                }
                 getSupportActionBar().setTitle(getResources().getString(R.string.navaccount));
                 break;
             case 3:
-                //  mBottomNaviagtionView.setItemBackgroundResource(R.drawable.morenav);
+                if (mTheme) {
+                    mBottomNaviagtionView.setItemBackgroundResource(R.drawable.morenav);
+                }
                 getSupportActionBar().setTitle(getResources().getString(R.string.navMore));
                 break;
         }

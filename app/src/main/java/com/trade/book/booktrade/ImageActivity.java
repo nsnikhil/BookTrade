@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.WindowManager;
 
 import com.trade.book.booktrade.adapters.adapterPurchaseImage;
@@ -17,6 +18,8 @@ public class ImageActivity extends AppCompatActivity {
 
     @BindView(R.id.imageFullScreenImages)
     RecyclerView imageList;
+    @BindView(R.id.imageToolbar)
+    Toolbar mImageToolbar;
     adapterPurchaseImage imageAdapter;
 
     @Override
@@ -25,6 +28,11 @@ public class ImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_image);
         ButterKnife.bind(this);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        setSupportActionBar(mImageToolbar);
+        mImageToolbar.setPadding(0, 52, 0, 0);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.fill_transparent));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         imageList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         ArrayList<String> urls;
         if (getIntent() != null) {
@@ -34,4 +42,11 @@ public class ImageActivity extends AppCompatActivity {
             imageList.getLayoutManager().scrollToPosition(getIntent().getExtras().getInt(getResources().getString(R.string.intentArrayListPosition)));
         }
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return super.onSupportNavigateUp();
+    }
+
 }

@@ -129,7 +129,6 @@ public class adapterPurchaseImage extends RecyclerView.Adapter<adapterPurchaseIm
                     @Override
                     public void onClick(View v) {
                         Intent fullScreen = new Intent(mContext, ImageActivity.class);
-                        //fullScreen.putExtra(mContext.getResources().getString(R.string.intentImageUrl), url.get(getPosition()));
                         fullScreen.putStringArrayListExtra(mContext.getResources().getString(R.string.intentArrayListUrl), url);
                         fullScreen.putExtra(mContext.getResources().getString(R.string.intentArrayListPosition), getPosition());
                         fullScreen.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

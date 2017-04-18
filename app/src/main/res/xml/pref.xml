@@ -4,10 +4,9 @@
         <ListPreference
             android:key="@string/prefThemeKey"
             android:summary="@string/prefThemeDefaultValue"
-            android:enabled="false"
             android:defaultValue="@string/prefThemeDefaultValue"
             android:entries="@array/prefThemeEntries"
-            android:entryValues="@array/prefThemeEntries"
+            android:entryValues="@array/prefThemeValues"
             android:title="@string/prefThemeTitle" />
     </PreferenceCategory>
 </PreferenceScreen>

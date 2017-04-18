@@ -6,19 +6,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 import com.trade.book.booktrade.R;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class adapterList extends BaseAdapter{
+public class adapterList extends BaseAdapter {
 
     private Context mContext;
     private ArrayList<String> list;
 
-    public adapterList(Context context, ArrayList<String> name){
+    public adapterList(Context context, ArrayList<String> name) {
         mContext = context;
         list = name;
     }
@@ -40,22 +42,24 @@ public class adapterList extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        MyViewHolder myViewHolder = null;
-        if(convertView==null){
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.cat_item,parent,false);
+        MyViewHolder myViewHolder;
+        if (convertView == null) {
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.cat_item, parent, false);
             myViewHolder = new MyViewHolder(convertView);
             convertView.setTag(myViewHolder);
-        }else {
+        } else {
             myViewHolder = (MyViewHolder) convertView.getTag();
         }
         myViewHolder.catName.setText(list.get(position));
         return convertView;
     }
 
-    static class MyViewHolder{
-        @BindView(R.id.catName) TextView catName;
-        MyViewHolder(View v){
-            ButterKnife.bind(this,v);
+    static class MyViewHolder {
+        @BindView(R.id.catName)
+        TextView catName;
+
+        MyViewHolder(View v) {
+            ButterKnife.bind(this, v);
         }
     }
 }

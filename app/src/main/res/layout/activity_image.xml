@@ -4,6 +4,10 @@
     style="@style/verticalLinearLayout"
     tools:context="com.trade.book.booktrade.ImageActivity">
 
+    <include
+        android:id="@+id/imageToolbar"
+        layout="@layout/toolbar" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/imageFullScreenImages"
         style="@style/matchParent"

@@ -8,9 +8,9 @@ import com.trade.book.booktrade.fragments.BookListFragment;
 import com.trade.book.booktrade.fragments.CategoryFragment;
 
 
-public class adapterBookPager extends FragmentStatePagerAdapter{
+public class adapterBookPager extends FragmentStatePagerAdapter {
 
-    private static final CharSequence[] mPageTitle = {"Books","Category"};
+    private static final CharSequence[] mPageTitle = {"Books", "Category"};
 
 
     public adapterBookPager(FragmentManager fm) {
@@ -20,10 +20,10 @@ public class adapterBookPager extends FragmentStatePagerAdapter{
     @Override
     public Fragment getItem(int position) {
         Fragment f = null;
-        if(position==0){
+        if (position == 0) {
             f = new BookListFragment();
         }
-        if(position==1){
+        if (position == 1) {
             f = new CategoryFragment();
         }
         return f;
@@ -36,11 +36,11 @@ public class adapterBookPager extends FragmentStatePagerAdapter{
 
     @Override
     public CharSequence getPageTitle(int position) {
-        CharSequence s= null;
-        if(position==0) {
+        CharSequence s = null;
+        if (position == 0) {
             s = mPageTitle[0];
         }
-        if(position==1) {
+        if (position == 1) {
             s = mPageTitle[1];
         }
         return s;

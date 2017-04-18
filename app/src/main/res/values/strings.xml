@@ -20,6 +20,7 @@
     <string name="myPassword">Password</string>
     <string name="myPasswordSubmit">Submit</string>
     <string name="myLoading">Just a sec…</string>
+    <string name="rupeeSymbol" translatable="false">र</string>
 
 
     <!-- IntroText-->
@@ -90,7 +91,7 @@
 
     <!-- Prefrences-->
     <string name="prefCategory1">General</string>
-    <string name="prefCategory2">Ui</string>
+    <string name="prefCategory2">UI</string>
     <string name="prefThemeTitle">Theme</string>
     <string name="prefThemeKey">prefthky</string>
     <string name="prefThemeDefaultValue">Default</string>
@@ -99,13 +100,11 @@
     <array name="prefThemeEntries">
         <item>Default</item>
         <item>Multi-Color</item>
-        <item>Dark</item>
     </array>
 
     <array name="prefThemeValues">
         <item>Default</item>
         <item>Multi-Color</item>
-        <item>Dark</item>
     </array>
 
 
@@ -143,6 +142,7 @@
     <string name="purchaseEdit">Edit</string>
     <string name="purchaseDelete">Delete</string>
     <string name="purchaseDescription">Description</string>
+    <string name="purchaseRemoveFromCart">Remove From Cart</string>
     <!-- -->
 
     <!-- dialogText-->
@@ -154,6 +154,9 @@
     <string name="dialogTotal">Total Price</string>
     <string name="dialogAddRequest">Add book for request</string>
     <string name="dialogYourAddress">Your Address</string>
+    <string name="dialogLocationStatus">Status</string>
+    <string name="dialogLocationLatitude">Latitude</string>
+    <string name="dialogLocationLongitude">Location</string>
     <!-- -->
 
 
@@ -218,5 +221,7 @@
     <string name="longititude">88.341108</string>
     <string name="velloreLatitude">12.971035</string>
     <string name="velloreLongititude">76.1612908</string>
+    <string name="locationServiceEligible">Hurrah!!! You are eligible to use all our services</string>
+    <string name="locationServiceIllEligible">We are sorry your region dose not fall into our coverage zone, we are continuously working hard to expand our coverage zone</string>
     <!-- -->
 </resources>

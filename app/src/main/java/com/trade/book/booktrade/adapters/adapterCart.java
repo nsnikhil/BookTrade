@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutionException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class adapterCart extends CursorAdapter{
+public class adapterCart extends CursorAdapter {
 
     public adapterCart(Context context, Cursor c) {
         super(context, c);
@@ -30,7 +30,7 @@ public class adapterCart extends CursorAdapter{
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        View v = LayoutInflater.from(context).inflate(R.layout.single_book,parent,false);
+        View v = LayoutInflater.from(context).inflate(R.layout.single_book, parent, false);
         MyViewHolder myViewHolder = new MyViewHolder(v);
         v.setTag(myViewHolder);
         return v;
@@ -41,33 +41,58 @@ public class adapterCart extends CursorAdapter{
         MyViewHolder myViewHolder = (MyViewHolder) view.getTag();
         myViewHolder.bookName.setText(cursor.getString(cursor.getColumnIndex(CartTables.tablecart.mName)));
         myViewHolder.bookPublisher.setText(cursor.getString(cursor.getColumnIndex(CartTables.tablecart.mPublisher)));
-        myViewHolder.bookPrice.setText("र "+cursor.getInt(cursor.getColumnIndex(CartTables.tablecart.mSellingPrice)));
-        String url = context.getResources().getString(R.string.urlBucetHost)+context.getResources().getString(R.string.urlBucketName)+"/"+cursor.getString(cursor.getColumnIndex(CartTables.tablecart.mPhoto0));
+        myViewHolder.bookPrice.setText(context.getResources().getString(R.string.rupeeSymbol) + " " + cursor.getInt(cursor.getColumnIndex(CartTables.tablecart.mSellingPrice)));
+        String url = context.getResources().getString(R.string.urlBucetHost) + context.getResources().getString(R.string.urlBucketName) + "/" + cursor.getString(cursor.getColumnIndex(CartTables.tablecart.mPhoto0));
         Glide.with(context)
                 .load(url)
                 .centerCrop()
                 .placeholder(R.color.colorPrimaryDark)
                 .crossFade()
                 .into(myViewHolder.bookImage);
-        setColor color = new setColor(context,myViewHolder,url);
+        setColor color = new setColor(context, myViewHolder, url);
         color.execute();
     }
 
-    private void setColor(Context c,Palette p, MyViewHolder myViewHolder){
-        if(p!=null){
+    private void setColor(Context c, Palette p, MyViewHolder myViewHolder) {
+        if (p != null) {
             myViewHolder.bookTextConatiner.setBackgroundColor(p.getDarkMutedColor(c.getResources().getColor(R.color.colorPrimary)));
         }
     }
 
-    private class setColor extends AsyncTask<Void,Void,Palette> {
+    private Palette createPaletteAsync(Context c, String url) throws ExecutionException, InterruptedException {
+        Bitmap b = Glide.with(c).load(url).asBitmap().into(100, 100).get();
+        return Palette.from(b).generate();
+    }
+
+    static class MyViewHolder {
+        @BindView(R.id.singleBookPicture)
+        ImageView bookImage;
+        @BindView(R.id.singleBookName)
+        TextView bookName;
+        @BindView(R.id.singleBookPublisher)
+        TextView bookPublisher;
+        @BindView(R.id.singleBookPrice)
+        TextView bookPrice;
+        @BindView(R.id.singleBookCostPrice)
+        TextView bookCostPrice;
+        @BindView(R.id.singleBookTextContainer)
+        LinearLayout bookTextConatiner;
+
+        MyViewHolder(View v) {
+            ButterKnife.bind(this, v);
+            bookCostPrice.setVisibility(View.GONE);
+        }
+    }
+
+    private class setColor extends AsyncTask<Void, Void, Palette> {
 
         MyViewHolder myViewHolder;
         String url;
         Context mContext;
 
-        setColor(Context c,MyViewHolder mvh, String u){
+        setColor(Context c, MyViewHolder mvh, String u) {
             myViewHolder = mvh;
-            url  = u;
+            url = u;
             mContext = c;
         }
 
@@ -75,7 +100,7 @@ public class adapterCart extends CursorAdapter{
         @Override
         protected Palette doInBackground(Void... params) {
             try {
-                return createPaletteAsync(mContext,url);
+                return createPaletteAsync(mContext, url);
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
@@ -84,26 +109,8 @@ public class adapterCart extends CursorAdapter{
 
         @Override
         protected void onPostExecute(Palette palette) {
-            setColor(mContext,palette,myViewHolder);
+            setColor(mContext, palette, myViewHolder);
             super.onPostExecute(palette);
-        }
-    }
-
-    private Palette createPaletteAsync(Context c,String url) throws ExecutionException, InterruptedException {
-        Bitmap b =  Glide.with(c).load(url).asBitmap().into(100, 100).get();
-        return Palette.from(b).generate();
-    }
-
-    static class MyViewHolder{
-        @BindView(R.id.singleBookPicture) ImageView bookImage;
-        @BindView(R.id.singleBookName) TextView bookName;
-        @BindView(R.id.singleBookPublisher) TextView bookPublisher;
-        @BindView(R.id.singleBookPrice) TextView bookPrice;
-        @BindView(R.id.singleBookCostPrice) TextView bookCostPrice;
-        @BindView(R.id.singleBookTextContainer) LinearLayout bookTextConatiner;
-        MyViewHolder(View v){
-            ButterKnife.bind(this,v);
-            bookCostPrice.setVisibility(View.GONE);
         }
     }
 }

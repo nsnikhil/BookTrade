@@ -1,9 +1,7 @@
 package com.trade.book.booktrade.fragments.dialogfragments;
 
 
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,7 +10,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NotificationCompat;
@@ -22,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -31,7 +29,9 @@ import com.android.volley.toolbox.Volley;
 import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.StartActivity;
 import com.trade.book.booktrade.cartData.CartTables;
+
 import java.util.Calendar;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,12 +40,17 @@ import butterknife.Unbinder;
 
 public class dialogFragmentPurchase extends DialogFragment {
 
-    @BindView(R.id.dialogPurchaseHead) TextView title;
-    @BindView(R.id.dialogPurchasePrice) TextView actualPrice;
-    @BindView(R.id.dialogPurchaseExtra) TextView extraPrice;
-    @BindView(R.id.dialogPurchaseTotal) TextView totalPrice;
-    @BindView(R.id.dialogPurchaseBuy) Button buy;
     private static final String mNullValue = "N/A";
+    @BindView(R.id.dialogPurchaseHead)
+    TextView title;
+    @BindView(R.id.dialogPurchasePrice)
+    TextView actualPrice;
+    @BindView(R.id.dialogPurchaseExtra)
+    TextView extraPrice;
+    @BindView(R.id.dialogPurchaseTotal)
+    TextView totalPrice;
+    @BindView(R.id.dialogPurchaseBuy)
+    Button buy;
     private Unbinder mUnbinder;
 
     public dialogFragmentPurchase() {
@@ -55,7 +60,7 @@ public class dialogFragmentPurchase extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dialog_fragment_purchase, container, false);
-        mUnbinder = ButterKnife.bind(this,v);
+        mUnbinder = ButterKnife.bind(this, v);
         initilize();
         setVal();
         return v;
@@ -81,15 +86,15 @@ public class dialogFragmentPurchase extends DialogFragment {
         String publisher = args.getString(getActivity().getResources().getString(R.string.bundleBookPublisher));
         int price = args.getInt(getActivity().getResources().getString(R.string.bundleBookPrice));
         title.setText(name.toUpperCase() + " by " + publisher + " will be delivered to " + spf.getString(getActivity().getResources().getString(R.string.prefAccountAddress), mNullValue) + " within one week");
-        actualPrice.setText("र "+(double) price );
-        double taxPrice = Double.parseDouble(String.format("%.2f", compute(price)));
+        actualPrice.setText(getActivity().getResources().getString(R.string.rupeeSymbol) + " " + (double) price);
+        double taxPrice = Double.parseDouble(String.format(Locale.ENGLISH, "%.2f", compute(price)));
         taxPrice = Math.round(taxPrice);
-        extraPrice.setText("र "+taxPrice);
-        totalPrice.setText("र "+(price + taxPrice ));
+        extraPrice.setText(getActivity().getResources().getString(R.string.rupeeSymbol) + " " + taxPrice);
+        totalPrice.setText(getActivity().getResources().getString(R.string.rupeeSymbol) + " " + (price + taxPrice));
     }
 
     private double compute(int price) {
-        if(price<100){
+        if (price < 100) {
             return 7;
         }
         if (price > 100 && price < 300) {
@@ -181,7 +186,7 @@ public class dialogFragmentPurchase extends DialogFragment {
         String name = args.getString(getActivity().getResources().getString(R.string.bundleBookName));
         String publisher = args.getString(getActivity().getResources().getString(R.string.bundleBookPublisher));
         String messageBody = name.toUpperCase() + " by " + publisher + " will be delivered to " + spf.getString(getActivity().getResources().getString(R.string.prefAccountAddress), mNullValue) + " within one week";
-        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getActivity())
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("Order Confirmed")
@@ -224,7 +229,8 @@ public class dialogFragmentPurchase extends DialogFragment {
         }
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
     }

@@ -6,6 +6,11 @@
     android:background="@color/colorBackground"
     tools:context="com.trade.book.booktrade.PurchaseActivity">
 
+    <include
+        android:id="@+id/purchaseToolbar"
+        android:paddingTop="24dp"
+        layout="@layout/toolbar" />
+
     <RelativeLayout
         android:layout_alignParentBottom="true"
         android:background="@color/colorAccent"

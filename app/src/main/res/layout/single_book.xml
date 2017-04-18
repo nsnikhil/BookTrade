@@ -19,6 +19,7 @@
 
 
         <ImageView
+            android:contentDescription="@string/ImageDescriptionBackground"
             android:id="@+id/singleBookPicture"
             android:transitionName="transitionBookImage"
             style="@style/crdvImage" />

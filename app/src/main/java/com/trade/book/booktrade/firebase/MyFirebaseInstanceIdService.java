@@ -15,7 +15,7 @@ import com.trade.book.booktrade.R;
 import com.trade.book.booktrade.network.VolleySingleton;
 
 
-public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService{
+public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
 
     private static final String TAG = MyFirebaseInstanceIdService.class.getSimpleName();
     private static final String mNullValue = "N/A";
@@ -24,8 +24,8 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService{
     public void onTokenRefresh() {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        spf.edit().putString(getResources().getString(R.string.prefFirebaseToken),refreshedToken).apply();
-        if(!spf.getString(getResources().getString(R.string.prefAccountId),mNullValue).equalsIgnoreCase(mNullValue)){
+        spf.edit().putString(getResources().getString(R.string.prefFirebaseToken), refreshedToken).apply();
+        if (!spf.getString(getResources().getString(R.string.prefAccountId), mNullValue).equalsIgnoreCase(mNullValue)) {
             updateValues(refreshedToken);
         }
     }
@@ -50,13 +50,13 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService{
             @Override
             public void onResponse(String response) {
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                        .edit().putString(getResources().getString(R.string.prefFirebaseToken),key).apply();
-                Log.d(TAG,response);
+                        .edit().putString(getResources().getString(R.string.prefFirebaseToken), key).apply();
+                Log.d(TAG, response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d(TAG,error.toString());
+                Log.d(TAG, error.toString());
             }
         });
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
