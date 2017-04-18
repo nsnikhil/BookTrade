@@ -1,0 +1,19 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+     style="@style/matchParent"
+    android:background="@color/colorBackground"
+    tools:context="com.trade.book.booktrade.fragments.introfragments.intro1Fragment">
+
+
+    <ImageView
+        android:id="@+id/intro1Image"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/ImageDescriptionBackground"
+        android:gravity="center_horizontal"
+        android:src="@drawable/launcher_logo" />
+
+
+</RelativeLayout>

@@ -219,8 +219,8 @@
     <!-- Location-->
     <string name="latitude">22.591387</string>
     <string name="longititude">88.341108</string>
-    <string name="velloreLatitude">12.971035</string>
-    <string name="velloreLongititude">76.1612908</string>
+    <string name="velloreLatitude">12.971285</string>
+    <string name="velloreLongititude">79.160383</string>
     <string name="locationServiceEligible">Hurrah!!! You are eligible to use all our services</string>
     <string name="locationServiceIllEligible">We are sorry your region dose not fall into our coverage zone, we are continuously working hard to expand our coverage zone</string>
     <!-- -->
