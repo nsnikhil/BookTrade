@@ -8,6 +8,11 @@
         android:divider="@null"
         android:id="@+id/cateogoryList"/>
 
+    <ProgressBar
+        android:id="@+id/categoryProgress"
+        android:visibility="gone"
+        style="@style/progressbar" />
+
     <GridView
         style="@style/matchParent"
         android:visibility="gone"

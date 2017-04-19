@@ -137,10 +137,6 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         imageHolder.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         addToCart.setOnClickListener(this);
         buyNow.setOnClickListener(this);
-        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            buyNow.setTextColor(getResources().getColor(R.color.cardview_dark_background));
-            addToCart.setTextColor(getResources().getColor(R.color.cardview_dark_background));
-        }
     }
 
     private void setValue(BookObject bookObject) {

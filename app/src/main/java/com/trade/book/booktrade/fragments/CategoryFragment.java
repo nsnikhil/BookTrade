@@ -12,6 +12,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -41,6 +42,7 @@ public class CategoryFragment extends Fragment {
     ListView catList;
     @BindView(R.id.cateogoryGridList)
     GridView catGridList;
+    @BindView(R.id.categoryProgress) ProgressBar mProgressBar;
     private Unbinder mUnbinder;
     private ArrayList<String> mCategoryList;
 
@@ -58,6 +60,7 @@ public class CategoryFragment extends Fragment {
     }
 
     private void initilize() {
+        mProgressBar.setVisibility(View.VISIBLE);
         catList.setVisibility(View.GONE);
         catGridList.setVisibility(View.VISIBLE);
         mCategoryList = new ArrayList<>();
@@ -112,6 +115,7 @@ public class CategoryFragment extends Fragment {
     }
 
     private void makeCategoryList(JSONArray array) throws JSONException {
+        mProgressBar.setVisibility(View.GONE);
         if (array.length() > 0) {
             for (int i = 0; i < array.length(); i++) {
                 JSONObject object = array.getJSONObject(i);
@@ -129,7 +133,6 @@ public class CategoryFragment extends Fragment {
             String url = mBaseFileUri + Character.toString((char) num) + ".jpg";
             catObjList.add(new CategoryObject(mCategoryList.get(i), url));
         }
-
         adapterCategory adptr = new adapterCategory(getActivity(), catObjList);
         catGridList.setAdapter(adptr);
     }

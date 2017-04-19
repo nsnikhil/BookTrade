@@ -6,11 +6,6 @@
     android:background="@color/colorBackground"
     tools:context="com.trade.book.booktrade.PurchaseActivity">
 
-    <include
-        android:id="@+id/purchaseToolbar"
-        android:paddingTop="24dp"
-        layout="@layout/toolbar" />
-
     <RelativeLayout
         android:layout_alignParentBottom="true"
         android:background="@color/colorAccent"
@@ -130,8 +125,6 @@
                         style="@style/purchaseTextView"
                         android:text="@string/bookCondition" />
 
-
-
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -139,5 +132,10 @@
         </RelativeLayout>
 
     </ScrollView>
+
+    <include
+        android:id="@+id/purchaseToolbar"
+        android:paddingTop="24dp"
+        layout="@layout/toolbar" />
 
 </RelativeLayout>

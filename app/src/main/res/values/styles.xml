@@ -7,6 +7,7 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="colorControlNormal">@color/colorAccent</item>
+        <item name="windowActionBarOverlay">false</item>
     </style>
 
     <style name="AddBookTheme" parent="Theme.AppCompat.NoActionBar">

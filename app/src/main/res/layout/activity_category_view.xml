@@ -1,33 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    style="@style/matchParent"
     tools:context="com.trade.book.booktrade.CategoryViewActivity">
 
-    <include layout="@layout/toolbar"
-        android:id="@+id/toolbarCategory"/>
+    <include layout="@layout/background" />
 
-    <include layout="@layout/background"/>
+    <include
+        android:id="@+id/toolbarCategory"
+        layout="@layout/toolbar" />
 
     <ImageView
-        android:contentDescription="@string/ImageDescriptionError"
-        style="@style/errorImage"
         android:id="@+id/categoryEmpty"
+        style="@style/errorImage"
+        android:contentDescription="@string/ImageDescriptionError"
         android:src="@drawable/nodata" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/catListSwipeRefresh"
-        android:layout_below="@id/toolbarCategory"
-        style="@style/matchParent">
-
-    <GridView
-        android:id="@+id/catrLst"
         style="@style/matchParent"
-        android:numColumns="2"/>
+        android:layout_below="@id/toolbarCategory">
+
+        <GridView
+            android:id="@+id/catrLst"
+            style="@style/matchParent"
+            android:numColumns="2" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
-
 
 </RelativeLayout>
