@@ -8,6 +8,7 @@
         style="@style/verticalLinearLayout"
         android:layout_height="wrap_content"
         android:padding="@dimen/sixteen"
+        android:visibility="visible"
         android:id="@+id/myPasswordContainer">
 
 
@@ -55,8 +56,7 @@
         android:baselineAligned="false">
 
         <RelativeLayout
-            style="@style/matchParent"
-            android:layout_height="0dp"
+            style="@style/wrapContent"
             android:layout_weight="1">
 
             <ImageView
@@ -84,8 +84,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            style="@style/matchParent"
-            android:layout_height="0dp"
+            style="@style/wrapContent"
             android:layout_weight="1">
 
             <ImageView

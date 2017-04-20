@@ -6,6 +6,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="colorControlNormal">@color/colorAccent</item>
@@ -29,10 +30,6 @@
 
     <style name="tranparentNavBar" parent="AppTheme">
         <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
-    </style>
-
-    <style name="buttonColor">
-        <item name="android:colorButtonNormal">@color/colorAccent</item>
     </style>
 
     <style name="OverFlowLight" parent="@android:style/Widget.Material.ActionButton.Overflow">

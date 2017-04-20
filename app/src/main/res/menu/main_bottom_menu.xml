@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/bottomMenuBooks"
-        android:title="Book List"
+        android:title="@string/navBookList"
         android:icon="@drawable/ic_book_white_24dp" />
 
     <item android:id="@+id/bottomMenuRequest"

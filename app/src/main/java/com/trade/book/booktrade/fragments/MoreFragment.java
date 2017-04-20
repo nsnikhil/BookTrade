@@ -89,7 +89,7 @@ public class MoreFragment extends Fragment {
             case 2:
                 Intent share = new Intent(android.content.Intent.ACTION_SEND);
                 share.setType("text/plain");
-                share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
                 share.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.trade.book.booktrade");
                 startActivity(Intent.createChooser(share, "Share link!"));
                 break;

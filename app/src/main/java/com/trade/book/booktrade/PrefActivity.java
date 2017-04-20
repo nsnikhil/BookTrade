@@ -1,8 +1,6 @@
 package com.trade.book.booktrade;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -12,6 +10,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -34,12 +33,6 @@ import butterknife.ButterKnife;
 public class PrefActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String termsUrl = "https://docs.google.com/document/d/1a67czBVEUSpL0u8DCByhEbEG1cTVyB8mvC9eLo3Jt6M/pub";
-    private static final int[] mName = {84, 104, 101, 32,
-            97, 112, 112, 32, 105, 115, 32, 100, 101, 118, 101, 108,
-            111, 112, 101, 100, 32, 98, 121, 32, 116, 104, 101, 71, 111,
-            111, 100, 71, 117, 121, 32, 97, 107, 97, 32, 78, 105, 107, 104, 105,
-            108, 32, 83, 111, 110, 105};
-    private static final String mNullValue = "N/A";
     @BindView(R.id.toolbarPref)
     Toolbar prefToolbar;
     @BindView(R.id.aboutContainer)
@@ -126,18 +119,25 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
                     dialogFragmentMyInfo.show(getSupportFragmentManager(), "myinfo");
                 } else {
                     mCount++;
-                    aboutDialog("Shelf Bee");
+                    aboutDialog();
                 }
                 break;
             case R.id.aboutButtonTerms:
-                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                CustomTabsIntent customTabsIntent = builder.build();
-                customTabsIntent.launchUrl(this, Uri.parse(termsUrl));
+                chromeCustomTab(termsUrl);
                 break;
             case R.id.aboutButtonLibraries:
                 showLibrariesList();
                 break;
         }
+    }
+
+    private void chromeCustomTab(String url) {
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        builder.setSecondaryToolbarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        builder.setExitAnimations(this, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(this, Uri.parse(url));
     }
 
     private void showLibrariesList() {
@@ -149,28 +149,17 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
         choosePath.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int position) {
-                openLink(libraryLink[position]);
+                chromeCustomTab(libraryLink[position]);
+                //openLink(libraryLink[position]);
             }
         });
         choosePath.create().show();
     }
 
-    private void openLink(String url) {
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(url));
-        if (i.resolveActivity(getPackageManager()) != null) {
-            startActivity(i);
-        } else {
-            Toast.makeText(getApplicationContext(), "You don't have a browser app to visit the link", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private Dialog aboutDialog(String message) {
+    private void aboutDialog() {
         AlertDialog.Builder abt = new AlertDialog.Builder(PrefActivity.this)
-                .setMessage(message);
-        Dialog d = abt.create();
-        abt.show();
-        return d;
+                .setMessage(getResources().getString(R.string.app_name));
+        abt.create().show();
     }
 
     @Override

@@ -76,7 +76,6 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     adapterCart cartAdapter;
     private int mCursorCount = 0;
     private Unbinder mUnbinder;
-    private boolean mTheme = false;
 
     public MyCartFragment() {
 
@@ -97,11 +96,9 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String prefValue = spf.getString(getResources().getString(R.string.prefThemeKey), mNullValue);
         if (prefValue.equalsIgnoreCase("Default")) {
-            mTheme = false;
-            noItem.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.emptycrt));
+            noItem.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.emptycrt));
         } else if (prefValue.equalsIgnoreCase("Multi-Color")) {
-            mTheme = true;
-            noItem.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.emptycrtcolor));
+            noItem.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.emptycrtcolor));
         }
     }
 

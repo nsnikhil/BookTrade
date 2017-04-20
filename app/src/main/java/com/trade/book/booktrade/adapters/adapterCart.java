@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,7 +56,7 @@ public class adapterCart extends CursorAdapter {
 
     private void setColor(Context c, Palette p, MyViewHolder myViewHolder) {
         if (p != null) {
-            myViewHolder.bookTextConatiner.setBackgroundColor(p.getDarkMutedColor(c.getResources().getColor(R.color.colorPrimary)));
+            myViewHolder.bookTextConatiner.setBackgroundColor(p.getDarkMutedColor(ContextCompat.getColor(c.getApplicationContext(), R.color.colorPrimary)));
         }
     }
 

@@ -164,6 +164,7 @@ public class SearchActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(getResources().getString(R.string.intenSearchKey));
+            searchView.setTextOnly(query);
             buildRequest(query);
         }
     }

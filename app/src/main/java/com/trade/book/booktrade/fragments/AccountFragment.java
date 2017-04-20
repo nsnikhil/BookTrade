@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
-import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.trade.book.booktrade.CategoryViewActivity;
@@ -49,7 +49,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.accountPicture)
     CircularImageView profile;
     private Unbinder mUnbinder;
-    private boolean mTheme = false;
+
 
     @Nullable
     @Override
@@ -66,17 +66,15 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String prefValue = spf.getString(getResources().getString(R.string.prefThemeKey), mNullValue);
         if (prefValue.equalsIgnoreCase("Default")) {
-            mTheme = false;
-            name.setTextColor(getResources().getColor(R.color.colorAccent));
-            signOut.setBackground(getActivity().getResources().getDrawable(R.drawable.roundbutton));
-            purchase.setBackground(getActivity().getResources().getDrawable(R.drawable.roundbutton));
-            uploads.setBackground(getActivity().getResources().getDrawable(R.drawable.roundbutton));
+            name.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+            signOut.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.roundbutton));
+            purchase.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.roundbutton));
+            uploads.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.roundbutton));
         } else if (prefValue.equalsIgnoreCase("Multi-Color")) {
-            mTheme = true;
             name.setTextColor(Color.parseColor("#455A64"));
-            signOut.setBackground(getActivity().getResources().getDrawable(R.drawable.roundbuttoncolor));
-            purchase.setBackground(getActivity().getResources().getDrawable(R.drawable.roundbuttoncolor));
-            uploads.setBackground(getActivity().getResources().getDrawable(R.drawable.roundbuttoncolor));
+            signOut.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.roundbuttoncolor));
+            purchase.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.roundbuttoncolor));
+            uploads.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.roundbuttoncolor));
         }
     }
 
@@ -163,7 +161,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             public void onClick(DialogInterface dialog, int which) {
                 AccessToken accessToken = AccessToken.getCurrentAccessToken();
                 if (accessToken != null) {
-                    FacebookSdk.sdkInitialize(getActivity());
                     LoginManager.getInstance().logOut();
                 }
                 SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());

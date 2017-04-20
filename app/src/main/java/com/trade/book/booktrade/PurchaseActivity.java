@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
@@ -132,7 +131,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         setSupportActionBar(mPurchaseToolbar);
         mPurchaseToolbar.setPadding(0, 52, 0, 0);
         getSupportActionBar().setTitle("");
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.fill_transparent));
+        getSupportActionBar().setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.fill_transparent));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         imageHolder.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         addToCart.setOnClickListener(this);
@@ -150,7 +149,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         }
         cateogory.setText(getResources().getString(R.string.bookCateogory) + " : " + bookObject.getCateogory());
         condition.setText(getResources().getString(R.string.bookCondition) + " : " + bookObject.getCondition());
-        imageHolder.setBackgroundColor(getResources().getColor(R.color.cardview_shadow_start_color));
+        imageHolder.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.cardview_shadow_start_color));
         buyNow.setText(" Buy Now " + " र " + bookObject.getSellingPrice());
     }
 
@@ -357,6 +356,7 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                dw.dismiss();
                 Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
             }
         });
@@ -364,10 +364,10 @@ public class PurchaseActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void showIfAvailable(JSONArray status, Dialog d) throws JSONException {
+        d.dismiss();
         if (status.length() > 0) {
             JSONObject obj = status.getJSONObject(0);
             int statusCode = obj.getInt("status");
-            d.dismiss();
             if (statusCode == 1) {
                 Toast.makeText(getApplicationContext(), "Book sold", Toast.LENGTH_LONG).show();
             } else {

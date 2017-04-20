@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/matchParent"
     android:id="@+id/entireContainer"
-    android:background="@color/colorBackground"
     tools:context="com.trade.book.booktrade.StartActivity">
 
     <include layout="@layout/toolbar"

@@ -77,8 +77,7 @@ public class StartActivity extends AppCompatActivity {
     Toolbar mBottomToolbar;
     @BindView(R.id.bottomFabAdd)
     FloatingActionButton mFabAddBook;
-    @BindView(R.id.bottomSearchView)
-    MaterialSearchView mBottomSearchView;
+    @BindView(R.id.bottomSearchView) MaterialSearchView mBottomSearchView;
     BookPagerFragment mFragmentBookPager;
     RequestListFragment mRequestListFragment;
     AccountFragment mAccountFragment;
@@ -168,7 +167,7 @@ public class StartActivity extends AppCompatActivity {
      */
     private void buildTapTarget() {
         TapTargetView.showFor(this, TapTarget.forView(findViewById(R.id.bottomFabAdd), "Click + to upload a book", "")
-                        .icon(getResources().getDrawable(R.drawable.ic_add_white_48dp))
+                        .icon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_add_white_48dp))
                         .targetCircleColor(R.color.colorAccent),
                 new TapTargetView.Listener() {
                     SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -208,7 +207,6 @@ public class StartActivity extends AppCompatActivity {
         mBottomSearchView.setMenuItem(item);
         return true;
     }
-
 
     /*
    initialize function
@@ -402,7 +400,7 @@ public class StartActivity extends AppCompatActivity {
         mBottomNaviagtionView.setVisibility(View.GONE);
         mFabAddBook.setVisibility(View.GONE);
         Snackbar.make(mBottomConatainer, "No Internet", BaseTransientBottomBar.LENGTH_INDEFINITE)
-                .setActionTextColor(getResources().getColor(R.color.white))
+                .setActionTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white))
                 .setAction("Retry", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -668,9 +666,9 @@ public class StartActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (mTheme) {
-                        getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimaryDark));
-                        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-                        mBottomToolbar.setBackground(getResources().getDrawable(R.drawable.toolbargradeint));
+                        getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                        getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                        mBottomToolbar.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.toolbargradeint));
                         mBottomNaviagtionView.setItemBackgroundResource(R.drawable.booknav);
                     }
                     getSupportActionBar().setElevation(0);

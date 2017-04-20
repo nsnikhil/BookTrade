@@ -1,11 +1,9 @@
 <resources>
     <string name="app_name">ShelfBee</string>
-    <string name="foldername">booktrade</string>
     <string name="placeHolderName">Place Holder</string>
-    <string name="drawerOpen">Open</string>
-    <string name="drawerClose">Close</string>
     <string name="detailsBuy">BUY</string>
     <string name="setting">Settings</string>
+    <string name="search">Search</string>
     <string name="searchHint">Search books by Name</string>
     <string name="facebook_app_id">1653383558302081</string>
     <string name="speech_prompt">Say the book name</string>
@@ -119,9 +117,9 @@
     <!-- -->
 
     <!-- AdMob ad unit IDs -->
-    <string name="banner_home_footer">ca-app-pub-5579030690922565/1038904732</string>
     <string name="interstitial_full_screen">ca-app-pub-5579030690922565~8562171532</string>
     <string name="banner_ad_unit_id">ca-app-pub-5579030690922565/1038904732</string>
+    <!-- -->
 
 
     <!-- addBookFields-->
@@ -133,6 +131,7 @@
     <string name="bookDescription">Comment or Notes(if any)</string>
     <string name="bookCondition">Condition</string>
     <string name="bookCateogory">Category</string>
+    <!-- -->
 
     <!-- PurchaseText-->
     <string name="purchaseBuyNow">Buy Now</string>
@@ -223,5 +222,6 @@
     <string name="velloreLongititude">79.160383</string>
     <string name="locationServiceEligible">Hurrah!!! You are eligible to use all our services</string>
     <string name="locationServiceIllEligible">We are sorry your region dose not fall into our coverage zone, we are continuously working hard to expand our coverage zone</string>
+    <string name="locationErrorMessage">If your having trouble finding location open your maps app locate yourself and then restart the app again</string>
     <!-- -->
 </resources>

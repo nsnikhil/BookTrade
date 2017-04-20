@@ -42,7 +42,8 @@ public class CategoryFragment extends Fragment {
     ListView catList;
     @BindView(R.id.cateogoryGridList)
     GridView catGridList;
-    @BindView(R.id.categoryProgress) ProgressBar mProgressBar;
+    @BindView(R.id.categoryProgress)
+    ProgressBar mProgressBar;
     private Unbinder mUnbinder;
     private ArrayList<String> mCategoryList;
 

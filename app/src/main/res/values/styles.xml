@@ -4,10 +4,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="colorControlNormal">@color/colorAccent</item>
-        <item name="windowActionBarOverlay">false</item>
     </style>
 
     <style name="AddBookTheme" parent="Theme.AppCompat.NoActionBar">
@@ -141,21 +141,6 @@
         <item name="android:layout_centerInParent">true</item>
     </style>
 
-    <style name="detailsText">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:padding">@dimen/eight</item>
-        <item name="android:text">@string/placeHolderName</item>
-    </style>
-
-    <style name="headerImage">
-        <item name="android:layout_width">@dimen/headerCircleImage</item>
-        <item name="android:layout_height">@dimen/headerCircleImage</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:src">@drawable/profile</item>
-    </style>
-
     <style name="accountButtons">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
@@ -167,15 +152,6 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="headerText">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">@dimen/sixteen</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:textSize">24sp</item>
-        <item name="android:fontFamily">sans-serif-light</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
 
     <style name="AppToolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColorPrimary">@android:color/white</item>
@@ -184,9 +160,6 @@
         <item name="actionMenuTextColor">@color/white</item>
     </style>
 
-    <style name="naviagtionDivider">
-        <item name="android:listDivider">@color/white</item>
-    </style>
 
     <style name="aboutButtons" parent="Base.Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">match_parent</item>

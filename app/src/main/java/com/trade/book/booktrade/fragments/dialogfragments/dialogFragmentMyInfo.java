@@ -5,8 +5,10 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,6 +91,9 @@ public class dialogFragmentMyInfo extends DialogFragment {
         mSubmit.setVisibility(View.GONE);
         mPasswordText.setVisibility(View.GONE);
         getValues();
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            mSubmit.setTextColor(ContextCompat.getColor(getActivity(), R.color.cardview_dark_background));
+        }
         return v;
     }
 
@@ -185,8 +190,8 @@ public class dialogFragmentMyInfo extends DialogFragment {
     }
 
     private void setImages() {
-        mNrsImageProgress.getIndeterminateDrawable().setColorFilter(getActivity().getResources().getColor(R.color.white), PorterDuff.Mode.MULTIPLY);
-        mMyImageProgress.getIndeterminateDrawable().setColorFilter(getActivity().getResources().getColor(R.color.white), PorterDuff.Mode.MULTIPLY);
+        mNrsImageProgress.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.white), PorterDuff.Mode.MULTIPLY);
+        mMyImageProgress.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.white), PorterDuff.Mode.MULTIPLY);
         mNrsImage.setBackgroundColor(Color.parseColor("#000000"));
         mMyImage.setBackgroundColor(Color.parseColor("#000000"));
         Glide.with(getActivity())
@@ -275,7 +280,7 @@ public class dialogFragmentMyInfo extends DialogFragment {
 
     private void setColor(Palette p, TextView textView) {
         if (p != null) {
-            textView.setBackgroundColor(p.getDarkMutedColor(getActivity().getResources().getColor(R.color.colorPrimary)));
+            textView.setBackgroundColor(p.getDarkMutedColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary)));
         }
     }
 

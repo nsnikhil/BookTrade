@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,13 +107,13 @@ public class adapterPurchaseImage extends RecyclerView.Adapter<adapterPurchaseIm
         public MyViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            progress.getIndeterminateDrawable().setColorFilter(mContext.getResources().getColor(R.color.white), PorterDuff.Mode.MULTIPLY);
+            progress.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(mContext.getApplicationContext(), R.color.white), PorterDuff.Mode.MULTIPLY);
             if (key == 0) {
                 img.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 remove.setVisibility(View.GONE);
             } else if (key == 2) {
                 remove.setVisibility(View.GONE);
-                img.setBackgroundColor(mContext.getResources().getColor(R.color.black));
+                img.setBackgroundColor(ContextCompat.getColor(mContext.getApplicationContext(), R.color.black));
             } else {
                 img.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 remove.setVisibility(View.VISIBLE);
@@ -120,8 +121,8 @@ public class adapterPurchaseImage extends RecyclerView.Adapter<adapterPurchaseIm
             remove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    url.remove(getPosition());
-                    notifyItemRemoved(getPosition());
+                    url.remove(getAdapterPosition());
+                    notifyItemRemoved(getAdapterPosition());
                 }
             });
             if (key != 2) {
@@ -130,7 +131,7 @@ public class adapterPurchaseImage extends RecyclerView.Adapter<adapterPurchaseIm
                     public void onClick(View v) {
                         Intent fullScreen = new Intent(mContext, ImageActivity.class);
                         fullScreen.putStringArrayListExtra(mContext.getResources().getString(R.string.intentArrayListUrl), url);
-                        fullScreen.putExtra(mContext.getResources().getString(R.string.intentArrayListPosition), getPosition());
+                        fullScreen.putExtra(mContext.getResources().getString(R.string.intentArrayListPosition), getAdapterPosition());
                         fullScreen.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, img, "transitionBookImage");

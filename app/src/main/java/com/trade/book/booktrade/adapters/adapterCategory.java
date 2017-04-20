@@ -2,6 +2,7 @@ package com.trade.book.booktrade.adapters;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +61,7 @@ public class adapterCategory extends BaseAdapter {
         }
         CategoryObject object = mList.get(position);
         myViewHolder.name.setText(object.getmName());
-        myViewHolder.catProgress.getIndeterminateDrawable().setColorFilter(mContext.getResources().getColor(R.color.white), PorterDuff.Mode.MULTIPLY);
+        myViewHolder.catProgress.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(mContext.getApplicationContext(), R.color.white), PorterDuff.Mode.MULTIPLY);
         Glide.with(mContext)
                 .load(object.getmImageUrl())
                 .listener(new RequestListener<String, GlideDrawable>() {

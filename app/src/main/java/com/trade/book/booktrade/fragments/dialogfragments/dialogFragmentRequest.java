@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +65,7 @@ public class dialogFragmentRequest extends DialogFragment {
             }
         });
         if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            save.setTextColor(getResources().getColor(R.color.cardview_dark_background));
+            save.setTextColor(ContextCompat.getColor(getActivity(), R.color.cardview_dark_background));
         }
     }
 

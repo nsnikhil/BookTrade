@@ -17,6 +17,7 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -61,6 +62,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -162,7 +164,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
 
     private void buildTapTarget() {
         TapTargetView.showFor(this, TapTarget.forView(findViewById(R.id.addBookNewImage), "Click here to add images", "")
-                        .icon(getResources().getDrawable(R.drawable.camera))
+                        .icon(ContextCompat.getDrawable(getApplicationContext(), R.drawable.camera))
                         .targetCircleColor(R.color.colorAccent),
                 new TapTargetView.Listener() {
                     SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -702,7 +704,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     }
 
     private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
@@ -780,7 +782,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                 int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
                 bmOptions.inJustDecodeBounds = false;
                 bmOptions.inSampleSize = scaleFactor;
-                bmOptions.inPurgeable = true;
+                //bmOptions.inPurgeable = true;
                 Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
                 imageList.add(getResizedBitmap(bitmap, 700));
                 imageContainer.swapAdapter(imageAdapter, true);

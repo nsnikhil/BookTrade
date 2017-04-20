@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/matchParent"
-    android:background="@color/colorBackground"
     android:fitsSystemWindows="true">
 
     <include layout="@layout/toolbar"
@@ -66,7 +65,7 @@
                             android:id="@+id/addBookName"
                             style="@style/addBookText"
                             android:hint="@string/bookName"
-                            android:singleLine="true"
+                            android:inputType="text"
                             android:maxLines="1" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -93,7 +92,7 @@
                             android:id="@+id/addBookPublisher"
                             style="@style/addBookText"
                             android:hint="@string/bookPublisher"
-                            android:singleLine="true"
+                            android:inputType="text"
                             android:maxLines="1" />
 
                     </android.support.design.widget.TextInputLayout>

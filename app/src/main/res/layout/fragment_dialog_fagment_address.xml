@@ -18,23 +18,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
         <android.support.design.widget.TextInputEditText
             android:id="@+id/dialogPhone"
             style="@style/addBookText"
             android:layout_width="250dp"
             android:padding="@dimen/eight"
-            android:singleLine="true"
             android:hint="@string/dialogPhone"
             android:inputType="phone" />
 
     </android.support.design.widget.TextInputLayout>
 
-
     <android.support.design.widget.TextInputLayout
         android:layout_width="250dp"
         android:layout_height="wrap_content">
-
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/dialogAddress"
@@ -55,6 +51,5 @@
         android:text="@string/dialogSave"
         android:textColor="@color/white"
         android:theme="@style/buttonClr" />
-
 
 </LinearLayout>

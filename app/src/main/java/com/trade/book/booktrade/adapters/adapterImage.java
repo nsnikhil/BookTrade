@@ -64,8 +64,8 @@ public class adapterImage extends RecyclerView.Adapter<adapterImage.MyViewHolder
             remove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    bmp.remove(getPosition());
-                    notifyItemRemoved(getPosition());
+                    bmp.remove(getAdapterPosition());
+                    notifyItemRemoved(getAdapterPosition());
                 }
             });
             if (k == 1) {

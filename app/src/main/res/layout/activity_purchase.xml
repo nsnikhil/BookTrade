@@ -3,7 +3,6 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/wrapContent"
-    android:background="@color/colorBackground"
     tools:context="com.trade.book.booktrade.PurchaseActivity">
 
     <RelativeLayout
@@ -87,6 +86,7 @@
                         android:layout_margin="@dimen/eight"
                         android:fontFamily="sans-serif-light"
                         android:paddingStart="@dimen/eight"
+                        android:paddingEnd="@dimen/eight"
                         android:text="@string/bookName"
                         android:textAllCaps="true"
                         android:textSize="28sp"
@@ -100,6 +100,7 @@
                         android:layout_margin="@dimen/eight"
                         android:fontFamily="sans-serif-light"
                         android:paddingStart="@dimen/eight"
+                        android:paddingEnd="@dimen/eight"
                         android:text="@string/bookPublisher"
                         android:textSize="20sp"
                         android:textStyle="bold"

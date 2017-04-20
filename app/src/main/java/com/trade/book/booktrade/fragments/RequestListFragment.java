@@ -67,7 +67,6 @@ public class RequestListFragment extends Fragment implements interfaceAddRequest
     adapterRequest adapter;
     Fragment f;
     private Unbinder mUnbinder;
-    private boolean mTheme = false;
 
     @Nullable
     @Override
@@ -86,11 +85,9 @@ public class RequestListFragment extends Fragment implements interfaceAddRequest
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String prefValue = spf.getString(getResources().getString(R.string.prefThemeKey), mNullValue);
         if (prefValue.equalsIgnoreCase("Default")) {
-            mTheme = false;
-            noRequest.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.norequest));
+            noRequest.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.norequest));
         } else if (prefValue.equalsIgnoreCase("Multi-Color")) {
-            mTheme = true;
-            noRequest.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.norequestcolor));
+            noRequest.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.norequestcolor));
         }
     }
 

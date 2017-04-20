@@ -1,10 +1,13 @@
 package com.trade.book.booktrade.fragments.dialogfragments;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +27,7 @@ import butterknife.Unbinder;
 
 public class dialogFragmentGetLocation extends DialogFragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
+    private static final int mLocationPermissionCode = 56;
     @BindView(R.id.locationLatitude)
     TextView mLatitude;
     @BindView(R.id.locationLongitude)
@@ -33,10 +37,6 @@ public class dialogFragmentGetLocation extends DialogFragment implements GoogleA
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     private Unbinder mUnbinder;
-    private LocationRequest mLocationRequest;
-    private long UPDATE_INTERVAL = 10 * 1000;
-    private long FASTEST_INTERVAL = 2000;
-
 
     @Nullable
     @Override
@@ -121,13 +121,17 @@ public class dialogFragmentGetLocation extends DialogFragment implements GoogleA
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, mLocationPermissionCode);
+            return;
+        }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
             mStatus.setVisibility(View.GONE);
             setLocationValue(mLastLocation);
         } else {
             mStatus.setVisibility(View.VISIBLE);
-            mStatus.setText("If your having trouble finding location open your maps app locate yourself and then restart the app again");
+            mStatus.setText(getActivity().getResources().getString(R.string.locationErrorMessage));
         }
         startLocationUpdates();
     }
@@ -143,11 +147,17 @@ public class dialogFragmentGetLocation extends DialogFragment implements GoogleA
     }
 
     protected void startLocationUpdates() {
-        mLocationRequest = LocationRequest.create()
+        long UPDATE_INTERVAL = 10 * 1000;
+        long FASTEST_INTERVAL = 2000;
+        LocationRequest locationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(UPDATE_INTERVAL)
                 .setFastestInterval(FASTEST_INTERVAL);
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, mLocationPermissionCode);
+            return;
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
     }
 
     @Override

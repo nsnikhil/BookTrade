@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -73,7 +74,7 @@ public class adapterBookList extends BaseAdapter {
         myViewHolder.bookName.setAllCaps(true);
         setSellingPrice(myViewHolder, bookObject);
         myViewHolder.bookPublisher.setText(bookObject.getPublisher());
-        myViewHolder.bookProgress.getIndeterminateDrawable().setColorFilter(mContext.getResources().getColor(R.color.white), PorterDuff.Mode.MULTIPLY);
+        myViewHolder.bookProgress.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(mContext.getApplicationContext(), R.color.white), PorterDuff.Mode.MULTIPLY);
         String url = mContext.getResources().getString(R.string.urlBucetHost) + mContext.getResources().getString(R.string.urlBucketName) + "/" + bookObject.getPhoto0();
         Log.d("", url);
         Glide.with(mContext)
@@ -125,7 +126,7 @@ public class adapterBookList extends BaseAdapter {
 
     private void setColor(Palette p, MyViewHolder myViewHolder) {
         if (p != null) {
-            myViewHolder.bookTextConatiner.setBackgroundColor(p.getDarkMutedColor(mContext.getResources().getColor(R.color.colorPrimary)));
+            myViewHolder.bookTextConatiner.setBackgroundColor(p.getDarkMutedColor(ContextCompat.getColor(mContext.getApplicationContext(), R.color.colorPrimary)));
         }
     }
 
