@@ -19,7 +19,7 @@
 
         <ListView
             android:id="@+id/requestList"
-            style="@style/matchParent"
+            style="@style/listStyle"
             android:divider="@null" />
 
     </android.support.v4.widget.SwipeRefreshLayout>

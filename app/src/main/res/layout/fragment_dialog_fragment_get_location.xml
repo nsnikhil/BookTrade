@@ -4,35 +4,24 @@
     style="@style/verticalLinearLayout"
     tools:context="com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentGetLocation">
 
+    <ImageView
+        android:contentDescription="@string/ImageDescriptionBackground"
+        style="@style/wrapContent"
+        android:visibility="gone"
+        android:id="@+id/locationStatusImage"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/happy"/>
+
+
     <TextView
         style="@style/wrapContent"
         android:textStyle="bold"
         android:textSize="16sp"
         android:id="@+id/locationStatus"
         android:layout_margin="@dimen/sixteen"
-        android:textColor="@color/black"
+        android:textColor="@color/colorAccent"
         android:layout_gravity="center_horizontal"
         android:visibility="gone"
         android:text="@string/dialogLocationStatus"/>
-
-    <TextView
-        style="@style/wrapContent"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:id="@+id/locationLatitude"
-        android:layout_margin="@dimen/sixteen"
-        android:textColor="@color/black"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/dialogLocationLatitude"/>
-
-    <TextView
-        style="@style/wrapContent"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:id="@+id/locationLongitude"
-        android:textColor="@color/black"
-        android:layout_margin="@dimen/sixteen"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/dialogLocationLongitude"/>
 
 </LinearLayout>

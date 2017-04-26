@@ -4,7 +4,6 @@
     android:background="@color/colorBackground"
     style="@style/matchParent">
 
-
     <android.support.v7.widget.CardView
         style="@style/matchParent"
         android:layout_height="wrap_content"
@@ -24,6 +23,5 @@
             android:id="@+id/catName"/>
 
     </android.support.v7.widget.CardView>
-
 
 </RelativeLayout>

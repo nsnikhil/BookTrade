@@ -8,7 +8,7 @@
 
     <GridView
         android:id="@+id/cartList"
-        style="@style/matchParent"
+        style="@style/listStyle"
         android:numColumns="2"/>
 
     <ImageView

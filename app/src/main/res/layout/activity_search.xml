@@ -14,7 +14,7 @@
         android:layout_height="wrap_content" />
 
     <GridView
-        style="@style/matchParent"
+        style="@style/listStyle"
         android:padding="@dimen/eight"
         android:layout_below="@id/sSearchView"
         android:numColumns="2"

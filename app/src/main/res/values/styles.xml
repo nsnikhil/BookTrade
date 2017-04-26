@@ -170,4 +170,9 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="listStyle" parent="matchParent">
+        <item name="android:paddingBottom">72dp</item>
+        <item name="android:clipToPadding">false</item>
+    </style>
+
 </resources>

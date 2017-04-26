@@ -96,9 +96,22 @@ public class RequestListFragment extends Fragment implements interfaceAddRequest
         requestAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialogFragmentRequest dialogFragmentRequest = new dialogFragmentRequest();
-                dialogFragmentRequest.setTargetFragment(f, 0);
-                dialogFragmentRequest.show(getActivity().getSupportFragmentManager(), "request");
+                SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                if (spf.getString(getResources().getString(R.string.prefLatitude), mNullValue).equalsIgnoreCase(mNullValue) ||
+                        spf.getString(getResources().getString(R.string.prefLongitude), mNullValue).equalsIgnoreCase(mNullValue)) {
+                    checkLocation();
+                } else {
+                    if (checkStatus() || checkVelloreStatus()) {
+                        dialogFragmentRequest dialogFragmentRequest = new dialogFragmentRequest();
+                        dialogFragmentRequest.setTargetFragment(f, 0);
+                        dialogFragmentRequest.show(getActivity().getSupportFragmentManager(), "request");
+                    } else {
+                        Toast.makeText(getActivity(), "We are sorry your region doesn't fall into " +
+                                "our coverage zone, we are continuously working hard to expand our coverage zone", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "If you think its a mistake try recalibrating location from more ", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
             }
         });
         requestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

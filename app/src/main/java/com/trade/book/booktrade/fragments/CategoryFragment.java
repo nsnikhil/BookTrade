@@ -11,6 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -44,6 +45,8 @@ public class CategoryFragment extends Fragment {
     GridView catGridList;
     @BindView(R.id.categoryProgress)
     ProgressBar mProgressBar;
+    @BindView(R.id.categoryBackground)
+    ImageView mBackGround;
     private Unbinder mUnbinder;
     private ArrayList<String> mCategoryList;
 
@@ -61,6 +64,7 @@ public class CategoryFragment extends Fragment {
     }
 
     private void initilize() {
+        mBackGround.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.VISIBLE);
         catList.setVisibility(View.GONE);
         catGridList.setVisibility(View.VISIBLE);

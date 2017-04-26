@@ -44,6 +44,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.trade.book.booktrade.adapters.adapterImage;
+import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentLoading;
 import com.trade.book.booktrade.network.VolleySingleton;
 import com.trade.book.booktrade.objects.BookObject;
 
@@ -92,6 +93,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     @BindView(R.id.addBookComments)
     TextInputEditText comment;
 
+
     @BindView(R.id.addBookCondition)
     Spinner condition;
     @BindView(R.id.addBookCateogory)
@@ -120,6 +122,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     private int mRequestCode = 2147483646;
     private int mCountIfDone = 0;
     private int mFakeVariable = 0;
+    private dialogFragmentLoading mDialogLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,12 +205,6 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-    }
-
-    private Dialog uploadigDialog() {
-        AlertDialog.Builder uploading = new AlertDialog.Builder(AddBook.this);
-        uploading.setMessage("Processing...").setCancelable(false);
-        return uploading.create();
     }
 
     private void setTwoVal() {
@@ -567,28 +564,34 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     private boolean verifyFields() {
         SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if (name.getText().toString().isEmpty() || name.getText().toString().equalsIgnoreCase("")) {
-            Toast.makeText(this, "Please enter the name of the book", Toast.LENGTH_SHORT).show();
+            name.requestFocus();
+            name.setError("Please enter the name of the book");
             return false;
         } else if (publisher.getText().toString().isEmpty() || publisher.getText().toString().equalsIgnoreCase("")) {
-            Toast.makeText(this, "Please enter the name of publisher", Toast.LENGTH_SHORT).show();
+            publisher.requestFocus();
+            publisher.setError("Please enter the name of publisher");
             return false;
         } else if (costPrice.getText().toString().isEmpty() || costPrice.getText().toString().equalsIgnoreCase("")) {
-            Toast.makeText(this, "Please enter the original cost price", Toast.LENGTH_SHORT).show();
+            costPrice.requestFocus();
+            costPrice.setError("Please enter the original cost price");
             return false;
         } else if (sellingPrice.getText().toString().isEmpty() || sellingPrice.getText().toString().equalsIgnoreCase("")) {
-            Toast.makeText(this, "Please enter the selling price", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (edition.getText().toString().isEmpty() || edition.getText().toString().equalsIgnoreCase("")) {
-            Toast.makeText(this, "Please enter the edition", Toast.LENGTH_SHORT).show();
+            sellingPrice.requestFocus();
+            sellingPrice.setError("Please enter the selling price");
             return false;
         } else if (Integer.parseInt(costPrice.getText().toString()) < Integer.parseInt(sellingPrice.getText().toString())) {
-            Toast.makeText(this, "Selling Price cannot be greater than cost price", Toast.LENGTH_SHORT).show();
+            sellingPrice.requestFocus();
+            sellingPrice.setError("Selling Price cannot be greater than cost price");
+            return false;
+        } else if (edition.getText().toString().isEmpty() || edition.getText().toString().equalsIgnoreCase("")) {
+            edition.requestFocus();
+            edition.setError("Please enter the edition");
             return false;
         } else if (spf.getString(getResources().getString(R.string.prefAccountId), mNullValue).equalsIgnoreCase(mNullValue)) {
-            Toast.makeText(this, "Invalid User Id", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Invalid User Id", Toast.LENGTH_LONG).show();
             return false;
         } else if (imageList.size() < 1) {
-            Toast.makeText(this, "You need to upload at-least one image", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You need to upload at-least one image", Toast.LENGTH_LONG).show();
             return false;
         }
         return true;
@@ -606,6 +609,8 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addBookDone:
+                mDialogLoading = new dialogFragmentLoading();
+                mDialogLoading.setCancelable(false);
                 if (getIntent().getExtras() != null) {
                     if (mRequestCode == 2147483646) {
                         editBookExtra();
@@ -626,9 +631,10 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
+
     private void editBookExtra() {
         if (verifyFields()) {
-            uploadigDialog().show();
+            mDialogLoading.show(getSupportFragmentManager(), "wait");
             makeNames();
             for (int i = 0; i < imageList.size(); i++) {
                 makeFile(fileArrayNames[i], i);
@@ -638,7 +644,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                 public void onResponse(String response) {
                     Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
                     setResult(RESULT_OK, null);
-                    uploadigDialog().dismiss();
+                    mDialogLoading.dismiss();
                     finish();
                     startActivity(new Intent(AddBook.this, StartActivity.class));
                 }
@@ -654,7 +660,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
 
     private void addBookNoExtra() {
         if (verifyFields()) {
-            uploadigDialog().show();
+            mDialogLoading.show(getSupportFragmentManager(), "wait");
             makeNames();
             for (int i = 0; i < imageList.size(); i++) {
                 makeFile(fileArrayNames[i], i);
@@ -666,7 +672,7 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                         removeRequest();
                     }
                     setResult(RESULT_OK, null);
-                    uploadigDialog().dismiss();
+                    mDialogLoading.dismiss();
                     finish();
                     startActivity(new Intent(AddBook.this, StartActivity.class));
                 }
@@ -782,7 +788,6 @@ public class AddBook extends AppCompatActivity implements View.OnClickListener {
                 int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
                 bmOptions.inJustDecodeBounds = false;
                 bmOptions.inSampleSize = scaleFactor;
-                //bmOptions.inPurgeable = true;
                 Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
                 imageList.add(getResizedBitmap(bitmap, 700));
                 imageContainer.swapAdapter(imageAdapter, true);

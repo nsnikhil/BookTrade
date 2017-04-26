@@ -4,8 +4,9 @@
     style="@style/matchParent"
     android:fitsSystemWindows="true">
 
-    <include layout="@layout/toolbar"
-        android:id="@+id/toolbarAddBook"/>
+    <include
+        android:id="@+id/toolbarAddBook"
+        layout="@layout/toolbar" />
 
     <ScrollView
         android:id="@+id/addBookScrollView"
@@ -20,9 +21,9 @@
                 android:layout_height="300dp">
 
                 <ImageView
-                    android:contentDescription="@string/ImageDescriptionBackground"
                     android:id="@+id/addBookImageEmptyState"
                     style="@style/matchParent"
+                    android:contentDescription="@string/ImageDescriptionBackground"
                     android:scaleType="centerInside"
                     android:src="@drawable/addimage" />
 
@@ -31,11 +32,11 @@
                     style="@style/matchParent" />
 
                 <ImageView
-                    android:contentDescription="@string/ImageDescriptionBackground"
                     android:id="@+id/addBookNewImage"
                     style="@style/wrapContent"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
+                    android:contentDescription="@string/ImageDescriptionBackground"
                     android:padding="@dimen/sixteen"
                     android:src="@drawable/camera" />
 
@@ -52,8 +53,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:contentDescription="@string/ImageDescriptionBackground"
                         style="@style/addBookIcon"
+                        android:contentDescription="@string/ImageDescriptionBackground"
                         android:src="@drawable/ic_book_black_48dp"
                         android:tint="@color/colorAccent" />
 
@@ -73,14 +74,14 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:contentDescription="@string/ImageDescriptionBackground"
                     style="@style/wrapContent"
                     android:layout_width="match_parent"
+                    android:contentDescription="@string/ImageDescriptionBackground"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:contentDescription="@string/ImageDescriptionBackground"
                         style="@style/addBookIcon"
+                        android:contentDescription="@string/ImageDescriptionBackground"
                         android:src="@drawable/ic_profile_banner_black_48d"
                         android:tint="@color/colorAccent" />
 
@@ -105,8 +106,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:contentDescription="@string/ImageDescriptionBackground"
                         style="@style/addBookIcon"
+                        android:contentDescription="@string/ImageDescriptionBackground"
                         android:src="@drawable/indianrupee_48"
                         android:tint="@color/colorAccent" />
 
@@ -131,8 +132,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:contentDescription="@string/ImageDescriptionBackground"
                         style="@style/addBookIcon"
+                        android:contentDescription="@string/ImageDescriptionBackground"
                         android:src="@drawable/indianrupee_48"
                         android:tint="@color/colorAccent" />
 
@@ -157,8 +158,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:contentDescription="@string/ImageDescriptionBackground"
                         style="@style/addBookIcon"
+                        android:contentDescription="@string/ImageDescriptionBackground"
                         android:src="@drawable/ic_date_range_black_48dp"
                         android:tint="@color/colorAccent" />
 
@@ -183,8 +184,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:contentDescription="@string/ImageDescriptionBackground"
                         style="@style/addBookIcon"
+                        android:contentDescription="@string/ImageDescriptionBackground"
                         android:src="@drawable/ic_comment_black_48dp"
                         android:tint="@color/colorAccent" />
 

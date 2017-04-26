@@ -9,9 +9,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -28,12 +30,10 @@ import butterknife.Unbinder;
 public class dialogFragmentGetLocation extends DialogFragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
     private static final int mLocationPermissionCode = 56;
-    @BindView(R.id.locationLatitude)
-    TextView mLatitude;
-    @BindView(R.id.locationLongitude)
-    TextView mLongitude;
     @BindView(R.id.locationStatus)
     TextView mStatus;
+    @BindView(R.id.locationStatusImage)
+    ImageView mStatusImage;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     private Unbinder mUnbinder;
@@ -61,17 +61,18 @@ public class dialogFragmentGetLocation extends DialogFragment implements GoogleA
     private void setLocationValue(Location location) {
         double lat = location.getLatitude();
         double lng = location.getLongitude();
-        mLatitude.setText(String.valueOf(lat));
-        mLongitude.setText(String.valueOf(lng));
         PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
                 .putString(getResources().getString(R.string.prefLatitude), String.valueOf(lat)).apply();
         PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
                 .putString(getResources().getString(R.string.prefLongitude), String.valueOf(lng)).apply();
         if (checkStatus(lat, lng) || checkVelloreStatus(lat, lng)) {
+            mStatusImage.setVisibility(View.VISIBLE);
             mStatus.setVisibility(View.VISIBLE);
             mStatus.setText(getActivity().getResources().getString(R.string.locationServiceEligible));
         } else {
+            mStatusImage.setVisibility(View.VISIBLE);
             mStatus.setVisibility(View.VISIBLE);
+            mStatusImage.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.sad));
             mStatus.setText(getActivity().getResources().getString(R.string.locationServiceIllEligible));
         }
     }

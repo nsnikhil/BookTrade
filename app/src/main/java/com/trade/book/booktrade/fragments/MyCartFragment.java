@@ -45,6 +45,7 @@ import com.trade.book.booktrade.adapters.adapterCart;
 import com.trade.book.booktrade.cartData.CartTables;
 import com.trade.book.booktrade.cartData.CartTables.tablecart;
 import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentGetLocation;
+import com.trade.book.booktrade.fragments.dialogfragments.dialogFragmentLoading;
 import com.trade.book.booktrade.network.VolleySingleton;
 import com.trade.book.booktrade.objects.BookObject;
 
@@ -76,6 +77,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
     adapterCart cartAdapter;
     private int mCursorCount = 0;
     private Unbinder mUnbinder;
+    private dialogFragmentLoading mDialogFragmentLoading;
 
     public MyCartFragment() {
 
@@ -324,18 +326,14 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                uploadigDialog().show();
+                mDialogFragmentLoading = new dialogFragmentLoading();
+                mDialogFragmentLoading.setCancelable(false);
+                mDialogFragmentLoading.show(getFragmentManager(), "wait");
                 checkOutFromCart();
             }
         });
         dialog = abd.create();
         dialog.show();
-    }
-
-    private Dialog uploadigDialog() {
-        AlertDialog.Builder uploading = new AlertDialog.Builder(getActivity());
-        uploading.setMessage("Processing...").setCancelable(false).create().show();
-        return uploading.create();
     }
 
     private void checkOutFromCart() {
@@ -348,7 +346,7 @@ public class MyCartFragment extends Fragment implements View.OnClickListener, an
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                uploadigDialog().dismiss();
+                mDialogFragmentLoading.dismiss();
                 getActivity().getContentResolver().delete(CartTables.mCartContentUri, null, null);
                 sendNotification();
                 getActivity().finish();
