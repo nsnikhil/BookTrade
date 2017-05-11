@@ -45,6 +45,8 @@ import com.claudiodegio.msv.MaterialSearchView;
 import com.claudiodegio.msv.OnSearchViewListener;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.trade.book.booktrade.cartData.CartTables;
 import com.trade.book.booktrade.fragments.AccountFragment;
@@ -92,23 +94,8 @@ public class StartActivity extends AppCompatActivity {
     int mAddBookRequestCode = 1080;
     @BindView(R.id.bottomErrorImage)
     ImageView errorImage;
+    @BindView(R.id.bottomAdView) AdView mBottomAdView;
     private boolean mTheme = false;
-
-    public static void disableShiftMode(BottomNavigationView view) {
-        BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
-        try {
-            Field shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
-            shiftingMode.setAccessible(true);
-            shiftingMode.setBoolean(menuView, false);
-            shiftingMode.setAccessible(false);
-            for (int i = 0; i < menuView.getChildCount(); i++) {
-                BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
-                item.setShiftingMode(false);
-                item.setChecked(item.getItemData().isChecked());
-            }
-        } catch (NoSuchFieldException | IllegalAccessException ignored) {
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,6 +195,22 @@ public class StartActivity extends AppCompatActivity {
         return true;
     }
 
+    public static void disableShiftMode(BottomNavigationView view) {
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
+        try {
+            Field shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
+            shiftingMode.setAccessible(true);
+            shiftingMode.setBoolean(menuView, false);
+            shiftingMode.setAccessible(false);
+            for (int i = 0; i < menuView.getChildCount(); i++) {
+                BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
+                item.setShiftingMode(false);
+                item.setChecked(item.getItemData().isChecked());
+            }
+        } catch (NoSuchFieldException | IllegalAccessException ignored) {
+        }
+    }
+
     /*
    initialize function
      */
@@ -265,6 +268,11 @@ public class StartActivity extends AppCompatActivity {
                     preFetchValues(spf.getString(getResources().getString(R.string.prefAccountId), mNullValue));
                 }
             }
+            mBottomAdView = (AdView) findViewById(R.id.bottomAdView);
+            AdRequest adRequest = new AdRequest.Builder()
+                    //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    .build();
+            mBottomAdView.loadAd(adRequest);
         } else {
             removeOffConnection(savedInstanceState);
         }
@@ -567,6 +575,9 @@ public class StartActivity extends AppCompatActivity {
                                 ft.hide(mMoreFragment);
                                 ft.hide(myCartFragment);
                                 bottomSelection(0);
+                                if(mBottomAdView.getVisibility()==View.GONE){
+                                    mBottomAdView.setVisibility(View.VISIBLE);
+                                }
                             }
                         }
                         break;
@@ -579,6 +590,7 @@ public class StartActivity extends AppCompatActivity {
                                 ft.hide(mAccountFragment);
                                 ft.hide(mMoreFragment);
                                 ft.show(myCartFragment);
+                                mBottomAdView.setVisibility(View.GONE);
                                 bottomSelection(2);
                             }
                         }
@@ -592,6 +604,7 @@ public class StartActivity extends AppCompatActivity {
                                 ft.hide(mAccountFragment);
                                 ft.hide(mMoreFragment);
                                 ft.hide(myCartFragment);
+                                mBottomAdView.setVisibility(View.GONE);
                                 bottomSelection(1);
                             }
                         }
@@ -605,6 +618,7 @@ public class StartActivity extends AppCompatActivity {
                                 ft.show(mAccountFragment);
                                 ft.hide(mMoreFragment);
                                 ft.hide(myCartFragment);
+                                mBottomAdView.setVisibility(View.GONE);
                                 bottomSelection(3);
                             }
                         }
@@ -618,6 +632,7 @@ public class StartActivity extends AppCompatActivity {
                                 ft.hide(mAccountFragment);
                                 ft.show(mMoreFragment);
                                 ft.hide(myCartFragment);
+                                mBottomAdView.setVisibility(View.GONE);
                                 bottomSelection(4);
                             }
                         }
@@ -736,6 +751,32 @@ public class StartActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle(getResources().getString(R.string.navMore));
                 break;
         }
+    }
+
+    @Override
+    public void onPause() {
+        if (mBottomAdView != null) {
+            mBottomAdView.pause();
+        }
+        super.onPause();
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mBottomAdView != null) {
+            mBottomAdView.resume();
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        if (mBottomAdView != null) {
+            mBottomAdView.destroy();
+        }
+        super.onDestroy();
     }
 
 }

@@ -19,6 +19,8 @@
     <string name="myPasswordSubmit">Submit</string>
     <string name="myLoading">Just a sec…</string>
     <string name="rupeeSymbol" translatable="false">र</string>
+    <string name="adWordAppId" translatable="false">ca-app-pub-5579030690922565~8562171532</string>
+    <string name="adWordAdId" translatable="false">ca-app-pub-5579030690922565/1038904732</string>
 
 
     <!-- IntroText-->
